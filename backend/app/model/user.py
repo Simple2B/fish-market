@@ -1,21 +1,33 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime, func, or_
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, Enum, func, or_
 from sqlalchemy.orm import relationship
 
 from app.hash_utils import make_hash, hash_verify
 from app.database import Base, SessionLocal
+
+from .enums import Role
 
 
 class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
-    username = Column(String(64), nullable=False, unique=True)
+    username = Column(String(64), nullable=False)
     email = Column(String(128), nullable=False, unique=True)
     password_hash = Column(String(128), nullable=False)
     created_at = Column(DateTime(), default=datetime.now)
+    is_active = Column(Boolean, default=False)
+    adress = Column(String(128), nullable=False)
+    phone_number = Column(String, nullable=False, unique=True)
 
-    posts = relationship("Post", viewonly=True)
+    orders_taken = Column(Integer, default=0)
+    items_sold = Column(Integer, default=0)
+    kg_sold = Column(Integer, default=0)
+    sms_used = Column(Integer, default=0)
+
+    role = Column(Enum(Role), default=Role.Marketeer)
+
+    business = relationship("Business", back_populates="user", uselist=False)
 
     @property
     def password(self):
