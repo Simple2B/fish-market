@@ -5,29 +5,30 @@ from sqlalchemy.orm import relationship
 from app.hash_utils import make_hash, hash_verify
 from app.database import Base, SessionLocal
 
-from .enums import Role
+from .enums import UserRole
 
 
 class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
-    username = Column(String(64), nullable=False)
+    username = Column(String(64), nullable=False, unique=True)
     email = Column(String(128), nullable=False, unique=True)
     password_hash = Column(String(128), nullable=False)
-    created_at = Column(DateTime(), default=datetime.now)
+    created_at = Column(DateTime, default=datetime.now)
     is_active = Column(Boolean, default=False)
-    adress = Column(String(128), nullable=False)
-    phone_number = Column(String, nullable=False, unique=True)
+    address = Column(String(128), nullable=False)
+    phone_number = Column(String(32), nullable=False, unique=True)
+    frozen = Column(Boolean, default=False)
 
-    orders_taken = Column(Integer, default=0)
-    items_sold = Column(Integer, default=0)
-    kg_sold = Column(Integer, default=0)
-    sms_used = Column(Integer, default=0)
+    # orders_taken = Column(Integer, default=0)
+    # items_sold = Column(Integer, default=0)
+    # kg_sold = Column(Integer, default=0)
+    # sms_used = Column(Integer, default=0)
 
-    role = Column(Enum(Role), default=Role.Marketeer)
+    role = Column(Enum(UserRole), default=UserRole.Marketeer)
 
-    business = relationship("Business", back_populates="user", uselist=False)
+    businesses = relationship("Business", viewonly=True)
 
     @property
     def password(self):

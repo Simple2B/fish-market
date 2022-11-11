@@ -11,16 +11,16 @@ class Product(Base):
     __tablename__ = "products"
 
     id = Column(Integer, primary_key=True)
-    item_name = Column(String(128), nullable=False)
-    price = Column(Float, nullable=False)
-    sold_by = Column(Enum(SoldBy), nullable=False)
-    image = Column(String(256))
-    is_display = Column(Boolean, default=False)
     business_id = Column(Integer, ForeignKey("businesses.id"))
+    name = Column(String(128), nullable=False)
+    price = Column(Float, default=0.0)
+    sold_by = Column(Enum(SoldBy), default=SoldBy.unknown)
+    image = Column(String(256))
+    is_out_of_stoke = Column(Boolean, default=False)
+    is_deleted = Column(Boolean, default=False)
 
-    business = relationship("Business", back_populates="products")
-
-    preps = relationship("Prep", back_populates="product")
+    business = relationship("Business")
+    preps = relationship("Prep", viewonly=True)
 
     def __repr__(self) -> str:
-        return f"<id:{self.id}, item_name:{self.item_name}, businesses:[{self.businesses}]>"
+        return f"<{self.id}:{self.name}, business:[{self.business}]>"

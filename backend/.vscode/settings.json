@@ -10,6 +10,7 @@
     "fastapi",
     "finalizer",
     "noqa",
+    "passlib",
     "pydantic",
     "pytest",
     "skipif",

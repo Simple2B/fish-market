@@ -1,10 +1,11 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, DateTime, Enum, ForeignKey
+from sqlalchemy import Column, Integer, DateTime, Enum, ForeignKey, String
 from sqlalchemy.orm import relationship
 
 
 from app.database import Base
+from .order_item import order_items
 from .enums import OrderStatus
 
 
@@ -12,9 +13,11 @@ class Order(Base):
     __tablename__ = "orders"
 
     id = Column(Integer, primary_key=True)
-    order_time = Column(DateTime(), default=datetime.now)
-    status = Column(Enum(OrderStatus), default=OrderStatus.was_seen)
-    customer_phone_number = Column(Integer, ForeignKey("customers.phone_number"))
-    # TODO relationship with products
+    customer_id = Column(Integer, ForeignKey("customers.id"))
+    created_at = Column(DateTime, default=datetime.now)
+    status = Column(Enum(OrderStatus), default=OrderStatus.created)
 
-    customer = relationship("Custumer", back_populates="orders")
+    customer = relationship("Customer")
+
+    def __repr__(self) -> str:
+        return f"<id:{self.id}>, customer:{self.customer}"
