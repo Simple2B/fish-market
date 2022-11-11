@@ -1,11 +1,10 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, DateTime, Enum, ForeignKey, String
+from sqlalchemy import Column, Integer, DateTime, Enum, ForeignKey
 from sqlalchemy.orm import relationship
 
 
 from app.database import Base
-from .order_item import order_items
 from .enums import OrderStatus
 
 

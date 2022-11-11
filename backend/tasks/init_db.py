@@ -1,7 +1,6 @@
-from sqlalchemy.orm import Session
 from invoke import task
 from app.config import settings
-from app.model import User, Business
+from app.model import User
 
 
 @task
@@ -23,28 +22,3 @@ def init_db(_):
     db.add(admin)
 
     db.commit()
-
-
-def create_business(db):
-    business = m.Business(business_name="test business")
-    db.add(business)
-    db.commit()
-
-    return business
-
-
-@task
-def create_user(_):
-    from app.database import SessionLocal
-
-    db = SessionLocal()
-    business: Business = create_business(db)
-    user = m.User(
-        username="test1",
-        email="test@test.com",
-        password_hash="qwe123",
-    )
-    db.add(user)
-    db.commit()
-
-    return user

@@ -1,8 +1,7 @@
 from datetime import datetime
 
 
-from sqlalchemy import Column, Integer, Enum, DateTime
-from sqlalchemy.orm import ForeignKey
+from sqlalchemy import Column, Integer, Enum, DateTime, ForeignKey
 
 
 from .enums import OrderStatus
