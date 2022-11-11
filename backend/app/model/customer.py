@@ -16,4 +16,4 @@ class Customer(Base):
     customer_orders: list = relationship("Order", viewonly=True)
 
     def __repr__(self) -> str:
-        return f"<{self.id}:{self.full_name} orders:[{self.orders}]>"
+        return f"<{self.id}:{self.full_name} orders:[{self.customer_orders}]>"
