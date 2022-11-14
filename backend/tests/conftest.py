@@ -46,10 +46,26 @@ def db() -> Generator:
 
 
 @pytest.fixture
-def admin(client: TestClient, db: Session) -> Generator:
+def auth_client_admin(client: TestClient, db: Session) -> Generator:
     admin: m.User = db.query(m.User).filter_by(role=m.UserRole.Admin).first()
     assert admin
     res = client.post("/login", data=dict(username=admin.username, password="1234"))
+    assert res.status_code == status.HTTP_200_OK
+    token = s.Token.parse_obj(res.json())
+    assert token.access_token
+    client.headers.update(
+        {
+            "Authorization": f"Bearer {token.access_token}",
+        }
+    )
+    yield client
+
+
+@pytest.fixture
+def auth_client_marketeer(client: TestClient, db: Session) -> Generator:
+    marketeer: m.User = db.query(m.User).filter_by(role=m.UserRole.Marketeer).first()
+    assert marketeer
+    res = client.post("/login", data=dict(username=marketeer.username, password="1234"))
     assert res.status_code == status.HTTP_200_OK
     token = s.Token.parse_obj(res.json())
     assert token.access_token
