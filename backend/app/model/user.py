@@ -16,10 +16,10 @@ class User(Base):
     email = Column(String(128), nullable=False, unique=True)
     password_hash = Column(String(128), nullable=False)
     created_at = Column(DateTime, default=datetime.now)
-    is_active = Column(Boolean, default=False)
+    is_active = Column(Boolean, default=True)
     address = Column(String(128), nullable=False)
     phone_number = Column(String(32), nullable=False, unique=True)
-    frozen = Column(Boolean, default=False)
+    is_deleted = Column(Boolean, default=False)
 
     # orders_taken = Column(Integer, default=0)
     # items_sold = Column(Integer, default=0)

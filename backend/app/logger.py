@@ -1,7 +1,7 @@
 import logging
 import sys
 
-LOGGER_NAME = "FishMarket"
+LOGGER_NAME = "FishMarketLog"
 
 
 class Logger(object):

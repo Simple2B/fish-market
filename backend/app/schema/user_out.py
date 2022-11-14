@@ -1,13 +1,5 @@
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
-from typing import List
-
-
-class BusinessM(BaseModel):
-    id: int
-
-    class Config:
-        orm_mode = True
 
 
 class UserOut(BaseModel):
@@ -17,7 +9,10 @@ class UserOut(BaseModel):
     created_at: datetime
     is_active: bool
     address: str
-    businesses: List[BusinessM]
 
     class Config:
         orm_mode = True
+
+
+class AllUsers(BaseModel):
+    users: list[UserOut]
