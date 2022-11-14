@@ -1,4 +1,5 @@
-from fastapi import HTTPException, Depends, APIRouter
+from fastapi import HTTPException, Depends, APIRouter, status
+from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
 from app.service import get_current_admin
@@ -35,7 +36,11 @@ def get_all_user(
     current_user=Depends(get_current_admin),
 ):
     log(log.INFO, "get_all_user")
-    users: m.User = db.query(m.User).filter(m.User.is_deleted == False).all()
+    users: m.User = (
+        db.query(m.User)
+        .filter(and_(m.User.is_deleted == False, m.User.role != m.UserRole.Admin))
+        .all()
+    )
     return s.AllUsers(users=users)
 
 
@@ -45,9 +50,15 @@ def get_user(
     db: Session = Depends(get_db),
     current_user: int = Depends(get_current_admin),
 ):
-    user = db.query(m.User).get(id)
+    user = (
+        db.query(m.User)
+        .filter(and_(m.User.id == id, m.User.role != m.UserRole.Admin))
+        .first()
+    )
 
     if not user:
-        raise HTTPException(status_code=404, detail="This user was not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="This user was not found"
+        )
 
     return user

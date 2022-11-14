@@ -8,6 +8,7 @@ class UserOut(BaseModel):
     email: EmailStr
     created_at: datetime
     is_active: bool
+    phone_number: str
     address: str
 
     class Config:

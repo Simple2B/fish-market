@@ -34,8 +34,13 @@ def test_login(client: TestClient, db: Session):
 
 
 def test_create_user_marketeer(auth_client_admin: TestClient, db: Session):
+    count_of_user: int = int(db.query(m.User).count())
+
     response = auth_client_admin.post("/user/", json=new_user_data.dict())
     assert response.status_code == status.HTTP_201_CREATED
+
+    new_count_of_user: int = int(db.query(m.User).count())
+    assert new_count_of_user == count_of_user + 1
 
     new_user = s.UserOut.parse_obj(response.json())
     user = db.query(m.User).get(new_user.id)
@@ -44,9 +49,11 @@ def test_create_user_marketeer(auth_client_admin: TestClient, db: Session):
 
     response = auth_client_admin.get("/user/all")
     assert response and response.status_code == status.HTTP_200_OK
+    # admin do not need to check his data
+    assert count_of_user == len(response.json()["users"])
+
     user = s.UserOut.parse_obj(response.json()["users"][-1])
     assert user.username == USER_NAME
-
     # new user can login
     del auth_client_admin.headers["Authorization"]
     client = auth_client_admin
@@ -62,6 +69,18 @@ def test_create_user_marketeer(auth_client_admin: TestClient, db: Session):
     assert res.status_code == status.HTTP_200_OK
     token = s.Token.parse_obj(res.json())
     assert token.access_token
+
+
+def test_admin_get_user_by_id(auth_client_admin: TestClient, db: Session):
+    user: m.User = db.query(m.User).filter_by(role=m.UserRole.Marketeer).first()
+    res = auth_client_admin.get(f"/user/{user.id}")
+    assert res.status_code == status.HTTP_200_OK
+    user_data = s.UserOut.parse_obj(res.json())
+    assert user_data.username == user.username
+
+    user: m.User = db.query(m.User).filter_by(role=m.UserRole.Admin).first()
+    res = auth_client_admin.get(f"/user/{user.id}")
+    assert res.status_code == status.HTTP_404_NOT_FOUND
 
 
 def test_user_marketeer_can_not_get_users(auth_client_marketeer: TestClient):
