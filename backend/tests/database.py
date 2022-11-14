@@ -12,7 +12,7 @@ def fill_test_data(db: SessionLocal):
     for _ in range(2):
         admin: m.User = m.User(
             username=fake.name(),
-            password=fake.password(),
+            password="1234",
             address=fake.address(),
             phone_number=fake.phone_number(),
             email=fake.email(),
@@ -24,7 +24,7 @@ def fill_test_data(db: SessionLocal):
     for _ in range(5):
         user: m.User = m.User(
             username=fake.name(),
-            password=fake.password(),
+            password="1234",
             address=fake.address(),
             phone_number=fake.phone_number(),
             email=fake.email(),
