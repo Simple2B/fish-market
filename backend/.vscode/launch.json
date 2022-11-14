@@ -14,7 +14,8 @@
                 "DATABASE_URI": "${env:DEV_DATABASE_URI}",
             },
             "args": [
-                "app.main:app"
+                "app.main:app",
+                "--reload",
             ],
             "jinja": true,
             "justMyCode": true

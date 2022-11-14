@@ -1,8 +1,8 @@
-import jinja2 
- 
-# patch https://jinja.palletsprojects.com/en/3.0.x/changes/ 
-# pass_context replaces contextfunction and contextfilter. 
-jinja2.contextfunction = jinja2.pass_context 
+import jinja2
+
+# patch https://jinja.palletsprojects.com/en/3.0.x/changes/
+# pass_context replaces contextfunction and contextfilter.
+jinja2.contextfunction = jinja2.pass_context
 # flake8: noqa F402
 
 from fastapi import FastAPI

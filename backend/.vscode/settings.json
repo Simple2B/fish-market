@@ -16,6 +16,7 @@
     "skipif",
     "sqlalchemy",
     "starlette",
+    "traitlets",
     "uvicorn",
     "viewonly"
   ],

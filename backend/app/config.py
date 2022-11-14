@@ -8,7 +8,9 @@ class Settings(BaseSettings):
     JWT_SECRET: str = "<None>"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     DATABASE_URI: str = ""
-    DEV_DATABASE_URI: str = os.environ.get("DEV_DATABASE_URI")
+    DEV_DATABASE_URI: str = "sqlite:///./test.db"
+    ADDRESS = "1D Home, rome 1"
+    PHONE_NUMBER = "380121233413"
     ADMIN_USER: str = "admin"
     ADMIN_PASS: str = "admin"
     ADMIN_EMAIL: EmailStr = "admin@admin.com"

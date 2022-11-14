@@ -26,6 +26,7 @@ ipython = "^8.3.0"
 sqladmin = "^0.6.1"
 anyio = "^3.6.1"
 setuptools = "^65.4.1"
+Faker = "^15.3.1"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^5.0.4"
