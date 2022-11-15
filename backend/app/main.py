@@ -8,7 +8,7 @@ jinja2.contextfunction = jinja2.pass_context
 from fastapi import FastAPI
 from sqladmin import Admin, ModelView
 
-from app.router import post, user, auth
+from app.router import post, user, auth, business
 from app import admin
 from app.database import engine
 from .config import settings
@@ -23,6 +23,7 @@ sql_admin.add_view(admin.user.UserAdmin)
 app.include_router(post.router)
 app.include_router(user.router)
 app.include_router(auth.router)
+app.include_router(business.router)
 
 
 @app.get("/")

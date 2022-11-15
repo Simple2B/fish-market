@@ -23,5 +23,14 @@ class Business(Base):
     user = relationship("User")
     products = relationship("Product", viewonly=True)
 
+    def to_dict(self):
+        self_data = {
+            "user_id": self.user_id,
+            "name": self.name,
+            "logo": self.logo,
+            "web_site_id": self.web_site_id,
+        }
+        return self_data
+
     def __repr__(self) -> str:
         return f"<id:{self.id}, name:{self.name},  user:{self.user}>"
