@@ -84,13 +84,31 @@ def test_admin_get_user_marketeer_by_id(auth_client_admin: TestClient, db: Sessi
     assert res.status_code == status.HTTP_404_NOT_FOUND
 
 
-def test_user_marketeer_can_not_get_users(auth_client_marketeer: TestClient):
+def test_user_marketeer_can_not_get_users(
+    auth_client_marketeer: TestClient, db: Session
+):
+    user_marketeer = (
+        db.query(m.User)
+        .filter(and_(m.User.role == m.UserRole.Marketeer, m.User.is_deleted == False))
+        .first()
+    )
+    user_admin = (
+        db.query(m.User)
+        .filter(and_(m.User.role == m.UserRole.Admin, m.User.is_deleted == False))
+        .first()
+    )
 
     # user marketeer do not have access to rousts /user/ and /user/all
     res = auth_client_marketeer.post("/user/", json=new_user_data.dict())
     assert res.status_code == status.HTTP_403_FORBIDDEN
 
     res = auth_client_marketeer.get("/user/all")
+    assert res.status_code == status.HTTP_403_FORBIDDEN
+
+    res = auth_client_marketeer.delete(f"/user/{user_marketeer.id}")
+    assert res.status_code == status.HTTP_403_FORBIDDEN
+
+    res = auth_client_marketeer.delete(f"/user/{user_admin.id}")
     assert res.status_code == status.HTTP_403_FORBIDDEN
 
 
@@ -117,3 +135,66 @@ def test_admin_delete_user_marketeer(auth_client_admin: TestClient, db: Session)
     admin = db.query(m.User).filter_by(role=m.UserRole.Admin).first()
     res = auth_client_admin.delete(f"/user/{admin.id}")
     assert res.status_code == status.HTTP_404_NOT_FOUND
+
+
+def test_user_market_update_by_admin(auth_client_admin: TestClient, db: Session):
+
+    user: m.User = (
+        db.query(m.User)
+        .filter(and_(m.User.role == m.UserRole.Marketeer, m.User.is_deleted == False))
+        .first()
+    )
+    admin: m.User = (
+        db.query(m.User)
+        .filter(and_(m.User.role == m.UserRole.Marketeer, m.User.is_deleted == False))
+        .first()
+    )
+
+    data_to_update = s.UserUpdate(
+        id=admin.id,
+        fields=s.UserFields(
+            username=USER_NAME,
+            email=USER_EMAIL,
+            address=USER_ADDRESS,
+            phone_number=USER_PHONE_NUMBER,
+            is_active=user.is_active,
+        ),
+    )
+
+    data_to_update = data_to_update.dict()
+
+    # test can not update admin
+    res = auth_client_admin.patch("/user/update", json=data_to_update)
+    assert res.status_code == status.HTTP_404_NOT_FOUND
+
+    # test update user
+    data_to_update["id"] = user.id
+    res = auth_client_admin.patch("/user/update", json=data_to_update)
+    assert res.status_code == status.HTTP_200_OK
+    assert data_to_update["fields"] == res.json()
+    user_from_db: m.User = db.query(m.User).get(user.id)
+    assert user_from_db.username == USER_NAME
+    assert user_from_db.email == USER_EMAIL
+    assert user_from_db.address == USER_ADDRESS
+    assert user_from_db.phone_number == USER_PHONE_NUMBER
+    assert user_from_db.is_active == user.is_active
+
+    # test one filed
+    new_address = "Ivano-Frankivsk 10A"
+    data_to_update["fields"] = s.UserFields(address=new_address).dict()
+    res = auth_client_admin.patch("/user/update", json=data_to_update)
+    assert res.status_code == status.HTTP_200_OK
+    assert data_to_update["fields"] == res.json()
+    user_from_db: m.User = db.query(m.User).get(user.id)
+    assert user_from_db.address == new_address
+    assert user_from_db.username == USER_NAME
+
+    # user id is not correct
+    data_to_update["id"] = 100
+    res = auth_client_admin.patch("/user/update", json=data_to_update)
+    assert res.status_code == status.HTTP_404_NOT_FOUND
+
+    # test fields is empty
+    data_to_update["fields"] = {}
+    res = auth_client_admin.patch("/user/update", json=data_to_update)
+    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY

@@ -4,3 +4,4 @@ from .user_out import UserOut, AllUsers
 from .user_login import UserLogin
 from .token import Token, TokenData
 from .post import Post, PostCreate
+from .user_update import UserUpdate, UserFields

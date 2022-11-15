@@ -96,3 +96,38 @@ def delete_user_marketeer(
     user.is_deleted = True
     db.commit()
     return {"ok": True}
+
+
+@router.patch("/update", response_model=s.UserFieldsOut)
+def update_user(
+    data: s.UserUpdate,
+    db: Session = Depends(get_db),
+    current_user: int = Depends(get_current_admin),
+):
+    user_id = data.id
+
+    user = (
+        db.query(m.User)
+        .filter(
+            and_(
+                m.User.id == user_id,
+                m.User.is_deleted == False,
+                m.User.role == m.UserRole.Marketeer,
+            )
+        )
+        .first()
+    )
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="This user was not found"
+        )
+
+    user_fields = data.fields
+    for key, value in user_fields:
+        if value is not None and getattr(user, key):
+            setattr(user, key, value)
+
+    db.commit()
+
+    return user_fields
