@@ -146,7 +146,7 @@ def test_user_market_update_by_admin(auth_client_admin: TestClient, db: Session)
     )
     admin: m.User = (
         db.query(m.User)
-        .filter(and_(m.User.role == m.UserRole.Marketeer, m.User.is_deleted == False))
+        .filter(and_(m.User.role == m.UserRole.Admin, m.User.is_deleted == False))
         .first()
     )
 

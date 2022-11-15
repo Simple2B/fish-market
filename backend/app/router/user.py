@@ -98,7 +98,7 @@ def delete_user_marketeer(
     return {"ok": True}
 
 
-@router.patch("/update", response_model=s.UserFieldsOut)
+@router.patch("/update", response_model=s.UserFields)
 def update_user(
     data: s.UserUpdate,
     db: Session = Depends(get_db),
