@@ -2,6 +2,7 @@ import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
+from sqlalchemy import and_
 
 from app import model as m
 from app import schema as s
@@ -71,7 +72,7 @@ def test_create_user_marketeer(auth_client_admin: TestClient, db: Session):
     assert token.access_token
 
 
-def test_admin_get_user_by_id(auth_client_admin: TestClient, db: Session):
+def test_admin_get_user_marketeer_by_id(auth_client_admin: TestClient, db: Session):
     user: m.User = db.query(m.User).filter_by(role=m.UserRole.Marketeer).first()
     res = auth_client_admin.get(f"/user/{user.id}")
     assert res.status_code == status.HTTP_200_OK
@@ -91,3 +92,28 @@ def test_user_marketeer_can_not_get_users(auth_client_marketeer: TestClient):
 
     res = auth_client_marketeer.get("/user/all")
     assert res.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_admin_delete_user_marketeer(auth_client_admin: TestClient, db: Session):
+    marketeers: list[m.User] = db.query(m.User).filter(
+        and_(m.User.role == m.UserRole.Marketeer, m.User.is_deleted == False)
+    )
+    count_of_marketeers = int(marketeers.count())
+    marketeer = marketeers.first()
+
+    res = auth_client_admin.delete(f"/user/{marketeer.id}")
+    assert res.status_code == status.HTTP_200_OK
+
+    new_count_of_marketers = int(
+        db.query(m.User)
+        .filter(and_(m.User.role == m.UserRole.Marketeer, m.User.is_deleted == False))
+        .count()
+    )
+    assert new_count_of_marketers == count_of_marketeers - 1
+
+    res = auth_client_admin.get(f"/user/{marketeer.id}")
+    assert res.status_code == status.HTTP_404_NOT_FOUND
+
+    admin = db.query(m.User).filter_by(role=m.UserRole.Admin).first()
+    res = auth_client_admin.delete(f"/user/{admin.id}")
+    assert res.status_code == status.HTTP_404_NOT_FOUND

@@ -12,7 +12,7 @@ from app.logger import log
 router = APIRouter(prefix="/user", tags=["Users"])
 
 
-@router.post("/", status_code=201, response_model=s.UserOut)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=s.UserOut)
 def create_user(
     user: s.UserCreate,
     db: Session = Depends(get_db),
@@ -52,7 +52,13 @@ def get_user(
 ):
     user = (
         db.query(m.User)
-        .filter(and_(m.User.id == id, m.User.role != m.UserRole.Admin))
+        .filter(
+            and_(
+                m.User.id == id,
+                m.User.role != m.UserRole.Admin,
+                m.User.is_deleted == False,
+            )
+        )
         .first()
     )
 
@@ -62,3 +68,31 @@ def get_user(
         )
 
     return user
+
+
+@router.delete("/{id}", status_code=status.HTTP_200_OK)
+def delete_user_marketeer(
+    id: int,
+    db: Session = Depends(get_db),
+    current_user: int = Depends(get_current_admin),
+):
+    user = (
+        db.query(m.User)
+        .filter(
+            and_(
+                m.User.id == id,
+                m.User.is_deleted == False,
+                m.User.role == m.UserRole.Marketeer,
+            )
+        )
+        .first()
+    )
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="This user was not found"
+        )
+
+    user.is_deleted = True
+    db.commit()
+    return {"ok": True}
