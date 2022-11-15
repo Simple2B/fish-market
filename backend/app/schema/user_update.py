@@ -2,7 +2,7 @@ from pydantic import BaseModel, root_validator, EmailStr
 from typing import Optional
 
 
-class UserFields(BaseModel):
+class UserUpdate(BaseModel):
     username: Optional[str]
     email: Optional[EmailStr]
     address: Optional[str]
@@ -14,8 +14,3 @@ class UserFields(BaseModel):
         if not any(v.values()):
             raise ValueError(f"At least one of fields: {v.keys()} must have a value")
         return v
-
-
-class UserUpdate(BaseModel):
-    id: int
-    fields: UserFields

@@ -1,3 +1,4 @@
+# flake8: noqa E712
 from fastapi import HTTPException, Depends, APIRouter, status
 from sqlalchemy import and_
 from sqlalchemy.orm import Session
@@ -98,19 +99,20 @@ def delete_user_marketeer(
     return {"ok": True}
 
 
-@router.patch("/update", response_model=s.UserFields)
+@router.patch("/{id}")
 def update_user(
+    id: int,
     data: s.UserUpdate,
     db: Session = Depends(get_db),
     current_user: int = Depends(get_current_admin),
 ):
-    user_id = data.id
 
+    log(log.INFO, "update_user")
     user = (
         db.query(m.User)
         .filter(
             and_(
-                m.User.id == user_id,
+                m.User.id == id,
                 m.User.is_deleted == False,
                 m.User.role == m.UserRole.Marketeer,
             )
@@ -123,11 +125,18 @@ def update_user(
             status_code=status.HTTP_404_NOT_FOUND, detail="This user was not found"
         )
 
-    user_fields = data.fields
-    for key, value in user_fields:
+    data: dict = data.dict()
+    for key, value in data.items():
         if value is not None and getattr(user, key):
             setattr(user, key, value)
 
     db.commit()
+    db.refresh(user)
 
-    return user_fields
+    return s.UserUpdate(
+        username=user.username,
+        email=user.email,
+        address=user.address,
+        phone_number=user.phone_number,
+        is_active=user.is_active,
+    )
