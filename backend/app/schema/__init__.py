@@ -5,4 +5,4 @@ from .user_login import UserLogin
 from .token import Token, TokenData
 from .post import Post, PostCreate
 from .user_update import UserUpdate
-from .business_out import BusinessOut
+from .business_schemas import BusinessOut, BusinessUpdate, BusinessUpdateOut
