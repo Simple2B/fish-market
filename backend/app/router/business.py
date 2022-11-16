@@ -25,7 +25,7 @@ def get_business_cur_user(
             status_code=status.HTTP_404_NOT_FOUND, detail="User does not have business"
         )
 
-    return s.BusinessOut(**business.to_dict())
+    return business
 
 
 @router.patch("/", status_code=status.HTTP_200_OK)

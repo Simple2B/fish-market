@@ -9,6 +9,9 @@ class BusinessOut(BaseModel):
     log: Optional[str]
     web_site_id: str
 
+    class Config:
+        orm_mode = True
+
 
 class BusinessUpdate(BaseModel):
     name: Optional[str]
