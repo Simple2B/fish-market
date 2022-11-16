@@ -5,6 +5,7 @@
   "cSpell.words": [
     "aerich",
     "asyncio",
+    "autoflush",
     "bcrypt",
     "dotenv",
     "fastapi",
@@ -13,9 +14,11 @@
     "passlib",
     "pydantic",
     "pytest",
+    "sessionmaker",
     "skipif",
     "sqlalchemy",
     "starlette",
+    "traitlets",
     "uvicorn",
     "viewonly"
   ],
