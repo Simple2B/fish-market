@@ -51,10 +51,11 @@ def get_user(
     db: Session = Depends(get_db),
     current_user: int = Depends(get_current_admin),
 ):
-
+    log(log.INFO, "get_user")
     user: m.User = db.query(m.User).get(id)
 
     if not user or user.is_deleted or user.role == m.UserRole.Admin:
+        log(log.WARNING, "get_user: This user was not found")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="This user was not found"
         )
@@ -73,6 +74,7 @@ def delete_user_marketeer(
     user: m.User = db.query(m.User).get(id)
 
     if not user or user.is_deleted or user.role != m.UserRole.Marketeer:
+        log(log.WARNING, "delete_user_marketeer: This user was not found")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="This user was not found"
         )
@@ -95,6 +97,7 @@ def update_user(
     user: m.User = db.query(m.User).get(id)
 
     if not user or user.is_deleted or user.role != m.UserRole.Marketeer:
+        log(log.WARNING, "update_user: This user was not found")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="This user was not found"
         )
