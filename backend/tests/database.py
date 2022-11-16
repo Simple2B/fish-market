@@ -1,6 +1,5 @@
 from faker import Faker
 
-
 from app.database import SessionLocal
 from app import model as m
 
