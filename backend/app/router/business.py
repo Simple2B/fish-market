@@ -11,7 +11,7 @@ from app.logger import log
 router = APIRouter(prefix="/business", tags=["business"])
 
 
-@router.get("/")
+@router.get("/", response_model=s.BusinessOut)
 def get_business_cur_user(
     db: Session = Depends(get_db), current_user: m.User = Depends(get_current_user)
 ):
