@@ -104,7 +104,7 @@ def update_user(
 
     data: dict = data.dict()
     for key, value in data.items():
-        if value is not None and getattr(user, key):
+        if value is not None and getattr(user, key) is not None:
             setattr(user, key, value)
 
     db.commit()
