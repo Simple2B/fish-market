@@ -15,12 +15,16 @@ router = APIRouter(prefix="/business", tags=["business"])
 def get_business_cur_user(
     db: Session = Depends(get_db), current_user: m.User = Depends(get_current_user)
 ):
-    log(log.INFO, "get_business_cur_user")
+    log(log.INFO, "get_business_cur_user [%s]", current_user)
     business: m.Business = (
         db.query(m.Business).filter_by(user_id=current_user.id).first()
     )
     if not business:
-        log(log.WARNING, "get_business_cur_user: User does not have business")
+        log(
+            log.WARNING,
+            "get_business_cur_user [%s]: User does not have business",
+            current_user,
+        )
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User does not have business"
         )
@@ -41,14 +45,18 @@ def update_business_cur_user(
     log(log.INFO, "update_business_cur_user")
 
     if not business:
-        log(log.WARNING, "update_business_cur_user: User does not have business")
+        log(
+            log.WARNING,
+            "update_business_cur_user [%s]: User does not have business",
+            current_user,
+        )
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User does not have business"
         )
 
     data: dict = data.dict()
     for key, value in data.items():
-        if value is not None and getattr(business, key) is not None:
+        if value is not None:
             setattr(business, key, value)
 
     db.commit()
