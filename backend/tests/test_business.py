@@ -2,7 +2,6 @@
 from fastapi import status
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
-from sqlalchemy import and_
 
 from app import model as m
 from app import schema as s
@@ -18,3 +17,12 @@ def test_get_user_marketeer_business(marketer_client: TestClient, db: Session):
     res_data = s.BusinessOut.parse_obj(res.json())
     assert user_business.web_site_id == res_data.web_site_id
     assert user_business.user_id == user.id
+
+
+def test_get_user_admin_business(admin_client: TestClient, db: Session):
+
+    admin: m.User = db.query(m.User).filter_by(role=m.UserRole.Admin).first()
+
+    res = admin_client.get("/business/")
+    assert res.status_code == status.HTTP_404_NOT_FOUND
+    assert admin.businesses == []
