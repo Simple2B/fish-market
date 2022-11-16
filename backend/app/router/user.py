@@ -82,6 +82,7 @@ def delete_user_marketeer(
     return {"ok": True}
 
 
+# TODO make user can update himself
 @router.patch("/{id}")
 def update_user(
     id: int,
