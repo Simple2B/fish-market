@@ -83,6 +83,10 @@ def test_admin_get_user_marketeer_by_id(admin_client: TestClient, db: Session):
     res = admin_client.get(f"/user/{user.id}")
     assert res.status_code == status.HTTP_404_NOT_FOUND
 
+    # test user does not exist
+    res = admin_client.get(f"/user/{100}")
+    assert res.status_code == status.HTTP_404_NOT_FOUND
+
 
 def test_user_marketeer_can_not_get_users(marketer_client: TestClient, db: Session):
     user_marketeer = (

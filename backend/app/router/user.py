@@ -51,19 +51,11 @@ def get_user(
     db: Session = Depends(get_db),
     current_user: int = Depends(get_current_admin),
 ):
-    user = (
-        db.query(m.User)
-        .filter(
-            and_(
-                m.User.id == id,
-                m.User.role != m.UserRole.Admin,
-                m.User.is_deleted == False,
-            )
-        )
-        .first()
-    )
+    log(log.INFO, "get_user")
+    user: m.User = db.query(m.User).get(id)
 
-    if not user:
+    if not user or user.is_deleted or user.role == m.UserRole.Admin:
+        log(log.WARNING, "get_user: This user was not found")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="This user was not found"
         )
@@ -77,19 +69,12 @@ def delete_user_marketeer(
     db: Session = Depends(get_db),
     current_user: int = Depends(get_current_admin),
 ):
-    user = (
-        db.query(m.User)
-        .filter(
-            and_(
-                m.User.id == id,
-                m.User.is_deleted == False,
-                m.User.role == m.UserRole.Marketeer,
-            )
-        )
-        .first()
-    )
 
-    if not user:
+    log(log.INFO, "delete_user_marketeer")
+    user: m.User = db.query(m.User).get(id)
+
+    if not user or user.is_deleted or user.role != m.UserRole.Marketeer:
+        log(log.WARNING, "delete_user_marketeer: This user was not found")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="This user was not found"
         )
@@ -99,6 +84,7 @@ def delete_user_marketeer(
     return {"ok": True}
 
 
+# TODO make user can update himself
 @router.patch("/{id}")
 def update_user(
     id: int,
@@ -108,19 +94,10 @@ def update_user(
 ):
 
     log(log.INFO, "update_user")
-    user = (
-        db.query(m.User)
-        .filter(
-            and_(
-                m.User.id == id,
-                m.User.is_deleted == False,
-                m.User.role == m.UserRole.Marketeer,
-            )
-        )
-        .first()
-    )
+    user: m.User = db.query(m.User).get(id)
 
-    if not user:
+    if not user or user.is_deleted or user.role != m.UserRole.Marketeer:
+        log(log.WARNING, "update_user: This user was not found")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="This user was not found"
         )
