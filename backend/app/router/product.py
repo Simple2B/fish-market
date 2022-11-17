@@ -39,3 +39,27 @@ def create_product(
     db.refresh(new_product)
 
     return new_product
+
+
+@router.get("/{id}", status_code=status.HTTP_200_OK)
+def get_product_by_id(
+    id: int,
+    db: Session = Depends(get_db),
+    current_user: m.User = Depends(get_current_user),
+):
+    log(log.INFO, "get_product_by_id")
+    product = db.query(m.Product).get(id)
+
+    if not product or product.is_deleted:
+        log(log.WARNING, "get_product_by_id: [%x] product was not found", id)
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="product was not found"
+        )
+
+    return s.ProductOut(
+        id=product.id,
+        name=product.name,
+        price=product.price,
+        sold_by=product.sold_by,
+        image=product.image,
+    )

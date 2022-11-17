@@ -33,13 +33,13 @@ def test_get_all_product_cur_user(marketer_client: TestClient, db: Session):
     assert user_products == res_data
 
     # test if we add new product
-    # product = m.Product(business_id=user_business.id, name="meat")
-    # db.add(product)
-    # db.commit()
-    # db.refresh(product)
-    # res = marketer_client.get("/product/")
-    # assert res.status_code == status.HTTP_200_OK
-    # assert s.ProductOut(product).dict() in res.json()["products"]
+    new_pro_res = marketer_client.post("/product/", json=data_create_product.dict())
+    res = marketer_client.get("/product/")
+
+    assert res.status_code == status.HTTP_200_OK
+    res_data = s.ProductsOut.parse_obj(res.json())
+    new_pro_res = s.ProductOut.parse_obj(new_pro_res.json())
+    assert new_pro_res in res_data.products
 
     # test if one user product was deleted
     # product = db.query(m.Product).get(res_data.id)
@@ -61,7 +61,14 @@ def test_get_all_product_cur_user(marketer_client: TestClient, db: Session):
 
 
 def test_admin_can_not_create_product(admin_client: TestClient, db: Session):
+    product: m.Product = db.query(m.Product).filter_by(is_deleted=False).first()
     res = admin_client.post("/product/", json=data_create_product.dict())
+    assert res.status_code == status.HTTP_403_FORBIDDEN
+
+    res = admin_client.get(f"/product/{product.id}", json=data_create_product.dict())
+    assert res.status_code == status.HTTP_403_FORBIDDEN
+
+    res = admin_client.delete(f"/product/{product.id}")
     assert res.status_code == status.HTTP_403_FORBIDDEN
 
 
@@ -84,3 +91,29 @@ def test_cur_user_create_product(marketer_client: TestClient, db: Session):
     # test business has new product
     business = db.query(m.Business).get(product.business_id)
     assert business
+
+
+def test_get_product_by_id(marketer_client: TestClient, db: Session):
+    product: m.Product = db.query(m.Product).filter_by(is_deleted=False).first()
+
+    res = marketer_client.get(f"/product/{product.id}")
+    assert res.status_code == status.HTTP_200_OK
+    res_data = s.ProductOut.parse_obj(res.json())
+    assert s.ProductOut(**product.__dict__) == res_data
+
+    # test can not get defunct product
+    res = marketer_client.get(f"/product/{100}")
+    assert res.status_code == status.HTTP_404_NOT_FOUND
+
+
+def test_delete_product(marketer_client: TestClient, db: Session):
+
+    product: m.Product = db.query(m.Product).filter_by(is_deleted=False).first()
+
+    # res = marketer_client.delete(f"/product/{product.id}")
+    # assert res.status_code == status.HTTP_200_OK
+    # assert res.json() == {"ok", True}
+
+    # test can get deleted product
+    res = marketer_client.get(f"/product/{product.id}")
+    assert res.status_code == status.HTTP_404_NOT_FOUND
