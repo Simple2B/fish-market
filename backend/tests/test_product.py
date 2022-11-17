@@ -18,6 +18,13 @@ data_create_product = s.CreateProduct(
     image=PRODUCT_IMAGE,
 )
 
+data_update_product = s.UpdateProduct(
+    name=PRODUCT_NAME,
+    price=PRODUCT_PRICE,
+    sold_by=PRODUCT_SOLD_BY,
+    image=PRODUCT_IMAGE,
+)
+
 
 def test_get_all_product_cur_user(marketer_client: TestClient, db: Session):
 
@@ -60,7 +67,7 @@ def test_get_all_product_cur_user(marketer_client: TestClient, db: Session):
     # assert res.json() == {"products": []}
 
 
-def test_admin_can_not_create_product(admin_client: TestClient, db: Session):
+def test_admin_can_not_get_product(admin_client: TestClient, db: Session):
     product: m.Product = db.query(m.Product).filter_by(is_deleted=False).first()
     res = admin_client.post("/product/", json=data_create_product.dict())
     assert res.status_code == status.HTTP_403_FORBIDDEN
@@ -69,6 +76,9 @@ def test_admin_can_not_create_product(admin_client: TestClient, db: Session):
     assert res.status_code == status.HTTP_403_FORBIDDEN
 
     res = admin_client.delete(f"/product/{product.id}")
+    assert res.status_code == status.HTTP_403_FORBIDDEN
+
+    res = admin_client.patch(f"/product/{product.id}", json=data_update_product.dict())
     assert res.status_code == status.HTTP_403_FORBIDDEN
 
 
@@ -119,3 +129,38 @@ def test_delete_product(marketer_client: TestClient, db: Session):
     res = marketer_client.get(f"/product/{product.id}")
     assert res.status_code == status.HTTP_404_NOT_FOUND
     assert product.is_deleted == True
+
+
+def test_update_product(marketer_client: TestClient, db: Session):
+
+    product: m.Product = db.query(m.Product).filter_by(is_deleted=False).first()
+
+    prod_data: dict = data_update_product.dict()
+
+    res = marketer_client.patch(f"/product/{product.id}", json=prod_data)
+    assert res.status_code == status.HTTP_200_OK
+    prod_data["id"] = product.id
+    assert res.json() == prod_data
+
+    # test data update in db
+    res_data = s.ProductOut.parse_obj(res.json())
+    product = db.query(m.Product).get(product.id)
+    assert s.ProductOut(**product.__dict__) == res_data
+
+    # test update one of product fields
+    del prod_data["name"]
+    del prod_data["image"]
+
+    res = marketer_client.patch(f"/product/{product.id}", json=prod_data)
+    assert res.status_code == status.HTTP_200_OK
+    assert res.json()["price"] == PRODUCT_PRICE
+    assert res.json()["sold_by"] == m.SoldBy.by_kilogram.value
+
+    # test if product filed are empty
+    res = marketer_client.patch(f"/product/{product.id}", json={})
+    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+    # test can not update delete product
+    res_delete = marketer_client.delete(f"/product/{product.id}")
+    res = marketer_client.patch(f"/product/{product.id}", json=prod_data)
+    assert res.status_code == status.HTTP_404_NOT_FOUND

@@ -76,3 +76,32 @@ def delete_product_by_id(
     db.commit()
 
     return {"ok", "true"}
+
+
+@router.patch("/{id}", status_code=status.HTTP_200_OK)
+def update_product(
+    id: int,
+    data: s.UpdateProduct,
+    db: Session = Depends(get_db),
+    current_user: m.User = Depends(get_current_user),
+):
+    log(log.INFO, "update_product")
+    product = db.query(m.Product).get(id)
+
+    access_to_product(product=product, user=current_user)
+
+    update_data: dict = data.dict()
+    for key, value in update_data.items():
+        if value is not None:
+            setattr(product, key, value)
+
+    db.commit()
+    db.refresh(product)
+
+    return s.ProductOut(
+        id=product.id,
+        name=product.name,
+        price=product.price,
+        sold_by=product.sold_by,
+        image=product.image,
+    )
