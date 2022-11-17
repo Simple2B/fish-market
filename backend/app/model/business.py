@@ -16,8 +16,8 @@ class Business(Base):
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"))
-    name = Column(String(128))
-    logo = Column(String(128))
+    name = Column(String(128), default="")
+    logo = Column(String(128), default="")
     web_site_id = Column(String(36), default=gen_business_id)
 
     user = relationship("User")
