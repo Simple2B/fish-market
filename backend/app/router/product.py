@@ -105,3 +105,26 @@ def update_product(
         sold_by=product.sold_by,
         image=product.image,
     )
+
+
+@router.post(
+    "/{id}/prep",
+    status_code=status.HTTP_201_CREATED,
+)
+def create_product_prep(
+    id: int,
+    data: s.CreateProductPrep,
+    db: Session = Depends(get_db),
+    current_user: m.User = Depends(get_current_user),
+):
+    product = db.query(m.Product).get(id)
+
+    access_to_product(product=product, user=current_user)
+
+    prep: m.Prep = m.Prep(product_id=product.id, name=data.name)
+
+    db.add(prep)
+    db.commit()
+    db.refresh(prep)
+
+    return s.ProductPrepOut(id=prep.id, name=prep.name, is_active=prep.is_active)
