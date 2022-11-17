@@ -93,7 +93,7 @@ def test_cur_user_create_product(marketer_client: TestClient, db: Session):
     assert res_data.image == PRODUCT_IMAGE
 
     # test product was created in db
-    product = m.Product = db.query(m.Product).get(res_data.id)
+    product: m.Product = db.query(m.Product).get(res_data.id)
     assert product
     assert product.price == PRODUCT_PRICE
     assert product.sold_by == PRODUCT_SOLD_BY
