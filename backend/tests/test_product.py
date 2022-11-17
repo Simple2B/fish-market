@@ -7,9 +7,16 @@ from app import model as m
 from app import schema as s
 
 PRODUCT_NAME = "fish"
-PRODUCT_PRICE = 2.4
+PRODUCT_PRICE = 2
 PRODUCT_SOLD_BY = m.SoldBy.by_kilogram
 PRODUCT_IMAGE = "/dir/imag/logo_product.png"
+
+data_create_product = s.CreateProduct(
+    name=PRODUCT_NAME,
+    price=PRODUCT_PRICE,
+    sold_by=PRODUCT_SOLD_BY,
+    image=PRODUCT_IMAGE,
+)
 
 
 def test_get_all_product_cur_user(marketer_client: TestClient, db: Session):
@@ -53,18 +60,16 @@ def test_get_all_product_cur_user(marketer_client: TestClient, db: Session):
     # assert res.json() == {"products": []}
 
 
+def test_admin_can_not_create_product(admin_client: TestClient, db: Session):
+    res = admin_client.post("/product/", json=data_create_product.dict())
+    assert res.status_code == status.HTTP_403_FORBIDDEN
+
+
 def test_cur_user_create_product(marketer_client: TestClient, db: Session):
 
-    data_create_product = s.CreateProduct(
-        name=PRODUCT_NAME,
-        price=PRODUCT_PRICE,
-        sold_by=PRODUCT_SOLD_BY,
-        image=PRODUCT_IMAGE,
-    )
+    new_product = data_create_product.dict()
 
-    data_create_product = data_create_product.dict()
-
-    res = marketer_client.post("/product/", json=data_create_product)
+    res = marketer_client.post("/product/", json=new_product)
     assert res.status_code == status.HTTP_201_CREATED
     res_data = s.ProductOut.parse_obj(res.json())
     assert res_data.name == PRODUCT_NAME
