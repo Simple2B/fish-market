@@ -65,7 +65,7 @@ def test_admin_can_not_create_product(admin_client: TestClient, db: Session):
     res = admin_client.post("/product/", json=data_create_product.dict())
     assert res.status_code == status.HTTP_403_FORBIDDEN
 
-    res = admin_client.get(f"/product/{product.id}", json=data_create_product.dict())
+    res = admin_client.get(f"/product/{product.id}")
     assert res.status_code == status.HTTP_403_FORBIDDEN
 
     res = admin_client.delete(f"/product/{product.id}")
@@ -110,10 +110,12 @@ def test_delete_product(marketer_client: TestClient, db: Session):
 
     product: m.Product = db.query(m.Product).filter_by(is_deleted=False).first()
 
-    # res = marketer_client.delete(f"/product/{product.id}")
-    # assert res.status_code == status.HTTP_200_OK
-    # assert res.json() == {"ok", True}
+    res = marketer_client.delete(f"/product/{product.id}")
+    assert res.status_code == status.HTTP_200_OK
+    assert "ok" in res.json()
 
     # test can get deleted product
+    product: m.Product = db.query(m.Product).get(product.id)
     res = marketer_client.get(f"/product/{product.id}")
     assert res.status_code == status.HTTP_404_NOT_FOUND
+    assert product.is_deleted == True

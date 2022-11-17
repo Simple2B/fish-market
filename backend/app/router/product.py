@@ -6,7 +6,7 @@ from app import schema as s
 from app import model as m
 from app.database import get_db
 from app.logger import log
-from .utils import get_business_id_from_cur_user
+from .utils import get_business_id_from_cur_user, access_to_product
 
 
 router = APIRouter(prefix="/product", tags=["Product"])
@@ -50,11 +50,7 @@ def get_product_by_id(
     log(log.INFO, "get_product_by_id")
     product = db.query(m.Product).get(id)
 
-    if not product or product.is_deleted:
-        log(log.WARNING, "get_product_by_id: [%x] product was not found", id)
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="product was not found"
-        )
+    access_to_product(product=product, user=current_user)
 
     return s.ProductOut(
         id=product.id,
@@ -63,3 +59,20 @@ def get_product_by_id(
         sold_by=product.sold_by,
         image=product.image,
     )
+
+
+@router.delete("/{id}", status_code=status.HTTP_200_OK)
+def delete_product_by_id(
+    id: int,
+    db: Session = Depends(get_db),
+    current_user: m.User = Depends(get_current_user),
+):
+    log(log.INFO, "delete_product_by_id")
+    product = db.query(m.Product).get(id)
+
+    access_to_product(product=product, user=current_user)
+
+    product.is_deleted = True
+    db.commit()
+
+    return {"ok", "true"}
