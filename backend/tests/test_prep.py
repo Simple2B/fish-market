@@ -35,3 +35,4 @@ def test_get_product_preps(marketer_client: TestClient, db: Session):
     res = marketer_client.get(f"/product/{product.id}/prep")
     assert res.status_code == status.HTTP_200_OK
     res_data = s.ProductPrepsOut.parse_obj(res.json())
+    assert res_data.preps == s.ProductPrepsOut(id=product.id, preps=product_prep).preps

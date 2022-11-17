@@ -12,6 +12,9 @@ class ProductPrepOut(BaseModel):
     name: str
     is_active: str
 
+    class Config:
+        orm_mode = True
+
 
 class ProductPrepsOut(BaseModel):
     id: int

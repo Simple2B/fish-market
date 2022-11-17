@@ -119,6 +119,7 @@ def create_product_prep(
 ):
     product = db.query(m.Product).get(id)
 
+    log(log.INFO, "create_product_prep")
     access_to_product(product=product, user=current_user)
 
     prep: m.Prep = m.Prep(product_id=product.id, name=data.name)
@@ -128,3 +129,22 @@ def create_product_prep(
     db.refresh(prep)
 
     return s.ProductPrepOut(id=prep.id, name=prep.name, is_active=prep.is_active)
+
+
+@router.get(
+    "/{id}/prep",
+    status_code=status.HTTP_200_OK,
+)
+def get_product_prep(
+    id: int,
+    db: Session = Depends(get_db),
+    current_user: m.User = Depends(get_current_user),
+):
+    log(log.INFO, "get_product_prep")
+    product = db.query(m.Product).get(id)
+
+    access_to_product(product=product, user=current_user)
+
+    preps = db.query(m.Prep).filter_by(product_id=id, is_deleted=False).all()
+
+    return s.ProductPrepsOut(id=product.id, preps=preps)
