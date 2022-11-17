@@ -17,9 +17,11 @@ def get_products(
     db: Session = Depends(get_db), current_user: m.User = Depends(get_current_user)
 ):
 
-    business_id = current_user.businesses[0].id
+    business_id = get_business_id_from_cur_user(current_user)
 
-    products = db.query(m.Product).filter_by(business_id=business_id).all()
+    products = (
+        db.query(m.Product).filter_by(business_id=business_id, is_deleted=False).all()
+    )
 
     return s.ProductsOut(products=products)
 
