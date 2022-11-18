@@ -33,7 +33,7 @@ def check_access_to_product(product: m.Product, user: m.User, product_id: int) -
             detail="You don't  have permission to the product",
         )
     elif not product or product.is_deleted:
-        log(log.WARNING, "delete_product_by_id: [%d] product was not found", product_id)
+        log(log.WARNING, "Product [%d] was not found", product_id)
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Product was not found"
         )

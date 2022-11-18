@@ -1,7 +1,6 @@
 from fastapi import status
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
-from sqlalchemy import and_
 
 from app import model as m
 from app import schema as s
@@ -30,6 +29,7 @@ def test_get_all_product_cur_user(marketer_client: TestClient, db: Session):
 
     user: m.User = db.query(m.User).filter_by(role=m.UserRole.Marketeer).first()
 
+    assert user.businesses, "User must have business"
     user_business = user.businesses[0]
 
     user_products = s.ProductsOut(products=user_business.products)
@@ -49,22 +49,27 @@ def test_get_all_product_cur_user(marketer_client: TestClient, db: Session):
     assert new_pro_res in res_data.products
 
     # test if one user product was deleted
-    # product = db.query(m.Product).get(res_data.id)
-    # product.is_deleted = True
-    # db.commit()
-    # user_products = s.ProductsOut(products=user.businesses[0].products)
-    # assert res.status_code == status.HTTP_200_OK
-    # res_data = s.ProductsOut.parse_obj(res.json())
-    # assert user_products == res_data
+    res = marketer_client.delete(f"/product/{res_data.products[0].id}")
+    res = marketer_client.get("/product/")
+    assert res.status_code == status.HTTP_200_OK
+    res_data = s.ProductsOut.parse_obj(res.json())
+    user: m.User = db.query(m.User).filter_by(role=m.UserRole.Marketeer).first()
+    user_business = user.businesses[0]
+    user_products = s.ProductsOut(products=user_business.products)
+    assert len(user_products.products) - 1 == len(res_data.products)
 
-    # test if user does not have any products
-    # for _ in res_data:
-    #     product = db.query(m.Product).get(res_data.id)
-    #     product.is_deleted = True
-    #     db.commit()
-    # res = marketer_client.get("/product/")
-    # assert res.status_code == status.HTTP_200_OK
-    # assert res.json() == {"products": []}
+    #  test if user does not have any products
+    for product in res_data.products:
+        res = marketer_client.delete(f"/product/{product.id}")
+    res = marketer_client.get("/product/")
+    assert res.status_code == status.HTTP_200_OK
+    assert res.json() == {"products": []}
+    products: m.Product = (
+        db.query(m.Product)
+        .filter_by(business_id=user_business.id, is_deleted=False)
+        .all()
+    )
+    assert products == []
 
 
 def test_admin_can_not_get_product(admin_client: TestClient, db: Session):
@@ -128,7 +133,7 @@ def test_delete_product(marketer_client: TestClient, db: Session):
     product: m.Product = db.query(m.Product).get(product.id)
     res = marketer_client.get(f"/product/{product.id}")
     assert res.status_code == status.HTTP_404_NOT_FOUND
-    assert product.is_deleted == True
+    assert product.is_deleted
 
 
 def test_update_product(marketer_client: TestClient, db: Session):
@@ -161,6 +166,6 @@ def test_update_product(marketer_client: TestClient, db: Session):
     assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     # test can not update delete product
-    res_delete = marketer_client.delete(f"/product/{product.id}")
+    marketer_client.delete(f"/product/{product.id}")
     res = marketer_client.patch(f"/product/{product.id}", json=prod_data)
     assert res.status_code == status.HTTP_404_NOT_FOUND
