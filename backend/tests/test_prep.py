@@ -55,6 +55,10 @@ def test_delete_product_preps(marketer_client: TestClient, db: Session):
     assert res.status_code == status.HTTP_200_OK
     assert "ok" in res.json()
 
+    # test delete prep if product not exist
+    res = marketer_client.delete(f"/product/{100}/prep/{take_first_prep.id}")
+    assert res.status_code == status.HTTP_404_NOT_FOUND
+
     # test prep was deleted in db
     prep = db.query(m.Prep).filter_by(id=take_first_prep.id).first()
     assert prep.is_deleted
@@ -63,7 +67,7 @@ def test_delete_product_preps(marketer_client: TestClient, db: Session):
     res = marketer_client.delete(f"/product/{product.id}/prep/{take_first_prep.id}")
     assert res.status_code == status.HTTP_404_NOT_FOUND
 
-    # test prep does not below to the product
+    # test prep does not belong to the product
     prep = db.query(m.Prep).filter(and_(m.Prep.product_id != product.id)).first()
     res = marketer_client.delete(f"/product/{product.id}/prep/{prep.id}")
     assert res.status_code == status.HTTP_404_NOT_FOUND
@@ -74,4 +78,46 @@ def test_delete_product_preps(marketer_client: TestClient, db: Session):
 
 
 def test_patch_product_prep(marketer_client: TestClient, db: Session):
-    pass
+    product = db.query(m.Product).first()
+    take_first_prep = product.preps[0]
+
+    prep_data_update = s.UpdateProductPrep(is_active=True)
+
+    data_update = prep_data_update.dict()
+
+    res = marketer_client.patch(
+        f"/product/{product.id}/prep/{take_first_prep.id}", json=data_update
+    )
+    assert res.status_code == status.HTTP_200_OK
+    data_res = s.ProductPrepOut.parse_obj(res.json())
+    assert data_res.is_active == str(prep_data_update.is_active)
+
+    # test update was in db
+    prep = db.query(m.Prep).get(take_first_prep.id)
+    assert prep.is_active == prep_data_update.is_active
+
+    # test update prep if product does not exist
+    res = marketer_client.patch(
+        f"/product/{100}/prep/{take_first_prep.id}", json=data_update
+    )
+    assert res.status_code == status.HTTP_404_NOT_FOUND
+
+    # test can not update delete prep
+    res_delete = marketer_client.delete(
+        f"/product/{product.id}/prep/{take_first_prep.id}"
+    )
+    res = marketer_client.patch(
+        f"/product/{product.id}/prep/{take_first_prep.id}", json=data_update
+    )
+    assert res.status_code == status.HTTP_404_NOT_FOUND
+
+    # test can not update prep which does not belong to the product
+    prep = db.query(m.Prep).filter(and_(m.Prep.product_id != product.id)).first()
+    res = marketer_client.patch(
+        f"/product/{product.id}/prep/{prep.id}", json=data_update
+    )
+    assert res.status_code == status.HTTP_404_NOT_FOUND
+
+    # test can not update prep which does not exist
+    res = marketer_client.patch(f"/product/{product.id}/prep/{100}", json=data_update)
+    assert res.status_code == status.HTTP_404_NOT_FOUND

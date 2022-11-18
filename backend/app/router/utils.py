@@ -34,3 +34,17 @@ def access_to_product(product: m.Product, user: m.User) -> None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="product was not found"
         )
+
+
+def check_access_to_product_prep(prep_id: int, product: m.Product, prep: m.Prep):
+    if not prep or prep.is_deleted or prep.product_id != product.id:
+        log(
+            log.WARNING,
+            "The product [%d] dose not have access to the prep [%d] or prep is deleted",
+            product.id,
+            prep_id,
+        )
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Prep was not found",
+        )

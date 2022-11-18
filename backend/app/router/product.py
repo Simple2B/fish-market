@@ -6,7 +6,11 @@ from app import schema as s
 from app import model as m
 from app.database import get_db
 from app.logger import log
-from .utils import get_business_id_from_cur_user, access_to_product
+from .utils import (
+    get_business_id_from_cur_user,
+    access_to_product,
+    check_access_to_product_prep,
+)
 
 
 router = APIRouter(prefix="/product", tags=["Product"])
@@ -164,19 +168,36 @@ def delete_product_prep_by_id(
 
     prep: m.Prep = db.query(m.Prep).get(prep_id)
 
-    if not prep or prep.is_deleted or prep.product_id != product.id:
-        log(
-            log.WARNING,
-            "delete_product_prep_by_id: the product [%d] dose not have prep [%d]",
-            product_id,
-            prep_id,
-        )
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="The product dose not have prep ",
-        )
+    check_access_to_product_prep(prep_id=prep_id, product=product, prep=prep)
 
     prep.is_deleted = True
     db.commit()
 
     return {"ok", True}
+
+
+@router.patch(
+    "/{product_id}/prep/{prep_id}",
+    response_model=s.ProductPrepOut,
+    status_code=status.HTTP_200_OK,
+)
+def patch_product_prep_by_id(
+    data: s.UpdateProductPrep,
+    product_id: int,
+    prep_id: int,
+    db: Session = Depends(get_db),
+    current_user: m.User = Depends(get_current_user),
+):
+    log(log.INFO, "patch_product_prep_by_id")
+    product = db.query(m.Product).get(product_id)
+
+    access_to_product(product=product, user=current_user)
+
+    prep: m.Prep = db.query(m.Prep).get(prep_id)
+
+    check_access_to_product_prep(prep_id=prep_id, product=product, prep=prep)
+
+    prep.is_active = data.is_active
+    db.commit()
+
+    return prep
