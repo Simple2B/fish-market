@@ -74,7 +74,7 @@ def delete_product_by_id(
     return {"ok", "true"}
 
 
-@router.patch("/{id}", status_code=status.HTTP_200_OK)
+@router.patch("/{id}", response_model=s.ProductOut, status_code=status.HTTP_200_OK)
 def update_product(
     id: int,
     data: s.UpdateProduct,
@@ -94,10 +94,4 @@ def update_product(
     db.commit()
     db.refresh(product)
 
-    return s.ProductOut(
-        id=product.id,
-        name=product.name,
-        price=product.price,
-        sold_by=product.sold_by,
-        image=product.image,
-    )
+    return product
