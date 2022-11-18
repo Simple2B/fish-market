@@ -97,7 +97,7 @@ def update_product(
 
     db.commit()
     db.refresh(product)
-    
+
     return product
 
 
@@ -154,7 +154,7 @@ def delete_product_prep_by_id(
     log(log.INFO, "delete_product_prep_by_id")
     product = db.query(m.Product).get(product_id)
 
-    check_access_to_product(product=product, user=current_user, product_id=id)
+    check_access_to_product(product=product, user=current_user, product_id=product_id)
 
     prep: m.Prep = db.query(m.Prep).get(prep_id)
 
@@ -181,7 +181,7 @@ def patch_product_prep_by_id(
     log(log.INFO, "patch_product_prep_by_id")
     product = db.query(m.Product).get(product_id)
 
-    check_access_to_product(product=product, user=current_user, product_id=id)
+    check_access_to_product(product=product, user=current_user, product_id=product_id)
 
     prep: m.Prep = db.query(m.Prep).get(prep_id)
 
