@@ -1,7 +1,6 @@
 from fastapi import status
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
-from sqlalchemy import and_
 
 from app import model as m
 from app import schema as s
@@ -134,7 +133,7 @@ def test_delete_product(marketer_client: TestClient, db: Session):
     product: m.Product = db.query(m.Product).get(product.id)
     res = marketer_client.get(f"/product/{product.id}")
     assert res.status_code == status.HTTP_404_NOT_FOUND
-    assert product.is_deleted == True
+    assert product.is_deleted
 
 
 def test_update_product(marketer_client: TestClient, db: Session):
@@ -167,6 +166,6 @@ def test_update_product(marketer_client: TestClient, db: Session):
     assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     # test can not update delete product
-    res_delete = marketer_client.delete(f"/product/{product.id}")
+    marketer_client.delete(f"/product/{product.id}")
     res = marketer_client.patch(f"/product/{product.id}", json=prod_data)
     assert res.status_code == status.HTTP_404_NOT_FOUND

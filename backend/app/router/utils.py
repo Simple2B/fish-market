@@ -1,5 +1,3 @@
-from typing import Optional
-
 from fastapi import HTTPException, status
 
 from app import model as m
@@ -14,7 +12,7 @@ def get_business_id_from_cur_user(user: m.User) -> int:
         business_id = user.businesses[0].id
 
     if not business_id:
-        log(log.WARNING, "create_product: [%s] User does not have business", user)
+        log(log.WARNING, "User [%s] does not have business", user)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You don't  have permission to the business",
@@ -27,7 +25,7 @@ def check_access_to_product(product: m.Product, user: m.User, product_id: int) -
     if user.role == m.UserRole.Admin:
         log(
             log.WARNING,
-            "get_product_by_id: [%s] User dose not have permission to the product",
+            "User [%s] dose not have permission to the product",
             user,
         )
         raise HTTPException(
