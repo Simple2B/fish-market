@@ -30,6 +30,7 @@ def test_get_all_product_cur_user(marketer_client: TestClient, db: Session):
 
     user: m.User = db.query(m.User).filter_by(role=m.UserRole.Marketeer).first()
 
+    assert user.businesses, "User must have business"
     user_business = user.businesses[0]
 
     user_products = s.ProductsOut(products=user_business.products)

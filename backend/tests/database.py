@@ -49,4 +49,4 @@ def add_business_fake_products(business_id: int, db: SessionLocal) -> None:
             image=fake.image_url(),
         )
         db.add(product)
-        db.commit()
+    db.commit()

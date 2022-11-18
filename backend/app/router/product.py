@@ -6,7 +6,7 @@ from app import schema as s
 from app import model as m
 from app.database import get_db
 from app.logger import log
-from .utils import get_business_id_from_cur_user, access_to_product
+from .utils import get_business_id_from_cur_user, check_access_to_product
 
 
 router = APIRouter(prefix="/product", tags=["Product"])
@@ -43,7 +43,7 @@ def create_product(
     return new_product
 
 
-@router.get("/{id}", status_code=status.HTTP_200_OK)
+@router.get("/{id}", response_model=s.ProductOut, status_code=status.HTTP_200_OK)
 def get_product_by_id(
     id: int,
     db: Session = Depends(get_db),
@@ -52,15 +52,9 @@ def get_product_by_id(
     log(log.INFO, "get_product_by_id")
     product = db.query(m.Product).get(id)
 
-    access_to_product(product=product, user=current_user)
+    check_access_to_product(product=product, user=current_user, product_id=id)
 
-    return s.ProductOut(
-        id=product.id,
-        name=product.name,
-        price=product.price,
-        sold_by=product.sold_by,
-        image=product.image,
-    )
+    return product
 
 
 @router.delete("/{id}", status_code=status.HTTP_200_OK)
@@ -72,7 +66,7 @@ def delete_product_by_id(
     log(log.INFO, "delete_product_by_id")
     product = db.query(m.Product).get(id)
 
-    access_to_product(product=product, user=current_user)
+    check_access_to_product(product=product, user=current_user, product_id=id)
 
     product.is_deleted = True
     db.commit()
@@ -90,7 +84,7 @@ def update_product(
     log(log.INFO, "update_product")
     product = db.query(m.Product).get(id)
 
-    access_to_product(product=product, user=current_user)
+    check_access_to_product(product=product, user=current_user, product_id=id)
 
     update_data: dict = data.dict()
     for key, value in update_data.items():
