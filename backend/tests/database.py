@@ -70,4 +70,4 @@ def add_prep_to_product(product_id: int, db: SessionLocal) -> None:
     for _ in range(fake.random_int(1, 4)):
         prep = m.Prep(product_id=product_id, name=random.choice(list_prep_name))
         db.add(prep)
-        db.commit()
+    db.commit()

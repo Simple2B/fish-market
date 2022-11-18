@@ -8,7 +8,7 @@ from app.database import get_db
 from app.logger import log
 from .utils import (
     get_business_id_from_cur_user,
-    access_to_product,
+    check_access_to_product,
     check_access_to_product_prep,
 )
 
@@ -54,7 +54,7 @@ def get_product_by_id(
     log(log.INFO, "get_product_by_id")
     product = db.query(m.Product).get(id)
 
-    access_to_product(product=product, user=current_user)
+    check_access_to_product(product=product, user=current_user, product_id=id)
 
     return s.ProductOut(
         id=product.id,
@@ -74,7 +74,7 @@ def delete_product_by_id(
     log(log.INFO, "delete_product_by_id")
     product = db.query(m.Product).get(id)
 
-    access_to_product(product=product, user=current_user)
+    check_access_to_product(product=product, user=current_user, product_id=id)
 
     product.is_deleted = True
     db.commit()
@@ -92,7 +92,7 @@ def update_product(
     log(log.INFO, "update_product")
     product = db.query(m.Product).get(id)
 
-    access_to_product(product=product, user=current_user)
+    check_access_to_product(product=product, user=current_user, product_id=id)
 
     update_data: dict = data.dict()
     for key, value in update_data.items():
@@ -124,7 +124,7 @@ def create_product_prep(
     product = db.query(m.Product).get(id)
 
     log(log.INFO, "create_product_prep")
-    access_to_product(product=product, user=current_user)
+    check_access_to_product(product=product, user=current_user, product_id=id)
 
     prep: m.Prep = m.Prep(product_id=product.id, name=data.name)
 
@@ -147,7 +147,7 @@ def get_product_prep(
     log(log.INFO, "get_product_prep")
     product = db.query(m.Product).get(id)
 
-    access_to_product(product=product, user=current_user)
+    check_access_to_product(product=product, user=current_user, product_id=id)
 
     preps = db.query(m.Prep).filter_by(product_id=id, is_deleted=False).all()
 
@@ -164,7 +164,7 @@ def delete_product_prep_by_id(
     log(log.INFO, "delete_product_prep_by_id")
     product = db.query(m.Product).get(product_id)
 
-    access_to_product(product=product, user=current_user)
+    check_access_to_product(product=product, user=current_user, product_id=id)
 
     prep: m.Prep = db.query(m.Prep).get(prep_id)
 
@@ -191,7 +191,7 @@ def patch_product_prep_by_id(
     log(log.INFO, "patch_product_prep_by_id")
     product = db.query(m.Product).get(product_id)
 
-    access_to_product(product=product, user=current_user)
+    check_access_to_product(product=product, user=current_user, product_id=id)
 
     prep: m.Prep = db.query(m.Prep).get(prep_id)
 
