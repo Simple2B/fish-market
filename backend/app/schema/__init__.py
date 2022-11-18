@@ -7,3 +7,8 @@ from .post import Post, PostCreate
 from .user_update import UserUpdate
 from .business_schemas import BusinessOut, BusinessUpdate, BusinessUpdateOut
 from .product_schemas import ProductsOut, ProductOut, CreateProduct, UpdateProduct
+from .business_product_out_schemas import (
+    BusinessProductsOut,
+    BusinessProductOut,
+    BusinessProductPrepOut,
+)

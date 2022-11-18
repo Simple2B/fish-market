@@ -63,3 +63,33 @@ def update_business_cur_user(
     db.refresh(business)
 
     return s.BusinessUpdateOut(name=business.name, logo=business.logo)
+
+
+@router.get("/{business_uid}/product", status_code=status.HTTP_200_OK)
+def get_business_product_out(business_uid: str, db: Session = Depends(get_db)):
+    business: m.Business = (
+        db.query(m.Business).filter_by(web_site_id=business_uid).first()
+    )
+
+    if not business:
+        log(
+            log.WARNING,
+            "get_business_product_out: Business was not found",
+        )
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Business was not found",
+        )
+
+    products = [
+        product
+        for product in business.products
+        if not product.is_deleted and not product.is_out_of_stoke
+    ]
+
+    for product in products:
+        product.preps = [
+            prep for prep in product.preps if not prep.is_deleted and prep.is_active
+        ]
+
+    return s.BusinessProductsOut(products=products)
