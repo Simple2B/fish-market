@@ -9,9 +9,9 @@ class UserRole(enum.Enum):
 
 class SoldBy(enum.Enum):
 
-    unknown = "Unknown"
-    by_kilogram = "By Kilogram"
-    by_unit = "By Unit"
+    unknown = "unknown"
+    by_kilogram = "by_kilogram"
+    by_unit = "by_unit"
 
 
 class OrderStatus(enum.Enum):
