@@ -128,7 +128,7 @@ def create_product_prep(
     db.commit()
     db.refresh(prep)
 
-    return s.ProductPrepOut(id=prep.id, name=prep.name, is_active=prep.is_active)
+    return prep
 
 
 @router.get(
@@ -148,3 +148,35 @@ def get_product_prep(
     preps = db.query(m.Prep).filter_by(product_id=id, is_deleted=False).all()
 
     return s.ProductPrepsOut(id=product.id, preps=preps)
+
+
+@router.delete("/{product_id}/prep/{prep_id}", status_code=status.HTTP_200_OK)
+def delete_product_prep_by_id(
+    product_id: int,
+    prep_id: int,
+    db: Session = Depends(get_db),
+    current_user: m.User = Depends(get_current_user),
+):
+    log(log.INFO, "delete_product_prep_by_id")
+    product = db.query(m.Product).get(product_id)
+
+    access_to_product(product=product, user=current_user)
+
+    prep: m.Prep = db.query(m.Prep).get(prep_id)
+
+    if not prep or prep.is_deleted or prep.product_id != product.id:
+        log(
+            log.WARNING,
+            "delete_product_prep_by_id: the product [%d] dose not have prep [%d]",
+            product_id,
+            prep_id,
+        )
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="The product dose not have prep ",
+        )
+
+    prep.is_deleted = True
+    db.commit()
+
+    return {"ok", True}
