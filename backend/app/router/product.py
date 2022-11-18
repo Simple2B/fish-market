@@ -1,4 +1,4 @@
-from fastapi import Depends, APIRouter, status, HTTPException
+from fastapi import Depends, APIRouter, status
 from sqlalchemy.orm import Session
 
 from app.service import get_current_user
@@ -21,9 +21,11 @@ def get_products(
     db: Session = Depends(get_db), current_user: m.User = Depends(get_current_user)
 ):
 
-    business_id = current_user.businesses[0].id
+    business_id = get_business_id_from_cur_user(current_user)
 
-    products = db.query(m.Product).filter_by(business_id=business_id).all()
+    products = (
+        db.query(m.Product).filter_by(business_id=business_id, is_deleted=False).all()
+    )
 
     return s.ProductsOut(products=products)
 
@@ -45,7 +47,7 @@ def create_product(
     return new_product
 
 
-@router.get("/{id}", status_code=status.HTTP_200_OK)
+@router.get("/{id}", response_model=s.ProductOut, status_code=status.HTTP_200_OK)
 def get_product_by_id(
     id: int,
     db: Session = Depends(get_db),
@@ -56,13 +58,7 @@ def get_product_by_id(
 
     check_access_to_product(product=product, user=current_user, product_id=id)
 
-    return s.ProductOut(
-        id=product.id,
-        name=product.name,
-        price=product.price,
-        sold_by=product.sold_by,
-        image=product.image,
-    )
+    return product
 
 
 @router.delete("/{id}", status_code=status.HTTP_200_OK)
@@ -82,7 +78,7 @@ def delete_product_by_id(
     return {"ok", "true"}
 
 
-@router.patch("/{id}", status_code=status.HTTP_200_OK)
+@router.patch("/{id}", response_model=s.ProductOut, status_code=status.HTTP_200_OK)
 def update_product(
     id: int,
     data: s.UpdateProduct,
@@ -101,14 +97,8 @@ def update_product(
 
     db.commit()
     db.refresh(product)
-
-    return s.ProductOut(
-        id=product.id,
-        name=product.name,
-        price=product.price,
-        sold_by=product.sold_by,
-        image=product.image,
-    )
+    
+    return product
 
 
 @router.post(
