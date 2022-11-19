@@ -42,10 +42,10 @@ def fill_test_data(db: SessionLocal):
 
 
 def add_business_fake_products(business_id: int, db: SessionLocal) -> None:
-    for _ in range(fake.random_int(1, 5)):
+    for n in range(fake.random_int(4, 6)):
         product = m.Product(
             business_id=business_id,
-            name="fish",
+            name=f"fish_{n}",
             price=fake.random_int(1, 10),
             sold_by=m.SoldBy.by_unit,
             image=fake.image_url(),
@@ -68,6 +68,8 @@ def add_prep_to_product(product_id: int, db: SessionLocal) -> None:
     ]
 
     for _ in range(fake.random_int(2, 4)):
-        prep = m.Prep(product_id=product_id, name=random.choice(list_prep_name))
+        prep = m.Prep(
+            product_id=product_id, name=random.choice(list_prep_name), is_active=True
+        )
         db.add(prep)
     db.commit()
