@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker, Session
 
 from app.main import app
 from app.database import Base, get_db
-from tests.database import fill_test_data
+from tests.database import fill_test_data, create_test_customer_order
 from app import model as m
 from app import schema as s
 
@@ -67,3 +67,8 @@ def admin_client(client: TestClient, db: Session) -> Generator:
 @pytest.fixture
 def marketer_client(client: TestClient, db: Session) -> Generator:
     yield authorized_client(client, db, m.UserRole.Marketeer)
+
+
+@pytest.fixture
+def customer_orders(db: Session):
+    return create_test_customer_order(db)

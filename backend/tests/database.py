@@ -73,3 +73,32 @@ def add_prep_to_product(product_id: int, db: SessionLocal) -> None:
         )
         db.add(prep)
     db.commit()
+
+
+def create_test_customer_order(db: SessionLocal) -> tuple:
+    customer = m.Customer(
+        full_name="test user", phone_number="234102221050", note="test note"
+    )
+    db.add(customer)
+    db.commit()
+    db.refresh(customer)
+
+    order: m.Order = m.Order(customer_id=customer.id)
+    db.add(order)
+    db.commit()
+    db.refresh(order)
+
+    business = db.query(m.Business).first()
+
+    products = business.products
+
+    for i, product in enumerate(products):
+        for prep in product.preps:
+            order_item = m.OrderItem(order_id=order.id, prep_id=prep.id, qty=i + 1)
+            db.add(order_item)
+            if i == 2:
+                break
+    db.commit()
+    db.refresh(order)
+
+    return business, order
