@@ -1,3 +1,5 @@
+import random
+
 from faker import Faker
 
 from app.database import SessionLocal
@@ -49,4 +51,23 @@ def add_business_fake_products(business_id: int, db: SessionLocal) -> None:
             image=fake.image_url(),
         )
         db.add(product)
+        db.commit()
+        db.refresh(product)
+        add_prep_to_product(product_id=product.id, db=db)
+
+
+def add_prep_to_product(product_id: int, db: SessionLocal) -> None:
+    list_prep_name = [
+        "fillet",
+        "cleaned",
+        "without head",
+        "red",
+        "live",
+        "without tail",
+        "without bones",
+    ]
+
+    for _ in range(fake.random_int(1, 4)):
+        prep = m.Prep(product_id=product_id, name=random.choice(list_prep_name))
+        db.add(prep)
     db.commit()

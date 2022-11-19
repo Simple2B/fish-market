@@ -14,7 +14,7 @@ class Product(Base):
     business_id = Column(Integer, ForeignKey("businesses.id"))
     name = Column(String(128), nullable=False)
     price = Column(Float, default=0.0)
-    sold_by = Column(Enum(SoldBy), default=SoldBy.unknown)
+    sold_by = Column(Enum(SoldBy), default=SoldBy.unknown)  # TODO add both
     image = Column(String(256))
     is_out_of_stoke = Column(Boolean, default=False)
     is_deleted = Column(Boolean, default=False)
