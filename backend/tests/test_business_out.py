@@ -1,3 +1,5 @@
+import uuid
+
 from fastapi import status
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
@@ -126,3 +128,31 @@ def test_create_product_order(client: TestClient, db: Session):
     # test id web_site_id is not correct
     res = client.post(f"/business/fasfaf76fa7f8afaffafaf/order", json=order_data)
     assert res.status_code == status.HTTP_404_NOT_FOUND
+
+
+def test_delete_customer_order(client: TestClient, db: Session, customer_orders):
+    business, order = customer_orders
+    fake_uid = uuid.uuid4()
+
+    res = client.delete(f"/business/{business.web_site_id}/order/{order.order_uid}")
+    assert res.status_code == status.HTTP_200_OK
+    assert "ok" in res.json()
+    db.refresh(order)
+    assert order.status == m.OrderStatus.cancelled
+
+    # test bad order uid
+    res = client.delete(f"/business/{business.web_site_id}/order/{fake_uid}")
+    assert res.status_code == status.HTTP_404_NOT_FOUND
+
+    # test bad business uid
+    res = client.delete(f"/business/{fake_uid}/order/{order.order_uid}")
+    assert res.status_code == status.HTTP_404_NOT_FOUND
+
+
+def test_get_customer_orders(client: TestClient, db: Session, customer_orders):
+    business, order = customer_orders
+    fake_uid = uuid.uuid4()
+
+    res = client.get(f"/business/{business.web_site_id}/order/{order.order_uid}")
+    assert res.status_code == status.HTTP_200_OK
+    res_data = s.BusinessProductsOut.parse_obj(res.json())

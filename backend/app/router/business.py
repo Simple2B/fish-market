@@ -6,7 +6,7 @@ from app import schema as s
 from app import model as m
 from app.database import get_db
 from app.logger import log
-from .utils import check_access_to_business
+from .utils import check_access_to_business, check_access_to_order
 
 
 router = APIRouter(prefix="/business", tags=["business"])
@@ -127,3 +127,24 @@ def create_order_for_business(
     db.commit()
 
     return s.CreateOrderOut(customer=customer, order_status=order.status)
+
+
+@router.delete("/{business_uid}/order/{order_uid}", status_code=status.HTTP_200_OK)
+def delete_customer_order(
+    business_uid: str, order_uid: str, db: Session = Depends(get_db)
+):
+    log(log.INFO, "delete_customer_order")
+    business: m.Business = (
+        db.query(m.Business).filter_by(web_site_id=business_uid).first()
+    )
+
+    check_access_to_business(business=business, data_mes=business_uid)
+
+    order = db.query(m.Order).filter_by(order_uid=order_uid).first()
+
+    check_access_to_order(order=order)
+
+    order.status = m.OrderStatus.cancelled
+    db.commit()
+
+    return {"ok", True}

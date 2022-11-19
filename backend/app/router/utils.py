@@ -62,3 +62,12 @@ def check_access_to_business(business: m.Business, data_mes: Union[str, m.User])
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Business was not found",
         )
+
+
+def check_access_to_order(order: m.Order):
+    if not order:
+        log(log.WARNING, "Order was not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Order was not found",
+        )
