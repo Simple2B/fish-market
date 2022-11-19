@@ -6,6 +6,7 @@ from app import schema as s
 from app import model as m
 from app.database import get_db
 from app.logger import log
+from .utils import check_access_to_business
 
 
 router = APIRouter(prefix="/business", tags=["business"])
@@ -19,15 +20,8 @@ def get_business_cur_user(
     business: m.Business = (
         db.query(m.Business).filter_by(user_id=current_user.id).first()
     )
-    if not business:
-        log(
-            log.WARNING,
-            "get_business_cur_user [%s]: User does not have business",
-            current_user,
-        )
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="User does not have business"
-        )
+
+    check_access_to_business(business=business, data_mes=current_user)
 
     return business
 
@@ -38,21 +32,12 @@ def update_business_cur_user(
     db: Session = Depends(get_db),
     current_user: m.User = Depends(get_current_user),
 ):
+    log(log.INFO, "update_business_cur_user")
     business: m.Business = (
         db.query(m.Business).filter_by(user_id=current_user.id).first()
     )
 
-    log(log.INFO, "update_business_cur_user")
-
-    if not business:
-        log(
-            log.WARNING,
-            "update_business_cur_user [%s]: User does not have business",
-            current_user,
-        )
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="User does not have business"
-        )
+    check_access_to_business(business=business, data_mes=current_user)
 
     data: dict = data.dict()
     for key, value in data.items():
@@ -67,19 +52,12 @@ def update_business_cur_user(
 
 @router.get("/{business_uid}/product", status_code=status.HTTP_200_OK)
 def get_business_product_out(business_uid: str, db: Session = Depends(get_db)):
+    log(log.INFO, "get_business_product_out: [%s]", business_uid)
     business: m.Business = (
         db.query(m.Business).filter_by(web_site_id=business_uid).first()
     )
 
-    if not business:
-        log(
-            log.WARNING,
-            "get_business_product_out: Business was not found",
-        )
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Business was not found",
-        )
+    check_access_to_business(business=business, data_mes=business_uid)
 
     products = [
         product
@@ -93,3 +71,10 @@ def get_business_product_out(business_uid: str, db: Session = Depends(get_db)):
         ]
 
     return s.BusinessProductsOut(products=products)
+
+
+@router.post("/{business_uid}/order", status_code=status.HTTP_201_CREATED)
+def create_order_for_business(
+    business_uid: str, data: s.CreateOrder, db: Session = Depends(get_db)
+):
+    pass

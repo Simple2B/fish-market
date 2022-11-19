@@ -1,3 +1,5 @@
+from typing import Union
+
 from fastapi import HTTPException, status
 
 from app import model as m
@@ -50,4 +52,13 @@ def check_access_to_product_prep(prep_id: int, product: m.Product, prep: m.Prep)
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Prep was not found",
+        )
+
+
+def check_access_to_business(business: m.Business, data_mes: Union[str, m.User]):
+    if not business:
+        log(log.WARNING, "Business was not found: [%s]", data_mes)
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Business was not found",
         )
