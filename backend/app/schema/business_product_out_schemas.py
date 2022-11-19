@@ -16,7 +16,7 @@ class BusinessProductPrepOut(BaseModel):
 class BusinessProductOut(BaseModel):
     name: str
     price: float
-    logo: Optional[str]
+    image: Optional[str]
     sold_by: m.SoldBy
     preps: list[BusinessProductPrepOut]
 
