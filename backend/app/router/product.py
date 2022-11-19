@@ -103,6 +103,7 @@ def update_product(
 
 @router.post(
     "/{id}/prep",
+    response_model=s.ProductPrepOut,
     status_code=status.HTTP_201_CREATED,
 )
 def create_product_prep(
@@ -127,6 +128,7 @@ def create_product_prep(
 
 @router.get(
     "/{id}/prep",
+    response_model=s.ProductPrepsOut,
     status_code=status.HTTP_200_OK,
 )
 def get_product_prep(
