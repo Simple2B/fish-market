@@ -16,9 +16,9 @@ class SoldBy(enum.Enum):
 
 class OrderStatus(enum.Enum):
 
-    created = "Created"
-    was_seen = "Was seen"
-    in_progress = "In Progress"
-    completed = "Completed"
-    picked_up = "Picked Up"
-    cancelled = "Cancelled"  # TODO: consider to add another cancellation kind
+    created = "created"
+    was_seen = "was_seen"
+    in_progress = "in_progress"
+    completed = "completed"
+    picked_up = "picked_up"
+    cancelled = "cancelled"  # TODO: consider to add another cancellation kind
