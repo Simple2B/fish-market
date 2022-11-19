@@ -65,12 +65,15 @@ def get_business_product_out(business_uid: str, db: Session = Depends(get_db)):
         if not product.is_deleted and not product.is_out_of_stoke
     ]
 
+    show_products = []
     for product in products:
         product.preps = [
             prep for prep in product.preps if not prep.is_deleted and prep.is_active
         ]
+        if product.preps:
+            show_products.append(product)
 
-    return s.BusinessProductsOut(products=products)
+    return s.BusinessProductsOut(products=show_products)
 
 
 @router.post("/{business_uid}/order", status_code=status.HTTP_201_CREATED)

@@ -16,7 +16,7 @@ def test_get_business_product_out(
     user = db.query(m.User).filter_by(role=m.UserRole.Marketeer).first()
     user_business: m.Business = user.businesses[0]
 
-    first_product = user_business.products[0]
+    first_product: m.Product = user_business.products[0]
 
     res = client.get(f"/business/{user_business.web_site_id}/product")
     assert res.status_code == status.HTTP_200_OK
@@ -25,6 +25,23 @@ def test_get_business_product_out(
     assert first_product.name == first_product_res.name
     assert len(first_product.preps) == len(first_product_res.preps)
     assert len(user_business.products) == len(res_data.products)
+
+    user_business.products[0].is_out_of_stoke = True
+    user_business.products[1].price = 100
+    for prep in user_business.products[2].preps:
+        prep.is_deleted = True
+    for prep in user_business.products[3].preps:
+        prep.is_active = False
+    count_of_products = len(user_business.products)
+    db.commit()
+    res = client.get(f"/business/{user_business.web_site_id}/product")
+    res_products = res.json()["products"]
+    # test if marketeer make product out of stocks
+    assert user_business.products[0].name != res_products[0]["name"]
+    # test if marketeer change product
+    assert res_products[0]["price"] == 100
+    # test if product preps is not active or deleted
+    assert len(res_products) == count_of_products - 3
 
 
 def test_create_product_order(client: TestClient, db: Session):
