@@ -19,6 +19,7 @@ class Order(Base):
     order_uid = Column(String(36), default=gen_unique_uid)
 
     customer = relationship("Customer")
+    items = relationship("OrderItem", viewonly=True)
 
     def __repr__(self) -> str:
         return f"<id:{self.id}>, customer:{self.customer}"
