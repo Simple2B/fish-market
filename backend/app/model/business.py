@@ -1,13 +1,9 @@
-import uuid
 from sqlalchemy import Integer, String, Column, ForeignKey
 from sqlalchemy.orm import relationship
 
 
 from app.database import Base
-
-
-def gen_business_id() -> str:
-    return str(uuid.uuid4())
+from .utils import gen_unique_uid
 
 
 class Business(Base):
@@ -18,7 +14,7 @@ class Business(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     name = Column(String(128), default="")
     logo = Column(String(128), default="")
-    web_site_id = Column(String(36), default=gen_business_id)
+    web_site_id = Column(String(36), default=gen_unique_uid)
 
     user = relationship("User")
     products = relationship("Product", viewonly=True)
