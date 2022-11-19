@@ -77,4 +77,50 @@ def get_business_product_out(business_uid: str, db: Session = Depends(get_db)):
 def create_order_for_business(
     business_uid: str, data: s.CreateOrder, db: Session = Depends(get_db)
 ):
-    pass
+    log(log.INFO, "create_order_for_business")
+
+    prep_ids = [item.prep_id for item in data.items]
+    preps = db.query(m.Prep).filter(m.Prep.id.in_(prep_ids)).all()
+
+    if len(prep_ids) != len(preps):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Incorrect data"
+        )
+
+    business: m.Business = (
+        db.query(m.Business).filter_by(web_site_id=business_uid).first()
+    )
+
+    check_access_to_business(business=business, data_mes=business_uid)
+
+    customer_data: s.CreateCustomer = data.customer
+
+    customer = (
+        db.query(m.Customer).filter_by(phone_number=customer_data.phone_number).first()
+    )
+
+    if not customer:
+        log(log.INFO, "create customer")
+        create_customer = m.Customer(**customer_data.dict())
+        db.add(create_customer)
+        db.commit()
+        db.refresh(create_customer)
+        customer = create_customer
+
+    log(log.INFO, "create order")
+    order = m.Order(customer_id=customer.id)
+    db.add(order)
+    db.commit()
+    db.refresh(order)
+
+    order_items = data.items
+
+    log(log.INFO, "create_order_items")
+    for item in order_items:
+        create_order_item = m.OrderItem(
+            order_id=order.id, prep_id=item.prep_id, qty=item.qty
+        )
+        db.add(create_order_item)
+    db.commit()
+
+    return s.CreateOrderOut(customer=customer, order_status=order.status)
