@@ -148,3 +148,38 @@ def delete_customer_order(
     db.commit()
 
     return {"ok", True}
+
+
+@router.get("/{business_uid}/order/{order_uid}", status_code=status.HTTP_200_OK)
+def get_customer_order(
+    business_uid: str, order_uid: str, db: Session = Depends(get_db)
+):
+    log(log.INFO, "get_customer_order")
+    business: m.Business = (
+        db.query(m.Business).filter_by(web_site_id=business_uid).first()
+    )
+
+    check_access_to_business(business=business, data_mes=business_uid)
+
+    order = db.query(m.Order).filter_by(order_uid=order_uid).first()
+
+    check_access_to_order(order=order)
+
+    get_products = []
+    for item in order.items:
+        item.product.preps = [
+            prep
+            for prep in item.product.preps
+            if (not prep.is_deleted and prep.is_active) or prep.id == item.prep_id
+        ]
+        product_schema = s.OrderProductOut(
+            name=item.product.name,
+            price=item.product.price,
+            image=item.product.image,
+            sold_by=item.product.sold_by,
+            elect_prep_id=item.prep_id,
+            preps=item.product.preps,
+        )
+        get_products.append(product_schema)
+
+    return s.OrderProductsOut(products=get_products)
