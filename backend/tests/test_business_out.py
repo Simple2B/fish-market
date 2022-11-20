@@ -158,8 +158,12 @@ def test_get_customer_orders(client: TestClient, db: Session, customer_orders):
     res_data = s.OrderProductsOut.parse_obj(res.json())
     assert len(res_data.products) == len(order.items)
     assert [item.prep_id for item in order.items] == [
-        product.elect_prep_id for product in res_data.products
+        product.elect_prep.prep_id for product in res_data.products
     ]
+
+    assert sum(item.qty for item in order.items) == sum(
+        product.elect_prep.qty for product in res_data.products
+    )
 
     # test bad order uid
     res = client.delete(f"/business/{business.web_site_id}/order/{fake_uid}")
@@ -170,3 +174,15 @@ def test_get_customer_orders(client: TestClient, db: Session, customer_orders):
     assert res.status_code == status.HTTP_404_NOT_FOUND
 
     #  test if product prep is deleted or not active
+    for prep in order.items[0].prep.product.preps:
+        prep.is_active = False
+    for prep in order.items[1].prep.product.preps:
+        prep.is_deleted = True
+
+    db.commit()
+
+    res = client.get(f"/business/{business.web_site_id}/order/{order.order_uid}")
+    assert res.status_code == status.HTTP_200_OK
+    res_data = s.OrderProductsOut.parse_obj(res.json())
+    assert len(res_data.products[0].preps) == 1
+    assert len(res_data.products[1].preps) == 1

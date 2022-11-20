@@ -6,12 +6,21 @@ from app import model as m
 from .business_product_out_schemas import BusinessProductPrepOut
 
 
+class OrderElectPrep(BaseModel):
+    prep_id: int
+    qty: float
+
+    class Config:
+        orm_mode = True
+
+
 class OrderProductOut(BaseModel):
     name: str
     price: float
     image: Optional[str]
     sold_by: m.SoldBy
-    elect_prep_id: int
+
+    elect_prep: OrderElectPrep
     preps: list[BusinessProductPrepOut]
 
     class Config:

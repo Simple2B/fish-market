@@ -167,7 +167,7 @@ def get_customer_order(
 
     get_products = []
     for item in order.items:
-        item.product.preps = [
+        preps = [
             prep
             for prep in item.product.preps
             if (not prep.is_deleted and prep.is_active) or prep.id == item.prep_id
@@ -177,8 +177,8 @@ def get_customer_order(
             price=item.product.price,
             image=item.product.image,
             sold_by=item.product.sold_by,
-            elect_prep_id=item.prep_id,
-            preps=item.product.preps,
+            elect_prep=item,
+            preps=preps,
         )
         get_products.append(product_schema)
 
