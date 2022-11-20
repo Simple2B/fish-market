@@ -67,11 +67,19 @@ def get_business_product_out(business_uid: str, db: Session = Depends(get_db)):
 
     show_products = []
     for product in products:
-        product.preps = [
+        preps = [
             prep for prep in product.preps if not prep.is_deleted and prep.is_active
         ]
-        if product.preps:
-            show_products.append(product)
+        if preps:
+            show_products.append(
+                s.BusinessProductOut(
+                    name=product.name,
+                    price=product.price,
+                    image=product.image,
+                    sold_by=product.sold_by,
+                    preps=preps,
+                )
+            )
 
     return s.BusinessProductsOut(products=show_products)
 
