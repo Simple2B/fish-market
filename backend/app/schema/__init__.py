@@ -27,3 +27,5 @@ from .create_order_schemas import (
 )
 
 from .get_order_schemas import OrderProductsOut, OrderProductOut, OrderElectPrep
+
+from .patch_order_schemas import UpdateOrderProducts, UpdateOrderProduct

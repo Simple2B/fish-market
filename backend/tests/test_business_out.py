@@ -1,4 +1,5 @@
 import uuid
+import random
 
 from fastapi import status
 from fastapi.testclient import TestClient
@@ -151,6 +152,7 @@ def test_delete_customer_order(client: TestClient, db: Session, customer_orders)
 
 def test_get_customer_orders(client: TestClient, db: Session, customer_orders):
     business, order = customer_orders
+    new_qty = 100
     fake_uid = uuid.uuid4()
 
     res = client.get(f"/business/{business.web_site_id}/order/{order.order_uid}")
@@ -186,3 +188,72 @@ def test_get_customer_orders(client: TestClient, db: Session, customer_orders):
     res_data = s.OrderProductsOut.parse_obj(res.json())
     assert len(res_data.products[0].preps) == 1
     assert len(res_data.products[1].preps) == 1
+
+
+def test_patch_customer_orders(client: TestClient, db: Session, customer_orders):
+    business, order = customer_orders
+    new_qty = 100
+    fake_uid = uuid.uuid4()
+    res_data = client.get(f"/business/{business.web_site_id}/order/{order.order_uid}")
+    products_for_update = s.OrderProductsOut.parse_obj(res_data.json())
+
+    products = products_for_update.products
+
+    update_products = []
+    for index, product in enumerate(products):
+        product = s.OrderProductOut.parse_obj(product)
+        if index == 0:
+            update_products.append(
+                s.UpdateOrderProduct(
+                    prep_id=product.preps[1].id,
+                    qty=product.elect_prep.qty,
+                    prod_name=product.name,
+                )
+            )
+        elif index == 1:
+            update_products.append(
+                s.UpdateOrderProduct(
+                    prep_id=product.elect_prep.prep_id,
+                    qty=new_qty,
+                    prod_name=product.name,
+                )
+            )
+        elif index == 2:
+            update_products.append(
+                s.UpdateOrderProduct(
+                    **product.elect_prep.dict(), delete=True, prod_name=product.name
+                )
+            )
+        else:
+            update_products.append(
+                s.UpdateOrderProduct(
+                    **product.elect_prep.dict(), prod_name=product.name
+                )
+            )
+
+    update_data = s.UpdateOrderProducts(products=update_products)
+
+    res = client.patch(
+        f"/business/{business.web_site_id}/order/{order.order_uid}",
+        json=update_data.dict(),
+    )
+    assert res.status_code == status.HTTP_200_OK
+    res_data = s.OrderProductOut.parse_obj(res.json())
+    assert len(res_data.products) == len(products_for_update) - 1
+    assert res_data.products[0].elect_prep.prep_id == product.preps[1].id
+    assert res_data.products[1].price == new_qty
+    assert res_data.products[2].elect_prep.dict() == products_for_update[3].elect_prep
+
+    # test data wsa changed in db
+    db.refresh(order)
+    assert order.items[0].prep_id == product.preps[2].id
+    assert order.items[1].price == new_qty
+    assert len(order.items) == len(products_for_update) - 1
+
+    # test if prep belongs to the products
+    update_data.products[0].elect_prep.prep_id = 200
+    res = client.patch(
+        f"/business/{business.web_site_id}/order/{order.order_uid}",
+        json=update_data.dict(),
+    )
+    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
