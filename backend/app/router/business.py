@@ -193,21 +193,21 @@ def get_customer_order(
     return s.OrderProductsOut(products=get_products)
 
 
-@router.patch("/{business_uid}/order/{order_uid}", status_code=status.HTTP_200_OK)
-def patch_customer_order(
-    data: s.UpdateOrderProducts,
-    business_uid: str,
-    order_uid: str,
-    db: Session = Depends(get_db),
-):
-    log(log.INFO, "patch_customer_order")
-    # TODO prep belongs to product, chack  the stats order was not in progre
-    business: m.Business = (
-        db.query(m.Business).filter_by(web_site_id=business_uid).first()
-    )
-    check_access_to_business(business=business, data_mes=business_uid)
-    order = db.query(m.Order).filter_by(order_uid=order_uid).first()
+# @router.patch("/{business_uid}/order/{order_uid}", status_code=status.HTTP_200_OK)
+# def patch_customer_order(
+#     data: s.UpdateOrderProducts,
+#     business_uid: str,
+#     order_uid: str,
+#     db: Session = Depends(get_db),
+# ):
+#     log(log.INFO, "patch_customer_order")
+#     # TODO prep belongs to product, chack  the stats order was not in progre
+#     business: m.Business = (
+#         db.query(m.Business).filter_by(web_site_id=business_uid).first()
+#     )
+#     check_access_to_business(business=business, data_mes=business_uid)
+#     order = db.query(m.Order).filter_by(order_uid=order_uid).first()
 
-    check_access_to_order(order=order)
+#     check_access_to_order(order=order)
 
-    products = data.products
+#     products = data.products
