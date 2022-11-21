@@ -161,6 +161,7 @@ def delete_product_prep_by_id(
     prep: m.Prep = db.query(m.Prep).get(prep_id)
 
     check_access_to_product_prep(prep_id=prep_id, product=product, prep=prep)
+    # TODO can not show product without any preps or active preps
 
     prep.is_deleted = True
     db.commit()

@@ -13,7 +13,7 @@ class Customer(Base):
     is_number_verified = Column(Boolean, default=False)
     note = Column(String(512))
 
-    customer_orders: list = relationship("Order", viewonly=True)
+    orders: list = relationship("Order", viewonly=True)
 
     def __repr__(self) -> str:
-        return f"<{self.id}:{self.full_name} orders:[{self.customer_orders}]>"
+        return f"<{self.id}:{self.full_name} orders:[{self.orders}]>"
