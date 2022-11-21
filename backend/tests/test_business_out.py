@@ -1,5 +1,4 @@
 import uuid
-import random
 
 from fastapi import status
 from fastapi.testclient import TestClient
@@ -127,7 +126,7 @@ def test_create_product_order(client: TestClient, db: Session):
     assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     # test id web_site_id is not correct
-    res = client.post(f"/business/fasfaf76fa7f8afaffafaf/order", json=order_data)
+    res = client.post("/business/fasfaf76fa7f8afaffafaf/order", json=order_data)
     assert res.status_code == status.HTTP_404_NOT_FOUND
 
 
@@ -152,7 +151,6 @@ def test_delete_customer_order(client: TestClient, db: Session, customer_orders)
 
 def test_get_customer_orders(client: TestClient, db: Session, customer_orders):
     business, order = customer_orders
-    new_qty = 100
     fake_uid = uuid.uuid4()
 
     res = client.get(f"/business/{business.web_site_id}/order/{order.order_uid}")

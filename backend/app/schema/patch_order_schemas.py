@@ -2,8 +2,6 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from app import model as m
-
 
 class UpdateOrderProduct(BaseModel):
     # ask for validations
