@@ -181,6 +181,7 @@ def get_customer_order(
             if (not prep.is_deleted and prep.is_active) or prep.id == item.prep_id
         ]
         product_schema = s.OrderProductOut(
+            id=item.product.id,
             name=item.product.name,
             price=item.product.price,
             image=item.product.image,
