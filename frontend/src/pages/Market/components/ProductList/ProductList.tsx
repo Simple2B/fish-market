@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { ItemUnit, ProductItemProps } from "./ProductList.type";
+import { ProductItemProps } from "./ProductList.type";
 import { ProductItem } from "./ProductItem";
 import Grid from "@mui/material/Grid";
 
@@ -11,13 +11,18 @@ export function ProductList({ marketId }: Props) {
   const { data, isLoading } = useQuery({
     queryKey: [`marketProductList-${marketId}`],
     queryFn: async () => {
+      console.log(import.meta.env.VITE_API_BASE_URL);
+
       const res = await fetch(
-        `http://127.0.0.1:8008/business/${marketId}/product`
+        `${import.meta.env.VITE_API_BASE_URL}/business/${marketId}/product`
       );
       const data: { products: ProductItemProps[] } = await res.json();
       return data.products;
     },
   });
+
+  const onProductClicked = (id: number) => console.log({ id });
+
   return isLoading ? (
     <p>LOADING...</p>
   ) : (
@@ -30,6 +35,7 @@ export function ProductList({ marketId }: Props) {
           image={image}
           price={price}
           unit={unit}
+          onClick={onProductClicked}
         />
       ))}
     </Grid>
