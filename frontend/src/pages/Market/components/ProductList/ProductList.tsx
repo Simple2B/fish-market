@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { ProductItemProps } from "./ProductList.type";
 import { ProductItem } from "./ProductItem";
 import Grid from "@mui/material/Grid";
+import { AddItemModal } from "./AddItemModal";
+import { useState } from "react";
 
 type Props = {
   marketId: string;
@@ -21,23 +23,38 @@ export function ProductList({ marketId }: Props) {
     },
   });
 
-  const onProductClicked = (id: number) => console.log({ id });
+  const [itemToAdd, setItemToAdd] = useState<ProductItemProps | null>(null);
+
+  const onProductClicked = (id: number) => {
+    const selectedItem = data?.find((item) => item.id === id);
+    if (selectedItem) {
+      setItemToAdd(selectedItem);
+    }
+  };
 
   return isLoading ? (
     <p>LOADING...</p>
   ) : (
-    <Grid container spacing={2} py={2}>
-      {data?.map(({ id, name, image, unit, price }: ProductItemProps) => (
-        <ProductItem
-          key={id}
-          id={id}
-          name={name}
-          image={image}
-          price={price}
-          unit={unit}
-          onClick={onProductClicked}
-        />
-      ))}
-    </Grid>
+    <>
+      <Grid container spacing={2} py={2}>
+        {data?.map(({ id, name, image, unit, price }: ProductItemProps) => (
+          <ProductItem
+            key={id}
+            id={id}
+            name={name}
+            image={image}
+            price={price}
+            unit={unit}
+            onClick={onProductClicked}
+          />
+        ))}
+      </Grid>
+      <AddItemModal
+        onClose={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+        item={itemToAdd}
+      />
+    </>
   );
 }
