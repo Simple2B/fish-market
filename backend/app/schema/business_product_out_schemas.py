@@ -14,6 +14,7 @@ class BusinessProductPrepOut(BaseModel):
 
 
 class BusinessProductOut(BaseModel):
+    id: int
     name: str
     price: float
     image: Optional[str]

@@ -73,6 +73,7 @@ def get_business_product_out(business_uid: str, db: Session = Depends(get_db)):
         if preps:
             show_products.append(
                 s.BusinessProductOut(
+                    id=product.id,
                     name=product.name,
                     price=product.price,
                     image=product.image,
