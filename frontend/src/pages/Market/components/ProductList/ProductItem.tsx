@@ -11,10 +11,14 @@ export function ProductItem({
   image,
   unit,
   price,
-}: ProductItemProps) {
+  onClick,
+}: Omit<ProductItemProps, "preps">) {
+  const handleClick = () => {
+    onClick(id);
+  };
   return (
     <Grid xs={4} alignItems="center" justifyContent="center">
-      <Card sx={{ maxWidth: 330 }}>
+      <Card sx={{ maxWidth: 330 }} onClick={handleClick}>
         <CardMedia
           component="img"
           height="140"

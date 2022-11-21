@@ -9,4 +9,8 @@ export type ProductItemProps = {
   image: string;
   price: number;
   unit: ItemUnit;
+  preps: ProductPrep[];
+  onClick: (id: number) => void;
 };
+
+export type ProductPrep = { id: number; name: string };
