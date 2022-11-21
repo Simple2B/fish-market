@@ -8,7 +8,7 @@ import { ProductItemProps } from "./ProductList.type";
 export function ProductItem({
   id,
   name,
-  imageUrl,
+  image,
   unit,
   price,
 }: ProductItemProps) {
@@ -18,7 +18,7 @@ export function ProductItem({
         <CardMedia
           component="img"
           height="140"
-          image={imageUrl}
+          image={image}
           alt="green iguana"
         />
         <CardContent>

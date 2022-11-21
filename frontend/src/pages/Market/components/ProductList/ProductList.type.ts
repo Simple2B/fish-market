@@ -6,7 +6,7 @@ export enum ItemUnit {
 export type ProductItemProps = {
   id: number;
   name: string;
-  imageUrl: string;
+  image: string;
   price: number;
   unit: ItemUnit;
 };
