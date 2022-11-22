@@ -43,17 +43,42 @@ def fill_test_data(db: SessionLocal):
 
 def add_business_fake_products(business_id: int, db: SessionLocal) -> None:
     for n in range(fake.random_int(4, 6)):
-        product = m.Product(
-            business_id=business_id,
-            name=f"fish_{n}",
-            price=fake.random_int(1, 10),
-            sold_by=m.SoldBy.by_unit,
-            image=fake.image_url(),
-        )
-        db.add(product)
-        db.commit()
-        db.refresh(product)
-        add_prep_to_product(product_id=product.id, db=db)
+        if n <= 2:
+            product = m.Product(
+                business_id=business_id,
+                name=f"fish_{n}",
+                price=fake.random_int(1, 10),
+                sold_by=m.SoldBy.by_unit,
+                image=fake.image_url(),
+            )
+            db.add(product)
+            db.commit()
+            db.refresh(product)
+            add_prep_to_product(product_id=product.id, db=db)
+        elif 2 > n <= 4:
+            product = m.Product(
+                business_id=business_id,
+                name=f"fish_{n}",
+                price=fake.random_int(1, 10),
+                sold_by=m.SoldBy.by_kilogram,
+                image=fake.image_url(),
+            )
+            db.add(product)
+            db.commit()
+            db.refresh(product)
+            add_prep_to_product(product_id=product.id, db=db)
+        else:
+            product = m.Product(
+                business_id=business_id,
+                name=f"fish_{n}",
+                price=fake.random_int(1, 10),
+                sold_by=m.SoldBy.by_both,
+                image=fake.image_url(),
+            )
+            db.add(product)
+            db.commit()
+            db.refresh(product)
+            add_prep_to_product(product_id=product.id, db=db)
 
 
 def add_prep_to_product(product_id: int, db: SessionLocal) -> None:
