@@ -9,7 +9,7 @@ export function ProductItem({
   id,
   name,
   image,
-  unit,
+  sold_by,
   price,
   onClick,
 }: Omit<ProductItemProps, "preps">) {
@@ -35,7 +35,7 @@ export function ProductItem({
             {name}
           </Typography>
           <Typography align="center" variant="h5" color="text.primary">
-            {`$${price} per ${unit}`}
+            {`$${price} ${sold_by}`}
           </Typography>
         </CardContent>
       </Card>

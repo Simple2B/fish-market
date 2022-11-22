@@ -27,14 +27,14 @@ export function ProductList({ marketId }: Props) {
     <p>LOADING...</p>
   ) : (
     <Grid container spacing={2} py={2}>
-      {data?.map(({ id, name, image, unit, price }: ProductItemProps) => (
+      {data?.map(({ id, name, image, sold_by, price }: ProductItemProps) => (
         <ProductItem
           key={id}
           id={id}
           name={name}
           image={image}
           price={price}
-          unit={unit}
+          sold_by={sold_by}
           onClick={onProductClicked}
         />
       ))}

@@ -1,6 +1,6 @@
 export enum ItemUnit {
-  kg = "kg",
-  unit = "unit",
+  kilogram = "per Kg",
+  by_unit = "by Unit",
 }
 
 export type ProductItemProps = {
@@ -8,7 +8,7 @@ export type ProductItemProps = {
   name: string;
   image: string;
   price: number;
-  unit: ItemUnit;
+  sold_by: ItemUnit;
   preps: ProductPrep[];
   onClick: (id: number) => void;
 };
