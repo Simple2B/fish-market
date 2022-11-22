@@ -1,6 +1,7 @@
 export enum ItemUnit {
   kilogram = "per Kg",
   by_unit = "by Unit",
+  by_both = "buBoth",
 }
 
 export type ProductItemProps = {
@@ -8,7 +9,7 @@ export type ProductItemProps = {
   name: string;
   image: string;
   price: number;
-  sold_by: ItemUnit;
+  sold_by: keyof typeof ItemUnit;
   preps: ProductPrep[];
   onClick: (id: number) => void;
 };

@@ -3,7 +3,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { ProductItemProps } from "./ProductList.type";
+import { ProductItemProps, ItemUnit } from "./ProductList.type";
 
 export function ProductItem({
   id,
@@ -35,7 +35,7 @@ export function ProductItem({
             {name}
           </Typography>
           <Typography align="center" variant="h5" color="text.primary">
-            {`$${price} ${sold_by}`}
+            {`$${price} ${ItemUnit.kilogram}`}
           </Typography>
         </CardContent>
       </Card>
