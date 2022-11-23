@@ -1,8 +1,8 @@
-"""zero migrations
+"""zero
 
-Revision ID: 3adcbd1e582a
+Revision ID: b6cd10f1b380
 Revises: 
-Create Date: 2022-11-11 14:25:29.006165
+Create Date: 2022-11-22 13:57:26.315195
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '3adcbd1e582a'
+revision = 'b6cd10f1b380'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -36,7 +36,7 @@ def upgrade() -> None:
     sa.Column('is_active', sa.Boolean(), nullable=True),
     sa.Column('address', sa.String(length=128), nullable=False),
     sa.Column('phone_number', sa.String(length=32), nullable=False),
-    sa.Column('frozen', sa.Boolean(), nullable=True),
+    sa.Column('is_deleted', sa.Boolean(), nullable=True),
     sa.Column('role', sa.Enum('Admin', 'Marketeer', name='userrole'), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
@@ -57,6 +57,7 @@ def upgrade() -> None:
     sa.Column('customer_id', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('status', sa.Enum('created', 'was_seen', 'in_progress', 'completed', 'picked_up', 'cancelled', name='orderstatus'), nullable=True),
+    sa.Column('order_uid', sa.String(length=36), nullable=True),
     sa.ForeignKeyConstraint(['customer_id'], ['customers.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -74,7 +75,7 @@ def upgrade() -> None:
     sa.Column('business_id', sa.Integer(), nullable=True),
     sa.Column('name', sa.String(length=128), nullable=False),
     sa.Column('price', sa.Float(), nullable=True),
-    sa.Column('sold_by', sa.Enum('unknown', 'by_kilogram', 'by_unit', name='soldby'), nullable=True),
+    sa.Column('sold_by', sa.Enum('unknown', 'by_kilogram', 'by_unit', 'by_both', name='soldby'), nullable=True),
     sa.Column('image', sa.String(length=256), nullable=True),
     sa.Column('is_out_of_stoke', sa.Boolean(), nullable=True),
     sa.Column('is_deleted', sa.Boolean(), nullable=True),
@@ -85,6 +86,8 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('product_id', sa.Integer(), nullable=True),
     sa.Column('name', sa.String(length=64), nullable=False),
+    sa.Column('is_deleted', sa.Boolean(), nullable=True),
+    sa.Column('is_active', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['product_id'], ['products.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
