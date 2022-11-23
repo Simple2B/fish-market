@@ -3,7 +3,9 @@ import {
   CardContent,
   Grid,
   IconButton,
+  MenuItem,
   Modal,
+  Select,
   Switch,
   Typography,
 } from "@mui/material";
@@ -11,7 +13,7 @@ import Container from "@mui/system/Container";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useEffect, useState } from "react";
-import { ProductItemProps, ItemUnit } from "./ProductList.type";
+import { ProductItemProps, ItemUnit, ProductPrep } from "./ProductList.type";
 
 type AddItemModalProps = {
   onClose: () => void;
@@ -27,6 +29,20 @@ export function AddItemModal({ onClose, item }: AddItemModalProps) {
     ItemUnit.kilogram
   );
 
+  const [selectedPrep, setSelectedPrep] = useState<ProductPrep | Object>({});
+
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+
+  useEffect(() => {
+    if (item) {
+      setTotalPrice(Math.round(amount * item.price));
+    }
+  }, [amount]);
+
+  const handleSelectPreps = (event) => {
+    setSelectedPrep(() => event.target.value);
+  };
+
   useEffect(() => {
     if (item && ItemUnit[item.sold_by] === ItemUnit.by_unit) {
       setSelectedType(ItemUnit.by_unit);
@@ -39,24 +55,24 @@ export function AddItemModal({ onClose, item }: AddItemModalProps) {
         setAmount(Math.round(amount));
         return ItemUnit.by_unit;
       }
-      setAmount(Math.round(amount * 100) / 100);
+      setAmount(Math.round(amount / 100) * 100);
       return ItemUnit.kilogram;
     });
   };
 
   const handlerAddAmount = () => {
     if (selectedType === ItemUnit.by_unit) {
-      setAmount(Math.round(amount + 1));
+      setAmount(amount + 1);
     } else if (selectedType === ItemUnit.kilogram) {
-      setAmount(Math.round((amount + 0.1) * 100) / 100);
+      setAmount(amount + 0.1);
     }
   };
 
   const handlerRemoveAmount = () => {
     if (selectedType === ItemUnit.by_unit) {
-      setAmount(Math.round(amount - 1));
+      setAmount(amount - 1);
     } else if (selectedType === ItemUnit.kilogram) {
-      setAmount(Math.round((amount - 0.1) * 100) / 100);
+      setAmount(amount - 0.1);
     }
     if (amount <= 0) {
       setAmount(0);
@@ -73,19 +89,20 @@ export function AddItemModal({ onClose, item }: AddItemModalProps) {
       <>
         {!!item && (
           <Grid container alignItems={"center"} justifyContent={"center"}>
-            <Grid item xs={8}>
+            <Grid item xs={10}>
               <Card>
                 <CardContent>
                   <Grid container>
-                    <Grid item xs={6}>
+                    {/* picture */}
+                    <Grid item xs={4}>
                       <img
-                        width="270px"
+                        width="240px"
                         height="220px"
                         src={item?.image}
                         alt="Fish image"
                       />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={8}>
                       <Container
                         sx={{
                           flexDirection: "row",
@@ -157,8 +174,33 @@ export function AddItemModal({ onClose, item }: AddItemModalProps) {
                           justifyContent: "space-between",
                         }}
                       >
-                        <Typography>{item?.name}</Typography>
-                        <Typography></Typography>
+                        <Typography>Preparation method </Typography>
+                        <Select
+                          value={selectedPrep}
+                          onChange={handleSelectPreps}
+                        >
+                          {item.preps.map((prep) => (
+                            <MenuItem key={prep.id} value={prep}>
+                              {prep.name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </Container>
+                      <Container
+                        sx={{
+                          flexDirection: "row",
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            fontWeight: "bold",
+                          }}
+                        >
+                          totalPrice
+                        </Typography>
+                        <Typography>${totalPrice}</Typography>
                       </Container>
                     </Grid>
                   </Grid>
