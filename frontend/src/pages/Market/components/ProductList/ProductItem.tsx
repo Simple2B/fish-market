@@ -1,7 +1,6 @@
-import { Grid } from "@mui/material";
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { ProductItemProps, ItemUnit } from "./ProductList.type";
 
@@ -16,15 +15,36 @@ export function ProductItem({
   const handleClick = () => {
     onClick(id);
   };
+
   return (
-    <Grid xs={4} alignItems="center" justifyContent="center">
-      <Card sx={{ maxWidth: 330 }} onClick={handleClick}>
-        <CardMedia
-          component="img"
-          height="140"
-          image={image}
-          alt="green iguana"
-        />
+    <Card
+      sx={{ width: "320px", height: "20px", m: "5px" }}
+      onClick={handleClick}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexDirection: "column",
+          // width: "100%",
+          // height: "100%",
+          paddingTop: "24px",
+          paddingBottom: "16px",
+        }}
+      >
+        <Box
+          sx={{
+            height: "131px",
+            width: "163px",
+          }}
+        >
+          <img
+            src={image}
+            alt={image}
+            style={{ height: "100%", width: "100%" }}
+          />
+        </Box>
         <CardContent>
           <Typography
             align="center"
@@ -38,7 +58,7 @@ export function ProductItem({
             {`$${price} ${ItemUnit.kilogram}`}
           </Typography>
         </CardContent>
-      </Card>
-    </Grid>
+      </Box>
+    </Card>
   );
 }
