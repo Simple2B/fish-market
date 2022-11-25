@@ -4,6 +4,7 @@ import { ProductItem } from "./ProductItem";
 import Grid from "@mui/material/Grid";
 import { AddItemModal } from "./AddItemModal";
 import { useState } from "react";
+import Box from "@mui/material/Box";
 
 type Props = {
   marketId: string;
@@ -19,6 +20,8 @@ export function ProductList({ marketId }: Props) {
         `${import.meta.env.VITE_API_BASE_URL}/business/${marketId}/product`
       );
       const data: { products: ProductItemProps[] } = await res.json();
+      console.log(data.products);
+
       return data.products;
     },
   });
@@ -36,7 +39,16 @@ export function ProductList({ marketId }: Props) {
     <p>LOADING...</p>
   ) : (
     <>
-      <Grid container spacing={2} py={2}>
+      <Box
+        sx={{
+          width: "97%",
+          m: "0 auto",
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "space-evenly",
+        }}
+      >
         {data?.map(({ id, name, image, sold_by, price }: ProductItemProps) => (
           <ProductItem
             key={id}
@@ -48,7 +60,7 @@ export function ProductList({ marketId }: Props) {
             onClick={onProductClicked}
           />
         ))}
-      </Grid>
+      </Box>
       <AddItemModal
         onClose={function (): void {
           throw new Error("Function not implemented.");
