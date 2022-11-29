@@ -1,16 +1,17 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ProductItemProps } from "./ProductList.type";
-import { ProductItem } from "./ProductItem";
-import Grid from "@mui/material/Grid";
-import { AddItemModal } from "./AddItemModal";
-import { useState } from "react";
-import Box from "@mui/material/Box";
+
+import style from "./ProductList.module.css";
+import { ProductItem } from "../ProductItem";
 
 type Props = {
   marketId: string;
 };
 
 export function ProductList({ marketId }: Props) {
+  console.log(marketId);
+
   const { data, isLoading } = useQuery({
     queryKey: [`marketProductList-${marketId}`],
     queryFn: async () => {
@@ -39,16 +40,7 @@ export function ProductList({ marketId }: Props) {
     <p>LOADING...</p>
   ) : (
     <>
-      <Box
-        sx={{
-          width: "97%",
-          m: "0 auto",
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "center",
-          justifyContent: "space-evenly",
-        }}
-      >
+      <div className={style.productList}>
         {data?.map(({ id, name, image, sold_by, price }: ProductItemProps) => (
           <ProductItem
             key={id}
@@ -60,13 +52,7 @@ export function ProductList({ marketId }: Props) {
             onClick={onProductClicked}
           />
         ))}
-      </Box>
-      <AddItemModal
-        onClose={function (): void {
-          throw new Error("Function not implemented.");
-        }}
-        item={itemToAdd}
-      />
+      </div>
     </>
   );
 }

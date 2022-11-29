@@ -1,8 +1,6 @@
-import { Button } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
-import SendIcon from "@mui/icons-material/Send";
 import { ProductList } from "./components/ProductList";
 
 export function Market() {
@@ -30,15 +28,7 @@ export function Market() {
           <ProductList marketId={marketId} />
         </>
       )}
-      {!showProducts && (
-        <Button
-          onClick={handleStartOrder}
-          variant="contained"
-          endIcon={<SendIcon />}
-        >
-          Start Order
-        </Button>
-      )}
+      {!showProducts && <button onClick={handleStartOrder}>Start Order</button>}
     </div>
   );
 }
