@@ -9,11 +9,6 @@ interface ICostumer {
   note?: string;
 }
 
-interface IOrder {
-  costumer: ICostumer;
-  items: IProduct[];
-}
-
 enum MarketActionTypes {
   ADD_ITEM = "ADD_ITEM",
   DELETE_ITEM = "DELETE_ITEM",
@@ -31,19 +26,16 @@ interface DeleteItemAction {
 
 type MarketActions = AddItemAction | DeleteItemAction;
 
-export function initialState(order: IOrder) {
-  return { costumer: { fullName: "", phoneNumber: "", note: "" }, items: [] };
+export function initialState(initialOrderItems: IProduct[]) {
+  return [];
 }
 
-export function reducer(state: IOrder, action: MarketActions) {
+export function reducer(state: IProduct[], action: MarketActions) {
   switch (action.type) {
     case MarketActionTypes.ADD_ITEM:
-      return { ...state, items: [...state.items, action.payload] };
+      return [...state, action.payload];
     case MarketActionTypes.DELETE_ITEM:
-      return {
-        ...state,
-        items: [...state.items.filter(({ id }) => id !== action.payload)],
-      };
+      return [...state.filter((_, index) => index !== action.payload)];
     default:
       return state;
   }

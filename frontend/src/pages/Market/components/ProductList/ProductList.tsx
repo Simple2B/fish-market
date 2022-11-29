@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ProductItemProps } from "./ProductList.type";
 
@@ -10,8 +9,6 @@ type Props = {
 };
 
 export function ProductList({ marketId }: Props) {
-  console.log(marketId);
-
   const { data, isLoading } = useQuery({
     queryKey: [`marketProductList-${marketId}`],
     queryFn: async () => {
@@ -27,12 +24,10 @@ export function ProductList({ marketId }: Props) {
     },
   });
 
-  const [itemToAdd, setItemToAdd] = useState<ProductItemProps | null>(null);
-
   const onProductClicked = (id: number) => {
     const selectedItem = data?.find((item) => item.id === id);
     if (selectedItem) {
-      setItemToAdd(selectedItem);
+      console.log(id);
     }
   };
 
@@ -41,16 +36,8 @@ export function ProductList({ marketId }: Props) {
   ) : (
     <>
       <div className={style.productList}>
-        {data?.map(({ id, name, image, sold_by, price }: ProductItemProps) => (
-          <ProductItem
-            key={id}
-            id={id}
-            name={name}
-            image={image}
-            price={price}
-            sold_by={sold_by}
-            onClick={onProductClicked}
-          />
+        {data?.map((props: Omit<ProductItemProps, "onClick">) => (
+          <ProductItem key={props.id} onClick={onProductClicked} {...props} />
         ))}
       </div>
     </>
