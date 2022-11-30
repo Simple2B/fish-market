@@ -1,13 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useReducer } from "react";
 import { Navigate, useParams } from "react-router-dom";
+
 import { ProductList } from "./components/ProductList";
+import { initialState, reducer } from "./Market.reducer";
+
+import style from "./Market.module.css";
 
 export function Market() {
   const { marketId } = useParams<"marketId">();
   if (!marketId) {
     return <Navigate to={"/"} replace={true} />;
   }
+
+  const [state, dispatch] = useReducer(reducer, initialState([]));
+
   const { data } = useQuery({
     queryKey: ["marketDetails"],
     queryFn: async () => {
@@ -20,7 +27,7 @@ export function Market() {
     setShowProducts(true);
   };
   return (
-    <div>
+    <div className={style.marketPageStart}>
       {!showProducts && <p>{data?.name}</p>}
 
       {showProducts && (

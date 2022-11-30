@@ -1,0 +1,6 @@
+.marketPageStart {
+    width: 97%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

@@ -3,11 +3,7 @@ import { useState } from "react";
 import Select from "react-select";
 
 import style from "./ProductItem.module.css";
-import {
-  ProductItemProps,
-  ItemUnit,
-  ProductPrep,
-} from "../ProductList/ProductList.type";
+import { ProductItemProps, ItemUnit } from "../ProductList/ProductList.type";
 
 type PrepOption = {
   value: number;
@@ -23,7 +19,9 @@ export function ProductItem({
   preps,
   onClick,
 }: ProductItemProps) {
-  const [selectedPrepId, setSelectedPrepId] = useState<number | null>(null);
+  const [selectedPrepId, setSelectedPrepId] = useState<number | undefined>(
+    undefined
+  );
 
   const handleAddItem = () => {
     console.log(selectedPrepId);
@@ -31,13 +29,11 @@ export function ProductItem({
     onClick(id);
   };
 
-  const handelSelectPrep = ({ value }: PrepOption) => {
-    setSelectedPrepId(value);
+  const handelSelectPrep = (value: number) => {
+    if (!!value) {
+      setSelectedPrepId(value);
+    }
   };
-
-  const options = preps.map(({ id, name }: ProductPrep) => {
-    return { value: id, label: name };
-  });
 
   return (
     <div className={style.card}>
@@ -51,14 +47,25 @@ export function ProductItem({
         </div>
 
         <div>
-          <Select
+          <select
+            placeholder="Choose prep"
             defaultValue={selectedPrepId}
-            options={options}
-            onChange={handelSelectPrep}
-          />
+            onChange={(e) => handelSelectPrep(Number(e.target.value))}
+          >
+            <option disabled selected>
+              please choose...
+            </option>
+            {preps.map(({ id, name }) => {
+              return (
+                <option key={id} value={id}>
+                  {name}
+                </option>
+              );
+            })}
+          </select>
         </div>
         <div>
-          <button onClick={handleAddItem} disabled={selectedPrepId === null}>
+          <button onClick={handleAddItem} disabled={!selectedPrepId}>
             add item
           </button>
         </div>
