@@ -213,3 +213,17 @@ def get_customer_order(
 #     check_access_to_order(order=order)
 
 #     products = data.products
+
+
+@router.get(
+    "/{business_uid}", response_model=s.BusinessOut, status_code=status.HTTP_200_OK
+)
+def get_business_out_by_uid(business_uid: str, db: Session = Depends(get_db)):
+    log(log.INFO, "get_business_out_by_uid")
+
+    business: m.Business = (
+        db.query(m.Business).filter_by(web_site_id=business_uid).first()
+    )
+    check_access_to_business(business=business, data_mes=business_uid)
+
+    return business

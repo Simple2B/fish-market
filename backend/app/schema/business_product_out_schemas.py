@@ -5,6 +5,14 @@ from pydantic import BaseModel
 from app import model as m
 
 
+class BusinessOut(BaseModel):
+    logo: Optional[str]
+    name: str
+
+    class Config:
+        orm_mode = True
+
+
 class BusinessProductPrepOut(BaseModel):
     id: int
     name: str
