@@ -19,3 +19,8 @@ interface DeleteItemAction {
 }
 
 export type MarketActions = AddItemAction | DeleteItemAction;
+
+export interface IBusinessOut {
+  logo: string | null;
+  name: string;
+}

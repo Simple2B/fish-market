@@ -4,6 +4,7 @@ import { Navigate, useParams } from "react-router-dom";
 
 import { ProductList } from "./components/ProductList";
 import { initialState, reducer } from "./Market.reducer";
+import { IBusinessOut } from "./Market.type";
 
 import style from "./Market.module.css";
 
@@ -15,27 +16,67 @@ export function Market() {
 
   const [state, dispatch] = useReducer(reducer, initialState([]));
 
-  const { data } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["marketDetails"],
     queryFn: async () => {
-      return { name: "Taras Supa Dupa Fish" };
-    }, // TODO: Replace this code with real fetch
+      console.log(import.meta.env.VITE_API_BASE_URL);
+
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/business/${marketId}`
+      );
+
+      if (!res.ok) {
+        throw new Error("Business not found");
+      }
+
+      const data: IBusinessOut = await res.json();
+      return data;
+    },
   });
 
   const [showProducts, setShowProducts] = useState<boolean>(false);
   const handleStartOrder = () => {
     setShowProducts(true);
   };
-  return (
-    <div className={style.marketPageStart}>
-      {!showProducts && <p>{data?.name}</p>}
 
+  const logoElement = data?.logo ? (
+    <img
+      style={{ width: "100%", height: "100%" }}
+      src={data.logo}
+      alt="Business logo"
+    />
+  ) : (
+    "logo"
+  );
+
+  if (isError) {
+    return <Navigate to={"/"} replace={true} />;
+  }
+
+  return isLoading ? (
+    <p>LOADING...</p>
+  ) : (
+    <>
+      {!showProducts && (
+        <div className={style.marketPageStart}>
+          <div className={style.businessLogo}>
+            <div className={style.businessLogoWrap}>{logoElement}</div>
+          </div>
+          <div className={style.businessTitle}>
+            <div className={style.businessTitleText}>
+              Welcome to {data!.name}
+            </div>
+          </div>
+          <div className={style.businessBtnStart} onClick={handleStartOrder}>
+            <div className={style.businessBtnStartText}>Start Order</div>
+          </div>
+        </div>
+      )}
       {showProducts && (
         <>
           <ProductList marketId={marketId} />
         </>
       )}
-      {!showProducts && <button onClick={handleStartOrder}>Start Order</button>}
-    </div>
+    </>
   );
 }
