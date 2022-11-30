@@ -23,10 +23,12 @@ export function ProductItem({
     undefined
   );
 
-  const handleAddItem = () => {
-    console.log(selectedPrepId);
+  const [isBtnEnable, setIsBtnEnable] = useState<boolean>(true);
 
-    onClick(id);
+  const handleAddItem = (e: any) => {
+    console.log(e.target);
+
+    // onClick(id);
   };
 
   const handelSelectPrep = (value: number) => {
@@ -36,7 +38,7 @@ export function ProductItem({
   };
 
   return (
-    <div className={style.card}>
+    <>
       <div className={style.cardWrap}>
         <div className={style.cardImage}>
           <img className={style.cardImageWrap} src={image} alt={image} />
@@ -46,8 +48,10 @@ export function ProductItem({
           <div>{`$${price} ${ItemUnit.kilogram}`}</div>
         </div>
 
-        <div>
+        <div className={style.preparationBlock}>
+          <div className={style.preparationTitle}>Preparation method</div>
           <select
+            className={style.preparationSelect}
             placeholder="Choose prep"
             defaultValue={selectedPrepId}
             onChange={(e) => handelSelectPrep(Number(e.target.value))}
@@ -64,12 +68,13 @@ export function ProductItem({
             })}
           </select>
         </div>
-        <div>
-          <button onClick={handleAddItem} disabled={!selectedPrepId}>
-            add item
-          </button>
+        <div
+          className={isBtnEnable ? style.addBtn : style.disabledAddBtn}
+          onClick={handleAddItem}
+        >
+          +
         </div>
       </div>
-    </div>
+    </>
   );
 }

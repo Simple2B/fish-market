@@ -35,10 +35,33 @@ export function ProductList({ marketId }: Props) {
     <p>LOADING...</p>
   ) : (
     <>
-      <div className={style.productList}>
-        {data?.map((props: Omit<ProductItemProps, "onClick">) => (
-          <ProductItem key={props.id} onClick={onProductClicked} {...props} />
-        ))}
+      <div className={style.productListPage}>
+        <div className={style.pageContent}>
+          <div className={style.productListContent}>
+            <div className={style.contentBlockTitle}>
+              <div className={style.blockTitle}>Choose your items</div>
+              <div className={style.blockSubTitle}>
+                *The weight is roughly estimated, the order might arrive with up
+                to 35% margin of difference
+              </div>
+            </div>
+            <div className={style.blockItems}>
+              {data?.map((props: Omit<ProductItemProps, "onClick">) => (
+                <ProductItem
+                  key={props.id}
+                  onClick={onProductClicked}
+                  {...props}
+                />
+              ))}
+            </div>
+          </div>
+          <div className={style.productCardContent}>
+            <div className={style.contentBlockTitle}>
+              <div className={style.blockTitle}>Card</div>
+            </div>
+          </div>
+        </div>
+        <div className={style.businessBtnOrder}>Order</div>
       </div>
     </>
   );
