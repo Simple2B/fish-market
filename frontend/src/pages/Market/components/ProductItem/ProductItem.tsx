@@ -5,6 +5,7 @@ import { IoIosAdd } from "react-icons/io";
 import { ProductType } from "./ProductType";
 import style from "./ProductItem.module.css";
 import { ProductItemProps, ItemUnit } from "../ProductList/ProductList.type";
+import { MarketActions, MarketActionTypes } from "../../Market.type";
 
 type PrepOption = {
   value: number;
@@ -19,18 +20,27 @@ export function ProductItem({
   price,
   preps,
   onClick,
+  dispatchCart,
 }: ProductItemProps) {
   const [selectedPrepId, setSelectedPrepId] = useState<number | undefined>(
     undefined
   );
   const [amount, setAmount] = useState<number>(0);
+  const isBtnEnable = amount > 0 && selectedPrepId !== undefined;
 
-  const [isBtnEnable, setIsBtnEnable] = useState<boolean>(false);
+  const handleAddItem = () => {
+    if (isBtnEnable) {
+      console.log("added item to cart");
 
-  const handleAddItem = (e: any) => {
-    console.log(e.target);
-
-    // onClick(id);
+      dispatchCart({
+        type: MarketActionTypes.ADD_ITEM,
+        payload: {
+          prepName: preps.find((p) => p.id === selectedPrepId)!.name,
+          prepId: selectedPrepId,
+          qty: amount,
+        },
+      });
+    }
   };
 
   const handelSelectPrep = (value: number) => {
@@ -38,21 +48,6 @@ export function ProductItem({
       setSelectedPrepId(value);
     }
   };
-
-  useEffect(() => {
-    console.log(selectedPrepId, undefined, "check");
-
-    if (amount > 0 && selectedPrepId !== undefined) {
-      setIsBtnEnable(true);
-    } else {
-      setIsBtnEnable(false);
-    }
-    // if (amount === 0 || setSelectedPrepId !== undefined) {
-    //   setIsBtnEnable(true);
-    // }
-  }, [amount, selectedPrepId]);
-
-  console.log(selectedPrepId, "prep id");
 
   return (
     <>

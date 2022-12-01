@@ -1,3 +1,5 @@
+import { AddItemAction } from "../../Market.type";
+
 export enum ItemUnit {
   kilogram = "Kg",
   by_unit = "Unit",
@@ -12,6 +14,7 @@ export type ProductItemProps = {
   sold_by: keyof typeof ItemUnit;
   preps: ProductPrep[];
   onClick: (id: number) => void;
+  dispatchCart: (action: AddItemAction) => void;
 };
 
 export type ProductPrep = { id: number; name: string };

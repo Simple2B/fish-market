@@ -21,12 +21,19 @@ export function ProductType({ soldBy, amount, setAmount }: PrepProductType) {
     }
   };
 
-  useEffect(() => {
-    if (amount < 0) {
-      // TODO more valid
-      setAmount(0);
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const { value } = e.target;
+    const numVAlue = Number(value);
+    if (isNaN(numVAlue)) {
+      console.log("not a number");
+      return;
     }
-  }, [amount]);
+    if (numVAlue < 0) {
+      setAmount(0);
+      return;
+    }
+    setAmount(numVAlue);
+  };
 
   const typeProduct =
     ItemUnit.by_both !== soldBy ? (
@@ -45,7 +52,6 @@ export function ProductType({ soldBy, amount, setAmount }: PrepProductType) {
         />
       </div>
     );
-  console.log(amount);
 
   return (
     <>
@@ -55,7 +61,7 @@ export function ProductType({ soldBy, amount, setAmount }: PrepProductType) {
           type="number"
           className={style.inputQty}
           value={amount}
-          onChange={(e: any) => setAmount(e.target.value)}
+          onChange={handleInputChange}
         />
         <div className={style.textQty}>{selectType}</div>
       </div>

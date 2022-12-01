@@ -3,22 +3,23 @@ import { ProductItemProps } from "./ProductList.type";
 
 import style from "./ProductList.module.css";
 import { ProductItem } from "../ProductItem";
+import { IProduct, MarketActions } from "../../Market.type";
+import { CartItem } from "../CartItem/CartItem";
 
 type Props = {
   marketId: string;
+  cartState: IProduct[];
+  dispatchCart: (action: MarketActions) => void;
 };
 
-export function ProductList({ marketId }: Props) {
+export function ProductList({ marketId, cartState, dispatchCart }: Props) {
   const { data, isLoading } = useQuery({
     queryKey: [`marketProductList-${marketId}`],
     queryFn: async () => {
-      console.log(import.meta.env.VITE_API_BASE_URL);
-
       const res = await fetch(
         `${import.meta.env.VITE_API_BASE_URL}/business/${marketId}/product`
       );
       const data: { products: ProductItemProps[] } = await res.json();
-      console.log(data.products);
 
       return data.products;
     },
@@ -31,6 +32,7 @@ export function ProductList({ marketId }: Props) {
     }
   };
 
+  console.log(cartState, !cartState);
   return isLoading ? (
     <p>LOADING...</p>
   ) : (
@@ -46,13 +48,16 @@ export function ProductList({ marketId }: Props) {
               </div>
             </div>
             <div className={style.blockItems}>
-              {data?.map((props: Omit<ProductItemProps, "onClick">) => (
-                <ProductItem
-                  key={props.id}
-                  onClick={onProductClicked}
-                  {...props}
-                />
-              ))}
+              {data?.map(
+                (props: Omit<ProductItemProps, "onClick" | "dispatchCart">) => (
+                  <ProductItem
+                    key={props.id}
+                    onClick={onProductClicked}
+                    dispatchCart={dispatchCart}
+                    {...props}
+                  />
+                )
+              )}
             </div>
           </div>
           <div className={style.productCardContent}>
@@ -60,11 +65,16 @@ export function ProductList({ marketId }: Props) {
               <div className={style.blockTitle}>Cart</div>
             </div>
             <div className={style.productCardItems}>
-              {" "}
-              <div className={style.productCardText}>
-                Your cart is empty now. Choose items on the left to add them to
-                the cart.
-              </div>
+              {!cartState ? (
+                cartState.map((prod, index) => {
+                  return <CartItem key={index} {...prod} />;
+                })
+              ) : (
+                <div className={style.productCardText}>
+                  Your cart is empty now. Choose items on the left to add them
+                  to the cart.
+                </div>
+              )}
             </div>
           </div>
         </div>
