@@ -57,7 +57,14 @@ export function ProductList({ marketId }: Props) {
           </div>
           <div className={style.productCardContent}>
             <div className={style.contentBlockTitle}>
-              <div className={style.blockTitle}>Card</div>
+              <div className={style.blockTitle}>Cart</div>
+            </div>
+            <div className={style.productCardItems}>
+              {" "}
+              <div className={style.productCardText}>
+                Your cart is empty now. Choose items on the left to add them to
+                the cart.
+              </div>
             </div>
           </div>
         </div>
