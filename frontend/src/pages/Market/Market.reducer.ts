@@ -1,8 +1,6 @@
 import { IProduct, MarketActions, MarketActionTypes } from "./Market.type";
 
-export function initialState(initialOrderItems: IProduct[]): IProduct[] {
-  return [];
-}
+export const initialState: IProduct[] = [];
 
 export function reducer(state: IProduct[], action: MarketActions) {
   switch (action.type) {
