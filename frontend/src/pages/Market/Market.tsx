@@ -4,7 +4,7 @@ import { Navigate, useParams } from "react-router-dom";
 
 import { ProductList } from "./components/ProductList";
 import { initialState, reducer } from "./Market.reducer";
-import { IBusinessOut } from "./Market.type";
+import { IBusinessOut, MarketActionTypes } from "./Market.type";
 
 import style from "./Market.module.css";
 
@@ -14,13 +14,11 @@ export function Market() {
     return <Navigate to={"/"} replace={true} />;
   }
 
-  const [state, dispatch] = useReducer(reducer, initialState([]));
+  const [cartState, dispatchCart] = useReducer(reducer, initialState);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["marketDetails"],
     queryFn: async () => {
-      console.log(import.meta.env.VITE_API_BASE_URL);
-
       const res = await fetch(
         `${import.meta.env.VITE_API_BASE_URL}/business/${marketId}`
       );
@@ -74,7 +72,11 @@ export function Market() {
       )}
       {showProducts && (
         <>
-          <ProductList marketId={marketId} />
+          <ProductList
+            marketId={marketId}
+            cartState={cartState}
+            dispatchCart={dispatchCart}
+          />
         </>
       )}
     </>

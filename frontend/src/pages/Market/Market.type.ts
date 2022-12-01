@@ -4,11 +4,12 @@ export enum MarketActionTypes {
 }
 
 export interface IProduct {
-  id: number;
+  prepName: string;
+  prepId: number;
   qty: number;
 }
 
-interface AddItemAction {
+export interface AddItemAction {
   type: MarketActionTypes.ADD_ITEM;
   payload: IProduct;
 }
