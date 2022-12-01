@@ -8,14 +8,63 @@
     margin-bottom: 8px;
 }
 
-.cardImage {
-    height: 50px;
-    width: 163px;
+.cardBlock {
+    height: 100%;
+    width: 35%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-right: 1px solid black;
+}
+
+.cardBlockContent {
+    height: 92px;
+    width: 114px;
 }
 
 .cardImageWrap {
     height: 100%;
     width: 100%;
+}
+
+.cardInfoWrap {
+    height: 100%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.cardProductName {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    text-align: center;
+    color: #000000;
+}
+
+.cardProductPrice {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 26px;
+    line-height: 36px;
+    text-align: center;
+    color: #000000;
+}
+
+
+.typeBlock {
+    height: 100%;
+    width: 22%;
+    border-right: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
 }
 
 .addBtn,
@@ -42,7 +91,7 @@
 
 .preparationBlock {
     height: 100%;
-    width: 30%;
+    width: 33%;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;

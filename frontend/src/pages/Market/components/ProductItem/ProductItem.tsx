@@ -1,7 +1,8 @@
 import { useState } from "react";
 
-import Select from "react-select";
+import { IoIosAdd } from "react-icons/io";
 
+import { ProductType } from "./ProductType";
 import style from "./ProductItem.module.css";
 import { ProductItemProps, ItemUnit } from "../ProductList/ProductList.type";
 
@@ -22,6 +23,7 @@ export function ProductItem({
   const [selectedPrepId, setSelectedPrepId] = useState<number | undefined>(
     undefined
   );
+  const [amount, setAmount] = useState<number>(0);
 
   const [isBtnEnable, setIsBtnEnable] = useState<boolean>(true);
 
@@ -40,12 +42,19 @@ export function ProductItem({
   return (
     <>
       <div className={style.cardWrap}>
-        <div className={style.cardImage}>
-          <img className={style.cardImageWrap} src={image} alt={image} />
+        <div className={style.cardBlock}>
+          <div className={style.cardBlockContent}>
+            <img className={style.cardImageWrap} src={image} alt={image} />
+          </div>
+          <div className={style.cardInfoWrap}>
+            <div className={style.cardProductName}>{name}</div>
+            <div
+              className={style.cardProductPrice}
+            >{`$${price} ${ItemUnit.kilogram}`}</div>
+          </div>
         </div>
-        <div>
-          <div>{name}</div>
-          <div>{`$${price} ${ItemUnit.kilogram}`}</div>
+        <div className={style.typeBlock}>
+          <ProductType soldBy={sold_by} amount={amount} setAmount={setAmount} />
         </div>
 
         <div className={style.preparationBlock}>
@@ -72,7 +81,7 @@ export function ProductItem({
           className={isBtnEnable ? style.addBtn : style.disabledAddBtn}
           onClick={handleAddItem}
         >
-          +
+          <IoIosAdd />
         </div>
       </div>
     </>
