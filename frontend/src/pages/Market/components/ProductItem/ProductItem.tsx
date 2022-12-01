@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { IoIosAdd } from "react-icons/io";
 
@@ -25,7 +25,7 @@ export function ProductItem({
   );
   const [amount, setAmount] = useState<number>(0);
 
-  const [isBtnEnable, setIsBtnEnable] = useState<boolean>(true);
+  const [isBtnEnable, setIsBtnEnable] = useState<boolean>(false);
 
   const handleAddItem = (e: any) => {
     console.log(e.target);
@@ -39,6 +39,21 @@ export function ProductItem({
     }
   };
 
+  useEffect(() => {
+    console.log(selectedPrepId, undefined, "check");
+
+    if (amount > 0 && selectedPrepId !== undefined) {
+      setIsBtnEnable(true);
+    } else {
+      setIsBtnEnable(false);
+    }
+    // if (amount === 0 || setSelectedPrepId !== undefined) {
+    //   setIsBtnEnable(true);
+    // }
+  }, [amount, selectedPrepId]);
+
+  console.log(selectedPrepId, "prep id");
+
   return (
     <>
       <div className={style.cardWrap}>
@@ -50,7 +65,7 @@ export function ProductItem({
             <div className={style.cardProductName}>{name}</div>
             <div
               className={style.cardProductPrice}
-            >{`$${price} ${ItemUnit.kilogram}`}</div>
+            >{`$${price} per ${ItemUnit.kilogram}`}</div>
           </div>
         </div>
         <div className={style.typeBlock}>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ItemUnit } from "../ProductList/ProductList.type";
 import style from "./ProductType.module.css";
 import { UnitOption } from "./UnitOption";
@@ -21,6 +21,13 @@ export function ProductType({ soldBy, amount, setAmount }: PrepProductType) {
     }
   };
 
+  useEffect(() => {
+    if (amount < 0) {
+      // TODO more valid
+      setAmount(0);
+    }
+  }, [amount]);
+
   const typeProduct =
     ItemUnit.by_both !== soldBy ? (
       <UnitOption value={ItemUnit[soldBy]} itemUnit={ItemUnit[soldBy]} />
@@ -38,12 +45,19 @@ export function ProductType({ soldBy, amount, setAmount }: PrepProductType) {
         />
       </div>
     );
+  console.log(amount);
 
   return (
     <>
       {typeProduct}
-      <div>
-        {amount} {selectType}
+      <div className={style.blockQty}>
+        <input
+          type="number"
+          className={style.inputQty}
+          value={amount}
+          onChange={(e: any) => setAmount(e.target.value)}
+        />
+        <div className={style.textQty}>{selectType}</div>
       </div>
     </>
   );
