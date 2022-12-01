@@ -1,0 +1,17 @@
+.cartContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 112px;
+    border-bottom: 1px solid black;
+}
+
+.cartLeft {
+    height: 100%;
+    width: 30%;
+}
+
+.cartRight {
+    height: 100%;
+    width: 70%;
+}
