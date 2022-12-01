@@ -1,7 +1,7 @@
 export enum ItemUnit {
-  kilogram = "per Kg",
-  by_unit = "by Unit",
-  by_both = "buBoth",
+  kilogram = "Kg",
+  by_unit = "Unit",
+  by_both = "by_both",
 }
 
 export type ProductItemProps = {

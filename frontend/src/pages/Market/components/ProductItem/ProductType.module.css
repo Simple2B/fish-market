@@ -1,0 +1,27 @@
+.itemWrap {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    padding: 8px;
+    margin: 8px;
+
+
+    text-align: center;
+
+    color: #000000;
+    border: 2px solid #C1E1FF;
+
+    border-radius: 5px;
+}
+
+.itemWrapSelected {
+    background-color: #C1E1FF;
+}
+
+
+.itemsWrap {
+    display: flex;
+    justify-content: space-between;
+}
