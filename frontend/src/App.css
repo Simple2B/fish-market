@@ -148,7 +148,6 @@ table {
     border-spacing: 0;
 }
 
-/* change border colour to suit your needs */
 hr {
     display: block;
     height: 1px;
@@ -161,4 +160,12 @@ hr {
 input,
 select {
     vertical-align: middle;
+}
+
+input {
+    all: unset;
+}
+
+input[type='number'] {
+    width: 20px;
 }
