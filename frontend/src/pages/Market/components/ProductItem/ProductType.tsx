@@ -60,6 +60,7 @@ export function ProductType({ soldBy, amount, setAmount }: PrepProductType) {
         <input
           type="number"
           className={style.inputQty}
+          step={selectType !== ItemUnit.kilogram ? 1 : 0.1}
           value={amount}
           onChange={handleInputChange}
         />
