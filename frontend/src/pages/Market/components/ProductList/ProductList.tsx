@@ -4,7 +4,8 @@ import { ProductItemProps } from "./ProductList.type";
 import style from "./ProductList.module.css";
 import { ProductItem } from "../ProductItem";
 import { IProduct, MarketActions } from "../../Market.type";
-import { CartItem } from "../CartItem/CartItem";
+import { CartItem } from "../CartItems/CartItem";
+import { CartItems } from "../CartItems/CartItems";
 
 type Props = {
   marketId: string;
@@ -64,18 +65,7 @@ export function ProductList({ marketId, cartState, dispatchCart }: Props) {
             <div className={style.contentBlockTitle}>
               <div className={style.blockTitle}>Cart</div>
             </div>
-            <div className={style.productCardItems}>
-              {cartState ? (
-                cartState.map((prod: IProduct, index: number) => {
-                  return <CartItem key={index} {...prod} />;
-                })
-              ) : (
-                <div className={style.productCardText}>
-                  Your cart is empty now. Choose items on the left to add them
-                  to the cart.
-                </div>
-              )}
-            </div>
+            <CartItems cartState={cartState} dispatchCart={dispatchCart} />
           </div>
         </div>
         <div className={style.businessBtnOrder}>Order</div>

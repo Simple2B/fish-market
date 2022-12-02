@@ -9,7 +9,6 @@
 .pageContent {
     display: flex;
     width: 90%;
-    padding-bottom: 16vh;
     justify-content: space-between;
 }
 
@@ -79,23 +78,6 @@
 .blockItems {
     padding-top: 2vh;
     height: 100%;
-
-}
-
-.productCardItems {
-    border: 1px solid #000000;
-    border-radius: 5px;
-    margin-top: 6vh;
-    height: 100%;
-}
-
-.productCardText {
-    margin: 16px;
-
-    font-family: 'Avenir';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 25px;
-    color: #D1D1D1;
+    overflow-y: scroll;
+    padding-bottom: 15vh;
 }

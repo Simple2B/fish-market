@@ -33,6 +33,7 @@ export function ProductItem({
       dispatchCart({
         type: MarketActionTypes.ADD_ITEM,
         payload: {
+          itemPrice: price,
           itemType: selectType,
           itemName: name,
           itemImage: image,

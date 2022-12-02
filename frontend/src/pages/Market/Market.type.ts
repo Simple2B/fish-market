@@ -6,6 +6,7 @@ export enum MarketActionTypes {
 }
 
 export interface IProduct {
+  itemPrice: number;
   itemType: ItemUnit;
   itemName: string;
   itemImage: string;
@@ -19,7 +20,7 @@ export interface AddItemAction {
   payload: IProduct;
 }
 
-interface DeleteItemAction {
+export interface DeleteItemAction {
   type: MarketActionTypes.DELETE_ITEM;
   payload: number;
 }
