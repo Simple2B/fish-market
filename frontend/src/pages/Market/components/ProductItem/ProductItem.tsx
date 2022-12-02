@@ -83,12 +83,12 @@ export function ProductItem({
             defaultValue={selectedPrepId}
             onChange={(e) => handelSelectPrep(Number(e.target.value))}
           >
-            <option disabled selected>
+            <option className={style.preparationOption} disabled selected>
               please choose...
             </option>
             {preps.map(({ id, name }) => {
               return (
-                <option key={id} value={id}>
+                <option className={style.preparationOption} key={id} value={id}>
                   {name}
                 </option>
               );
