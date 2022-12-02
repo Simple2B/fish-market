@@ -37,6 +37,7 @@ export function ProductType({
       setAmount(0);
       return;
     }
+    // TODO make normal
     setAmount(numVAlue);
   };
 
