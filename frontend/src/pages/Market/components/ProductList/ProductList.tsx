@@ -65,8 +65,8 @@ export function ProductList({ marketId, cartState, dispatchCart }: Props) {
               <div className={style.blockTitle}>Cart</div>
             </div>
             <div className={style.productCardItems}>
-              {!cartState ? (
-                cartState.map((prod, index) => {
+              {cartState ? (
+                cartState.map((prod: IProduct, index: number) => {
                   return <CartItem key={index} {...prod} />;
                 })
               ) : (

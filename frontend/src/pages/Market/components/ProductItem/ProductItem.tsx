@@ -7,11 +7,6 @@ import style from "./ProductItem.module.css";
 import { ProductItemProps, ItemUnit } from "../ProductList/ProductList.type";
 import { MarketActions, MarketActionTypes } from "../../Market.type";
 
-type PrepOption = {
-  value: number;
-  label: string;
-};
-
 export function ProductItem({
   id,
   name,
@@ -22,6 +17,9 @@ export function ProductItem({
   onClick,
   dispatchCart,
 }: ProductItemProps) {
+  const [selectType, setSelectType] = useState<ItemUnit>(
+    ItemUnit.by_both === sold_by ? ItemUnit.kilogram : ItemUnit[sold_by]
+  );
   const [selectedPrepId, setSelectedPrepId] = useState<number | undefined>(
     undefined
   );
@@ -35,6 +33,9 @@ export function ProductItem({
       dispatchCart({
         type: MarketActionTypes.ADD_ITEM,
         payload: {
+          itemType: selectType,
+          itemName: name,
+          itemImage: image,
           prepName: preps.find((p) => p.id === selectedPrepId)!.name,
           prepId: selectedPrepId,
           qty: amount,
@@ -64,7 +65,13 @@ export function ProductItem({
           </div>
         </div>
         <div className={style.typeBlock}>
-          <ProductType soldBy={sold_by} amount={amount} setAmount={setAmount} />
+          <ProductType
+            soldBy={sold_by}
+            amount={amount}
+            setAmount={setAmount}
+            selectType={selectType}
+            setSelectType={setSelectType}
+          />
         </div>
 
         <div className={style.preparationBlock}>

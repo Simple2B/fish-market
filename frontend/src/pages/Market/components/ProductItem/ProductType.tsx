@@ -7,12 +7,17 @@ type PrepProductType = {
   soldBy: keyof typeof ItemUnit;
   amount: number;
   setAmount: (n: number) => void;
+  selectType: ItemUnit;
+  setSelectType: (n: ItemUnit) => void;
 };
 
-export function ProductType({ soldBy, amount, setAmount }: PrepProductType) {
-  const [selectType, setSelectType] = useState<ItemUnit>(
-    ItemUnit.by_both === soldBy ? ItemUnit.kilogram : ItemUnit[soldBy]
-  );
+export function ProductType({
+  soldBy,
+  amount,
+  setAmount,
+  selectType,
+  setSelectType,
+}: PrepProductType) {
   const handleSelectType = () => {
     if (selectType === ItemUnit.kilogram) {
       setSelectType(ItemUnit.by_unit);
