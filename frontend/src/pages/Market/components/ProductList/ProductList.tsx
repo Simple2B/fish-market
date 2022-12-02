@@ -4,8 +4,7 @@ import { ProductItemProps } from "./ProductList.type";
 import style from "./ProductList.module.css";
 import { ProductItem } from "../ProductItem";
 import { IProduct, MarketActions } from "../../Market.type";
-import { CartItem } from "../CartItems/CartItem";
-import { CartItems } from "../CartItems/CartItems";
+import { CartItems } from "../CartItems";
 
 type Props = {
   marketId: string;
@@ -68,7 +67,6 @@ export function ProductList({ marketId, cartState, dispatchCart }: Props) {
             <CartItems cartState={cartState} dispatchCart={dispatchCart} />
           </div>
         </div>
-        <div className={style.businessBtnOrder}>Order</div>
       </div>
     </>
   );

@@ -1,7 +1,7 @@
 .productCartItems {
     border: 1px solid #000000;
     border-radius: 5px;
-    margin-top: 6vh;
+    /* margin-top: 6vh; */
     overflow-y: scroll;
 }
 

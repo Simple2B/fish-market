@@ -6,6 +6,7 @@ import { initialState, reducer } from "./Market.reducer";
 
 import style from "./Market.module.css";
 import { Logo } from "./components/Logo";
+import { Confirm } from "./components/Confirm";
 
 enum BusinessStep {
   START_ORDER,
@@ -16,6 +17,7 @@ enum BusinessStep {
 const buttonTitle = {
   [BusinessStep.ORDER]: "Order",
   [BusinessStep.START_ORDER]: "Start Order",
+  [BusinessStep.CONFIRM]: "Confirm",
 };
 
 export function Market() {
@@ -42,6 +44,9 @@ export function Market() {
           cartState={cartState}
           dispatchCart={dispatchCart}
         />
+      )}
+      {step === BusinessStep.CONFIRM && (
+        <Confirm cartState={cartState} dispatchCart={dispatchCart} />
       )}
       <div className={style.businessBtn} onClick={handleStepBusiness}>
         {buttonTitle[step]}
