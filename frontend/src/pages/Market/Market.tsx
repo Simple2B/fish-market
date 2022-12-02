@@ -10,6 +10,7 @@ import { Logo } from "./components/Logo";
 enum BusinessStep {
   START_ORDER,
   ORDER,
+  CONFIRM,
 }
 
 const buttonTitle = {
