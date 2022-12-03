@@ -18,12 +18,12 @@ export function ProductType({
   selectType,
   setSelectType,
 }: PrepProductType) {
-  const handleSelectType = () => {
-    if (selectType === ItemUnit.kilogram) {
-      setSelectType(ItemUnit.by_unit);
-    } else {
-      setSelectType(ItemUnit.kilogram);
-    }
+  const handleSelectKilogram = () => {
+    setSelectType(ItemUnit.kilogram);
+  };
+
+  const handleSelectUnit = () => {
+    setSelectType(ItemUnit.by_unit);
   };
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -47,12 +47,12 @@ export function ProductType({
     ) : (
       <div className={style.itemsWrap}>
         <UnitOption
-          onClick={handleSelectType}
+          onClick={handleSelectUnit}
           value={ItemUnit.by_unit}
           itemUnit={selectType}
         />
         <UnitOption
-          onClick={handleSelectType}
+          onClick={handleSelectKilogram}
           value={ItemUnit.kilogram}
           itemUnit={selectType}
         />
