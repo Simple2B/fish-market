@@ -15,7 +15,9 @@ const Confirm = ({ cartState, dispatchCart }: ConfirmProps) => {
       <div className={style.confirmPageTitle}>Order details</div>
       <div className={style.confirmPageContent}>
         <div className={style.contentCart}>
-          <CartItems cartState={cartState} dispatchCart={dispatchCart} />
+          <div className={style.contentCartWrap}>
+            <CartItems cartState={cartState} dispatchCart={dispatchCart} />
+          </div>
         </div>
         <div className={style.contentForm}>
           <PersonalInfo />

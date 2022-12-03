@@ -13,6 +13,7 @@
     align-items: end;
     justify-content: center;
     height: 10%;
+    margin-bottom: 24px;
 
 
     font-family: 'Avenir';
@@ -30,13 +31,22 @@
     justify-content: center;
     align-items: flex-start;
     height: 90%;
+    width: 100%;
 }
 
 .contentCart {
-    align-self: flex-start;
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .contentForm {
-    /* width: 30%; */
-    align-self: flex-start;
+    height: 100%;
+    width: 50%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.contentCartWrap {
+    width: 50%;
 }
