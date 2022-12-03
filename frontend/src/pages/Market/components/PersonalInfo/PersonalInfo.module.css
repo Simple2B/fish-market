@@ -1,7 +1,46 @@
 .personalInfoContent {
-    width: 100%;
+    height: 100%;
+    width: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: flex-start;
+}
+
+.contentWrap {
+    width: 80%;
+    margin-bottom: 36px;
+}
+
+.contentWrapNote {
+    height: 100%;
+    text-align: start;
+}
+
+.contentWrapLabel {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    margin-bottom: 8px;
+
+
+    color: #000000;
+}
+
+.contentInput {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    padding: 16px;
+
+    color: #000000;
+
+
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    border-radius: 5px;
 }
