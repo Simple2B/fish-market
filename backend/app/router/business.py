@@ -312,7 +312,9 @@ def valid_customer_phone_number(
 
     if confirm_code == db_phone_number.confirm_code:
         db_phone_number.is_number_verified = True
+        db_phone_number.confirm_code = m.gen_confirm_code()
         db.commit()
+
         return s.CreateCustomerPhone(phone_number=db_phone_number.number)
 
     raise HTTPException(
