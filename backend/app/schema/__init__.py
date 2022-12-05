@@ -24,6 +24,8 @@ from .create_order_schemas import (
     CreateCustomer,
     CreateOrderItem,
     CreateOrderOut,
+    CreateCustomerPhone,
+    ValidCustomerPhone,
 )
 
 from .get_order_schemas import OrderProductsOut, OrderProductOut, OrderElectPrep

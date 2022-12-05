@@ -271,3 +271,68 @@ def test_get_customer_orders(client: TestClient, db: Session, customer_orders):
 #         json=update_data.dict(),
 #     )
 #     assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
+def test_route_phone(client: TestClient, db: Session, customer_orders, mocker):
+    mocker.patch("app.router.business.send_sms")
+    business, _ = customer_orders
+
+    test_phone_number = PHONE_NUMBER
+
+    req_data = s.CreateCustomerPhone(phone_number=test_phone_number)
+
+    res = client.post(f"/business/{business.web_site_id}/phone", json=req_data.dict())
+    assert res.status_code == status.HTTP_201_CREATED
+    res_data = s.CreateCustomerPhone.parse_obj(res.json())
+    assert res_data.phone_number == req_data.phone_number
+
+    # test number is not valid
+    req_data = s.CreateCustomerPhone(phone_number="123456789")
+    res = client.post(f"/business/{business.web_site_id}/phone", json=req_data.dict())
+    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+    req_data = s.CreateCustomerPhone(phone_number="gfdbdbdbb")
+    res = client.post(f"/business/{business.web_site_id}/phone", json=req_data.dict())
+    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
+def test_route_phone_valid(client: TestClient, db: Session, customer_orders):
+    business, _ = customer_orders
+    # test is code valid
+    test_phone_number = PHONE_NUMBER
+    phone_number = m.PhoneNumber(number=test_phone_number)
+    db.add(phone_number)
+    db.commit()
+    db.refresh(phone_number)
+    req_data = s.ValidCustomerPhone(
+        phone_number=test_phone_number, sms_code=phone_number.confirm_code
+    )
+    res = client.post(
+        f"/business/{business.web_site_id}/phone/valid", json=req_data.dict()
+    )
+    assert res.status_code == status.HTTP_200_OK
+    assert phone_number.is_number_verified == True
+
+    # test number is not valid
+    req_data.phone_number = "123456778"
+    db.commit()
+    res = client.post(
+        f"/business/{business.web_site_id}/phone/valid", json=req_data.dict()
+    )
+    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+    # test if number not found
+    req_data.phone_number = "3805023123456"
+    db.commit()
+    res = client.post(
+        f"/business/{business.web_site_id}/phone/valid", json=req_data.dict()
+    )
+    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+    # test code is not valid
+    req_data.sms_code = "123456"
+    db.commit()
+    res = client.post(
+        f"/business/{business.web_site_id}/phone/valid", json=req_data.dict()
+    )
+    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY

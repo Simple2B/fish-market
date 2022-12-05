@@ -34,3 +34,11 @@ class CreateOrderOut(BaseModel):
 
     class Config:
         use_enum_values = True
+
+
+class CreateCustomerPhone(BaseModel):
+    phone_number: str
+
+
+class ValidCustomerPhone(CreateCustomerPhone):
+    sms_code: str

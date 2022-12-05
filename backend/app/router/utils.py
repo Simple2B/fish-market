@@ -1,8 +1,11 @@
 from typing import Union
 
 from fastapi import HTTPException, status
+import phonenumbers
+from phonenumbers.phonenumberutil import NumberParseException
 
 from app import model as m
+from app.config import settings
 from app.logger import log
 
 
@@ -70,4 +73,21 @@ def check_access_to_order(order: m.Order):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Order was not found",
+        )
+
+
+def is_number_valid(number: str) -> None:
+
+    try:
+        is_valid = phonenumbers.parse(number, settings.COUNTRY_CODE)
+    except NumberParseException:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Phone number is not valid",
+        )
+
+    if not phonenumbers.is_valid_number(is_valid):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Phone number is not valid",
         )
