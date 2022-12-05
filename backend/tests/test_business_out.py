@@ -88,7 +88,21 @@ def test_create_product_order(client: TestClient, db: Session):
     )
 
     order_data = data_create_order.dict()
+    # test number not exist
+    res = client.post(f"/business/{user_business.web_site_id}/order", json=order_data)
+    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
+    phone_number = m.PhoneNumber(number=PHONE_NUMBER)
+    db.add(phone_number)
+    db.commit()
+
+    # test number is not valid
+    res = client.post(f"/business/{user_business.web_site_id}/order", json=order_data)
+    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+    # test number is valid
+    phone_number.is_number_verified = True
+    db.commit()
     res = client.post(f"/business/{user_business.web_site_id}/order", json=order_data)
     assert res.status_code == status.HTTP_201_CREATED
     res_data = s.CreateOrderOut.parse_obj(res.json())
@@ -100,7 +114,7 @@ def test_create_product_order(client: TestClient, db: Session):
     assert customers
     assert len(customers) == 1
     customer = customers[0]
-    assert customer.phone_number == PHONE_NUMBER
+    assert customer.phone_number.number == PHONE_NUMBER
 
     # test order was created in db
     orders = db.query(m.Order).all()
@@ -114,7 +128,7 @@ def test_create_product_order(client: TestClient, db: Session):
     # test the order has correct customer
     order = orders[0]
     assert order.customer.full_name == FULL_NAME
-    assert order.customer.phone_number == PHONE_NUMBER
+    assert order.customer.phone_number.number == PHONE_NUMBER
     assert order.items
     assert len(order.items) == 2
 
@@ -124,7 +138,7 @@ def test_create_product_order(client: TestClient, db: Session):
     customers = db.query(m.Customer).all()
     assert len(customers) == 1
     customer = customers[0]
-    assert customer.phone_number == PHONE_NUMBER
+    assert customer.phone_number.number == PHONE_NUMBER
 
     # test customers order was created twice
     assert len(customer.orders) == 2
@@ -299,7 +313,7 @@ def test_route_phone(client: TestClient, db: Session, customer_orders, mocker):
 def test_route_phone_valid(client: TestClient, db: Session, customer_orders):
     business, _ = customer_orders
     # test is code valid
-    test_phone_number = PHONE_NUMBER
+    test_phone_number = "380502281085"
     phone_number = m.PhoneNumber(number=test_phone_number)
     db.add(phone_number)
     db.commit()

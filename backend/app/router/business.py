@@ -108,13 +108,26 @@ def create_order_for_business(
 
     customer_data: s.CreateCustomer = data.customer
 
-    customer = (
-        db.query(m.Customer).filter_by(phone_number=customer_data.phone_number).first()
+    phone_number: m.PhoneNumber = (
+        db.query(m.PhoneNumber).filter_by(number=customer_data.phone_number).first()
     )
+
+    if not phone_number or not phone_number.is_number_verified:
+        log(log.ERROR, "Number is not valid")
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Number is not valid",
+        )
+
+    customer = db.query(m.Customer).filter_by(phone_number_id=phone_number.id).first()
 
     if not customer:
         log(log.INFO, "create customer")
-        create_customer = m.Customer(**customer_data.dict())
+        create_customer = m.Customer(
+            full_name=customer_data.full_name,
+            phone_number_id=phone_number.id,
+            note=customer_data.note,
+        )
         db.add(create_customer)
         db.commit()
         db.refresh(create_customer)
