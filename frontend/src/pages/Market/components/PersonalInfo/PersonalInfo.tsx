@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import classNames from "classnames";
 import { useForm } from "react-hook-form";
 
 import { ErrorInput } from "./ErrorInput";
 import style from "./PersonalInfo.module.css";
 
-type Props = {};
+type PersonalInfoProps = {
+  onConfirm: () => void;
+};
 
-const PersonalInfo = (props: Props) => {
+const PersonalInfo = ({ onConfirm }: PersonalInfoProps) => {
+  const [isValidData, setIsValidData] = useState<boolean>();
+
   const {
     register,
     handleSubmit,
@@ -15,10 +19,11 @@ const PersonalInfo = (props: Props) => {
   } = useForm();
 
   const contentNote = classNames(style.contentInput, style.contentWrapNote);
+  // TODO post
 
   return (
     <form
-      onSubmit={handleSubmit((data) => console.log(data, "data"))}
+      onSubmit={handleSubmit(onConfirm)}
       className={style.personalInfoContent}
     >
       <div className={style.contentWrap}>
@@ -53,7 +58,6 @@ const PersonalInfo = (props: Props) => {
           placeholder="Type here"
         />
       </div>
-      <input type="submit" />
     </form>
   );
 };

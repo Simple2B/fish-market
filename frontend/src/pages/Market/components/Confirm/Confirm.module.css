@@ -47,6 +47,10 @@
     justify-content: flex-start;
 }
 
+.contentFormWrap {
+    width: 50%;
+}
+
 .contentCartWrap {
     width: 50%;
 }

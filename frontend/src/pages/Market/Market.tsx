@@ -12,12 +12,14 @@ enum BusinessStep {
   START_ORDER,
   ORDER,
   CONFIRM,
+  CONFIRM_CODE,
 }
 
 const buttonTitle = {
   [BusinessStep.ORDER]: "Order",
   [BusinessStep.START_ORDER]: "Start Order",
   [BusinessStep.CONFIRM]: "Confirm",
+  [BusinessStep.CONFIRM_CODE]: "",
 };
 
 export function Market() {
@@ -30,9 +32,18 @@ export function Market() {
 
   const [step, setStep] = useState<BusinessStep>(BusinessStep.START_ORDER);
 
+  const [hiddenBtn, setHiddenBtn] = useState<boolean>(false);
+
   const handleStepBusiness = () => {
     if (step === BusinessStep.ORDER && cartState.length < 1) return;
+    if (step === BusinessStep.CONFIRM) {
+      setHiddenBtn(true);
+    } else {
+      setHiddenBtn(false);
+    }
     setStep((value) => value + 1);
+
+    console.log(buttonTitle[step]);
   };
 
   return (
@@ -46,9 +57,17 @@ export function Market() {
         />
       )}
       {step === BusinessStep.CONFIRM && (
-        <Confirm cartState={cartState} dispatchCart={dispatchCart} />
+        <Confirm
+          cartState={cartState}
+          dispatchCart={dispatchCart}
+          onConfirm={handleStepBusiness}
+        />
       )}
-      <div className={style.businessBtn} onClick={handleStepBusiness}>
+      {step === BusinessStep.CONFIRM_CODE && <h1>Hello world</h1>}
+      <div
+        className={hiddenBtn ? undefined : style.businessBtn}
+        onClick={handleStepBusiness}
+      >
         {buttonTitle[step]}
       </div>
     </>
