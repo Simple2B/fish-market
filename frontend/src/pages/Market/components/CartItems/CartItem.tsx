@@ -30,11 +30,7 @@ export const CartItem = ({
     <div className={style.cartContent}>
       <div className={style.cartRight}>
         <div className={style.rightWrap}>
-          <img
-            src={itemImage}
-            alt="Product item"
-            style={{ width: "100%", height: "100%" }}
-          />
+          <img src={itemImage} alt="Product item" className={style.itemImage} />
         </div>
         <div className={style.leftWrap}>
           <div className={style.leftWrapTitle}>{itemName}</div>

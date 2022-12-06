@@ -32,15 +32,10 @@ export function Market() {
 
   const [step, setStep] = useState<BusinessStep>(BusinessStep.START_ORDER);
 
-  const [hiddenBtn, setHiddenBtn] = useState<boolean>(false);
+  const hiddenBtn = BusinessStep.CONFIRM === step;
 
   const handleStepBusiness = () => {
     if (step === BusinessStep.ORDER && cartState.length < 1) return;
-    if (step === BusinessStep.CONFIRM) {
-      setHiddenBtn(true);
-    } else {
-      setHiddenBtn(false);
-    }
     setStep((value) => value + 1);
 
     console.log(buttonTitle[step]);

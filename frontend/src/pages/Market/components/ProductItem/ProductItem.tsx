@@ -28,8 +28,6 @@ export function ProductItem({
 
   const handleAddItem = () => {
     if (isBtnEnable) {
-      console.log("added item to cart");
-
       dispatchCart({
         type: MarketActionTypes.ADD_ITEM,
         payload: {

@@ -10,14 +10,10 @@ type CartItemsProps = {
 };
 
 export const CartItems = ({ cartState, dispatchCart }: CartItemsProps) => {
-  const [totalPrice, setTotalPrice] = useState<number>(0);
-
-  useEffect(() => {
-    if (cartState) {
-      const totalList = cartState.map(({ qty, itemPrice }) => qty * itemPrice);
-      setTotalPrice(Math.floor(totalList.reduce((a, b) => a + b, 0)));
-    }
-  }, [cartState]);
+  const totalPrice = cartState.reduce(
+    (acc, currentValue) => acc + currentValue.qty * currentValue.itemPrice,
+    0
+  );
 
   return (
     <div style={{ paddingBottom: "15vh" }}>

@@ -1,2 +1,2 @@
-export { ErrorInput } from "./ErrorInput";
+import { ErrorMessage } from "./ErrorMessage";
 export { PersonalInfo } from "./PersonalInfo";

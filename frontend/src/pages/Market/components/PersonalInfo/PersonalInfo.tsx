@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import classNames from "classnames";
 import { useForm } from "react-hook-form";
 
-import { ErrorInput } from "./ErrorInput";
+import { ErrorMessage } from "./ErrorMessage";
 import style from "./PersonalInfo.module.css";
 
 type PersonalInfoProps = {
@@ -35,7 +35,7 @@ const PersonalInfo = ({ onConfirm }: PersonalInfoProps) => {
           placeholder="Enter your phone number"
         />
         {errors.phoneNumber && (
-          <ErrorInput text="Phone number should consist from 10 characters. Please provide a valid phone number." />
+          <ErrorMessage text="Phone number should consist from 10 characters. Please provide a valid phone number." />
         )}
       </div>
 
@@ -47,7 +47,7 @@ const PersonalInfo = ({ onConfirm }: PersonalInfoProps) => {
           placeholder="Enter your name"
         />
         {errors.name && (
-          <ErrorInput text="Your name should consist from minimum 3 characters. Please provide a valid name." />
+          <ErrorMessage text="Your name should consist from minimum 3 characters. Please provide a valid name." />
         )}
       </div>
       <div className={style.contentWrap}>
