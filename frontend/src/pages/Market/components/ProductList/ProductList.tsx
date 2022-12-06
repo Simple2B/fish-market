@@ -29,6 +29,7 @@ export function ProductList({ marketId, cartState, dispatchCart }: Props) {
     const selectedItem = data?.find((item) => item.id === id);
     if (selectedItem) {
       console.log(id);
+      // TODO completed it
     }
   };
 

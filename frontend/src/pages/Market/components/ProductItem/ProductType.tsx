@@ -18,12 +18,8 @@ export function ProductType({
   selectType,
   setSelectType,
 }: PrepProductType) {
-  const handleSelectKilogram = () => {
-    setSelectType(ItemUnit.kilogram);
-  };
-
-  const handleSelectUnit = () => {
-    setSelectType(ItemUnit.by_unit);
+  const handleSelect = (option: ItemUnit.by_unit | ItemUnit.kilogram) => {
+    setSelectType(option);
   };
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -41,27 +37,24 @@ export function ProductType({
     setAmount(numVAlue);
   };
 
-  const typeProduct =
-    ItemUnit.by_both !== soldBy ? (
-      <UnitOption value={ItemUnit[soldBy]} itemUnit={ItemUnit[soldBy]} />
-    ) : (
-      <div className={style.itemsWrap}>
-        <UnitOption
-          onClick={handleSelectUnit}
-          value={ItemUnit.by_unit}
-          itemUnit={selectType}
-        />
-        <UnitOption
-          onClick={handleSelectKilogram}
-          value={ItemUnit.kilogram}
-          itemUnit={selectType}
-        />
-      </div>
-    );
-
   return (
     <>
-      {typeProduct}
+      {ItemUnit.by_both !== soldBy ? (
+        <UnitOption value={ItemUnit[soldBy]} itemUnit={ItemUnit[soldBy]} />
+      ) : (
+        <div className={style.itemsWrap}>
+          <UnitOption
+            onClick={() => handleSelect(ItemUnit.by_unit)}
+            value={ItemUnit.by_unit}
+            itemUnit={selectType}
+          />
+          <UnitOption
+            onClick={() => handleSelect(ItemUnit.kilogram)}
+            value={ItemUnit.kilogram}
+            itemUnit={selectType}
+          />
+        </div>
+      )}
       <div className={style.blockQty}>
         <input
           type="number"
