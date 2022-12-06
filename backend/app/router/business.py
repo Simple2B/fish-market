@@ -73,6 +73,7 @@ def get_business_product_out(business_uid: str, db: Session = Depends(get_db)):
         if preps:
             show_products.append(
                 s.BusinessProductOut(
+                    id=product.id,
                     name=product.name,
                     price=product.price,
                     image=product.image,
@@ -181,6 +182,7 @@ def get_customer_order(
             if (not prep.is_deleted and prep.is_active) or prep.id == item.prep_id
         ]
         product_schema = s.OrderProductOut(
+            id=item.product.id,
             name=item.product.name,
             price=item.product.price,
             image=item.product.image,
@@ -211,3 +213,17 @@ def get_customer_order(
 #     check_access_to_order(order=order)
 
 #     products = data.products
+
+
+@router.get(
+    "/{business_uid}", response_model=s.BusinessOut, status_code=status.HTTP_200_OK
+)
+def get_business_out_by_uid(business_uid: str, db: Session = Depends(get_db)):
+    log(log.INFO, "get_business_out_by_uid")
+
+    business: m.Business = (
+        db.query(m.Business).filter_by(web_site_id=business_uid).first()
+    )
+    check_access_to_business(business=business, data_mes=business_uid)
+
+    return business

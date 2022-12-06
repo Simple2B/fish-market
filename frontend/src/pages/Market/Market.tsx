@@ -1,44 +1,70 @@
-import { Button } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useReducer } from "react";
 import { Navigate, useParams } from "react-router-dom";
-import SendIcon from "@mui/icons-material/Send";
+
 import { ProductList } from "./components/ProductList";
+import { initialState, reducer } from "./Market.reducer";
+
+import style from "./Market.module.css";
+import { Logo } from "./components/Logo";
+import { Confirm } from "./components/Confirm";
+
+enum BusinessStep {
+  START_ORDER,
+  ORDER,
+  CONFIRM,
+  CONFIRM_CODE,
+}
+
+const buttonTitle = {
+  [BusinessStep.ORDER]: "Order",
+  [BusinessStep.START_ORDER]: "Start Order",
+  [BusinessStep.CONFIRM]: "Confirm",
+  [BusinessStep.CONFIRM_CODE]: "",
+};
 
 export function Market() {
   const { marketId } = useParams<"marketId">();
   if (!marketId) {
     return <Navigate to={"/"} replace={true} />;
   }
-  const { data } = useQuery({
-    queryKey: ["marketDetails"],
-    queryFn: async () => {
-      return { name: "Taras Supa Dupa Fish" };
-    }, // TODO: Replace this code with real fetch
-  });
 
-  const [showProducts, setShowProducts] = useState<boolean>(false);
-  const handleStartOrder = () => {
-    setShowProducts(true);
+  const [cartState, dispatchCart] = useReducer(reducer, initialState);
+
+  const [step, setStep] = useState<BusinessStep>(BusinessStep.START_ORDER);
+
+  const hiddenBtn = BusinessStep.CONFIRM === step;
+
+  const handleStepBusiness = () => {
+    if (step === BusinessStep.ORDER && cartState.length < 1) return;
+    setStep((value) => value + 1);
+
+    console.log(buttonTitle[step]);
   };
-  return (
-    <div>
-      {!showProducts && <p>{data?.name}</p>}
 
-      {showProducts && (
-        <>
-          <ProductList marketId={marketId} />
-        </>
+  return (
+    <>
+      {step === BusinessStep.START_ORDER && <Logo marketId={marketId} />}
+      {step === BusinessStep.ORDER && (
+        <ProductList
+          marketId={marketId}
+          cartState={cartState}
+          dispatchCart={dispatchCart}
+        />
       )}
-      {!showProducts && (
-        <Button
-          onClick={handleStartOrder}
-          variant="contained"
-          endIcon={<SendIcon />}
-        >
-          Start Order
-        </Button>
+      {step === BusinessStep.CONFIRM && (
+        <Confirm
+          cartState={cartState}
+          dispatchCart={dispatchCart}
+          onConfirm={handleStepBusiness}
+        />
       )}
-    </div>
+      {step === BusinessStep.CONFIRM_CODE && <h1>Hello world</h1>}
+      <div
+        className={hiddenBtn ? undefined : style.businessBtn}
+        onClick={handleStepBusiness}
+      >
+        {buttonTitle[step]}
+      </div>
+    </>
   );
 }

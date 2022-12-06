@@ -3,6 +3,8 @@ import { RouterProvider } from "react-router-dom";
 import { queryClient } from "./queryClient";
 import { rootRouter } from "./router";
 
+import "./App.css";
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>

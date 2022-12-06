@@ -1,0 +1,35 @@
+.marketLogoStart {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+}
+
+.businessTitle {
+    height: 60vh;
+    align-self: center;
+}
+
+.businessTitleText {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 36px;
+    line-height: 49px;
+    text-align: center;
+}
+
+.businessLogoWrap {
+    height: 82px;
+    width: 132px;
+}
+
+.businessLogo {
+    height: 35vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

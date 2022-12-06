@@ -1,0 +1,61 @@
+.productListPage {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pageContent {
+    display: flex;
+    width: 90%;
+    justify-content: space-between;
+}
+
+
+.productListContent {
+    height: 100vh;
+    width: 68%;
+}
+
+.contentBlockTitle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 1vh;
+}
+
+
+.productCardContent {
+    height: 100vh;
+    width: 30%;
+
+}
+
+
+.blockTitle {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 28px;
+    line-height: 38px;
+    text-align: center;
+}
+
+.blockSubTitle {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    text-align: center;
+    padding-top: 1vh;
+
+}
+
+.blockItems {
+    padding-top: 2vh;
+    height: 100%;
+    overflow-y: scroll;
+    padding-bottom: 15vh;
+}

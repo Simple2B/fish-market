@@ -1,53 +1,74 @@
 import { useQuery } from "@tanstack/react-query";
-import { ItemUnit, ProductItemProps } from "./ProductList.type";
-import { ProductItem } from "./ProductItem";
-import Grid from "@mui/material/Grid";
+import { ProductItemProps } from "./ProductList.type";
+
+import style from "./ProductList.module.css";
+import { ProductItem } from "../ProductItem";
+import { IProduct, MarketActions } from "../../Market.type";
+import { CartItems } from "../CartItems";
 
 type Props = {
   marketId: string;
+  cartState: IProduct[];
+  dispatchCart: (action: MarketActions) => void;
 };
 
-export function ProductList({ marketId }: Props) {
+export function ProductList({ marketId, cartState, dispatchCart }: Props) {
   const { data, isLoading } = useQuery({
     queryKey: [`marketProductList-${marketId}`],
-    queryFn: async () => [
-      {
-        id: 1,
-        name: "Salmon",
-        price: 12,
-        imageUrl: "https://picsum.photos/200/300/?blur=2",
-        unit: ItemUnit.kg,
-      },
-      {
-        id: 2,
-        name: "Tuna",
-        price: 10,
-        imageUrl: "https://picsum.photos/200/300/?blur=1",
-        unit: ItemUnit.unit,
-      },
-      {
-        id: 3,
-        name: "Catfish",
-        price: 22,
-        imageUrl: "https://picsum.photos/200/300/?blur=3",
-        unit: ItemUnit.kg,
-      },
-    ],
+    queryFn: async () => {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/business/${marketId}/product`
+      );
+      const data: { products: ProductItemProps[] } = await res.json();
+
+      return data.products;
+    },
   });
+
+  const onProductClicked = (id: number) => {
+    const selectedItem = data?.find((item) => item.id === id);
+    if (selectedItem) {
+      console.log(id);
+      // TODO completed it
+    }
+  };
+
+  console.log(cartState, !cartState);
   return isLoading ? (
     <p>LOADING...</p>
   ) : (
-    <Grid container spacing={2} py={2}>
-      {data?.map(({ id, name, imageUrl, unit, price }: ProductItemProps) => (
-        <ProductItem
-          key={id}
-          id={id}
-          name={name}
-          imageUrl={imageUrl}
-          price={price}
-          unit={unit}
-        />
-      ))}
-    </Grid>
+    <>
+      <div className={style.productListPage}>
+        <div className={style.pageContent}>
+          <div className={style.productListContent}>
+            <div className={style.contentBlockTitle}>
+              <div className={style.blockTitle}>Choose your items</div>
+              <div className={style.blockSubTitle}>
+                *The weight is roughly estimated, the order might arrive with up
+                to 35% margin of difference
+              </div>
+            </div>
+            <div className={style.blockItems}>
+              {data?.map(
+                (props: Omit<ProductItemProps, "onClick" | "dispatchCart">) => (
+                  <ProductItem
+                    key={props.id}
+                    onClick={onProductClicked}
+                    dispatchCart={dispatchCart}
+                    {...props}
+                  />
+                )
+              )}
+            </div>
+          </div>
+          <div className={style.productCardContent}>
+            <div className={style.contentBlockTitle}>
+              <div className={style.blockTitle}>Cart</div>
+            </div>
+            <CartItems cartState={cartState} dispatchCart={dispatchCart} />
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

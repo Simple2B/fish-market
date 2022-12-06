@@ -12,6 +12,22 @@ PHONE_NUMBER = "380502221085"
 NOTE = "Do it quickly"
 
 
+def test_get_business_by_uid(client: TestClient, db: Session):
+    user = db.query(m.User).filter_by(role=m.UserRole.Marketeer).first()
+    user_business: m.Business = user.businesses[0]
+    fake_uid = uuid.uuid4()
+
+    res = client.get(f"/business/{user_business.web_site_id}")
+
+    assert res.status_code == status.HTTP_200_OK
+    res_data = s.BusinessOut.parse_obj(res.json())
+    assert res_data.name == user_business.name
+    assert res_data.logo == user_business.logo
+
+    res = client.get(f"/business/{fake_uid}")
+    assert res.status_code == status.HTTP_404_NOT_FOUND
+
+
 def test_get_business_product_out(
     client: TestClient, db: Session, marketer_client: TestClient
 ):

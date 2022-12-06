@@ -1,0 +1,68 @@
+.personalInfoContent {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.contentWrap {
+    width: 80%;
+    margin-bottom: 36px;
+}
+
+.contentWrapNote {
+    height: 100%;
+    text-align: start;
+}
+
+.contentWrapLabel {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    margin-bottom: 8px;
+
+
+    color: #000000;
+}
+
+.contentInput {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    padding: 16px;
+
+    color: #000000;
+
+
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    border-radius: 5px;
+}
+
+.businessBtn {
+    width: 100vh;
+    height: 15vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    background-color: #C1E1FF;
+    cursor: pointer;
+
+
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 36px;
+    line-height: 49px;
+    text-align: center;
+
+    position: fixed;
+    bottom: 0;
+}

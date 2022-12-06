@@ -6,9 +6,10 @@ jinja2.contextfunction = jinja2.pass_context
 # flake8: noqa F402
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqladmin import Admin, ModelView
 
-from app.router import post, user, auth, business, product
+from app.router import user, auth, business, product
 from app import admin
 from app.database import engine
 from .config import settings
@@ -16,11 +17,18 @@ from .config import settings
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 sql_admin = Admin(app, engine)
 
 sql_admin.add_view(admin.user.UserAdmin)
 
-app.include_router(post.router)
 app.include_router(user.router)
 app.include_router(auth.router)
 app.include_router(business.router)

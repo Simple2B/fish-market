@@ -15,6 +15,7 @@ class OrderElectPrep(BaseModel):
 
 
 class OrderProductOut(BaseModel):
+    id: int
     name: str
     price: float
     image: Optional[str]

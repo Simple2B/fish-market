@@ -12,6 +12,7 @@ class SoldBy(enum.Enum):
     unknown = "unknown"
     by_kilogram = "by_kilogram"
     by_unit = "by_unit"
+    by_both = "by_both"
 
 
 class OrderStatus(enum.Enum):
