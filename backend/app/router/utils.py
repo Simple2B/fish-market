@@ -79,14 +79,17 @@ def check_access_to_order(order: m.Order):
 def is_number_valid(number: str) -> None:
 
     try:
+        log(log.INFO, "is_number_valid")
         is_valid = phonenumbers.parse(number, settings.COUNTRY_CODE)
     except NumberParseException:
+        log(log.ERROR, "is_number_valid")
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Phone number is not valid",
         )
 
     if not phonenumbers.is_valid_number(is_valid):
+        log(log.ERROR, "is_number_valid.is_valid_number")
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Phone number is not valid",

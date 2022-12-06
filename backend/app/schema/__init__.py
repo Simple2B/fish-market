@@ -22,9 +22,9 @@ from .prep_schemas import (
 from .create_order_schemas import (
     CreateOrder,
     CreateCustomer,
+    CreateCustomerOut,
     CreateOrderItem,
     CreateOrderOut,
-    CreateCustomerPhone,
     ValidCustomerPhone,
 )
 
