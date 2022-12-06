@@ -7,11 +7,10 @@ import style from "./PersonalInfo.module.css";
 
 type PersonalInfoProps = {
   onConfirm: () => void;
+  submitRef: React.RefObject<HTMLButtonElement>;
 };
 
-const PersonalInfo = ({ onConfirm }: PersonalInfoProps) => {
-  const [isValidData, setIsValidData] = useState<boolean>();
-
+const PersonalInfo = ({ onConfirm, submitRef }: PersonalInfoProps) => {
   const {
     register,
     handleSubmit,
@@ -19,18 +18,22 @@ const PersonalInfo = ({ onConfirm }: PersonalInfoProps) => {
   } = useForm();
 
   const contentNote = classNames(style.contentInput, style.contentWrapNote);
-  // TODO post
+
+  const handleSubmitBtn = (data: object) => {
+    console.log({ data });
+    onConfirm();
+  };
 
   return (
     <form
-      onSubmit={handleSubmit(onConfirm)}
+      onSubmit={handleSubmit(handleSubmitBtn)}
       className={style.personalInfoContent}
     >
       <div className={style.contentWrap}>
         <div className={style.contentWrapLabel}>Phone number</div>
         {/* pattern: /\d+/ */}
         <input
-          {...(register("phoneNumber"), { required: true })}
+          {...register("phoneNumber", { required: true })}
           className={style.contentInput}
           placeholder="Enter your phone number"
         />
@@ -58,6 +61,7 @@ const PersonalInfo = ({ onConfirm }: PersonalInfoProps) => {
           placeholder="Type here"
         />
       </div>
+      <button ref={submitRef} type="submit" style={{ display: "none" }} />
     </form>
   );
 };

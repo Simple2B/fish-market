@@ -8,9 +8,15 @@ type ConfirmProps = {
   cartState: IProduct[];
   dispatchCart: (action: DeleteItemAction) => void;
   onConfirm: () => void;
+  submitRef: React.RefObject<HTMLButtonElement>;
 };
 
-const Confirm = ({ cartState, dispatchCart, onConfirm }: ConfirmProps) => {
+const Confirm = ({
+  cartState,
+  dispatchCart,
+  onConfirm,
+  submitRef,
+}: ConfirmProps) => {
   return (
     <>
       <div className={style.confirmPage}>
@@ -23,7 +29,7 @@ const Confirm = ({ cartState, dispatchCart, onConfirm }: ConfirmProps) => {
           </div>
           <div className={style.contentForm}>
             <div className={style.contentFormWrap}>
-              <PersonalInfo onConfirm={onConfirm} />
+              <PersonalInfo onConfirm={onConfirm} submitRef={submitRef} />
             </div>
           </div>
         </div>
