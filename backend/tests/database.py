@@ -104,13 +104,9 @@ def add_prep_to_product(product_id: int, db: SessionLocal) -> None:
 
 
 def create_test_customer_order(db: SessionLocal) -> tuple:
-    phone_number = m.PhoneNumber(number="380502221085", is_number_verified=True)
-    db.add(phone_number)
-    db.commit()
-    db.refresh(phone_number)
 
     customer = m.Customer(
-        full_name="test user", phone_number_id=phone_number.id, note="test note"
+        full_name="test user", phone_number="380502221085", note="test note"
     )
     db.add(customer)
     db.commit()
