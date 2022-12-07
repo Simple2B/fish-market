@@ -104,24 +104,23 @@ def add_prep_to_product(product_id: int, db: SessionLocal) -> None:
 
 
 def create_test_customer_order(db: SessionLocal) -> tuple:
-    phone_number = m.PhoneNumber(number="380502221085", is_number_verified=True)
+
+    phone_number = m.PhoneNumber(number="972545657514")
     db.add(phone_number)
     db.commit()
     db.refresh(phone_number)
 
-    customer = m.Customer(
-        full_name="test user", phone_number_id=phone_number.id, note="test note"
-    )
-    db.add(customer)
-    db.commit()
-    db.refresh(customer)
+    business = db.query(m.Business).first()
 
-    order: m.Order = m.Order(customer_id=customer.id)
+    order: m.Order = m.Order(
+        phone_number_id=phone_number.id,
+        business_id=business.id,
+        customer_name="Alex",
+        note="Do it",
+    )
     db.add(order)
     db.commit()
     db.refresh(order)
-
-    business = db.query(m.Business).first()
 
     products = business.products
 
