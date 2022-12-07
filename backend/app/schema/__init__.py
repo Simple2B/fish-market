@@ -19,13 +19,13 @@ from .prep_schemas import (
     UpdateProductPrep,
 )
 
-from .create_order_schemas import (
-    CreateOrder,
-    CreateCustomer,
+from .create_order import (
+    CreatePhoneNumber,
+    CreatePhoneNumberOut,
+    ValidPhoneNumber,
     CreateOrderItem,
+    CreateOrder,
     CreateOrderOut,
-    CreateCustomerPhone,
-    ValidCustomerPhone,
 )
 
 from .get_order_schemas import OrderProductsOut, OrderProductOut, OrderElectPrep
