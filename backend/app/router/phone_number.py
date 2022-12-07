@@ -9,75 +9,75 @@ from app.database import get_db
 from app.logger import log
 from .utils import is_number_valid
 
-router = APIRouter(prefix="/customer", tags=["customer"])
+router = APIRouter(prefix="/phone-number", tags=["Phone-number"])
 
 
 @router.post(
     "/",
-    response_model=s.CreateCustomerOut,
+    response_model=s.CreatePhoneNumberOut,
     status_code=status.HTTP_201_CREATED,
 )
-def create_check_customer(data: s.CreateCustomer, db: Session = Depends(get_db)):
+def create_check_phone_number(data: s.CreatePhoneNumber, db: Session = Depends(get_db)):
 
-    log(log.INFO, "Create_check_customer")
+    log(log.INFO, "create_check_phone_number")
 
     is_number_valid(data.phone_number)
 
-    customer = db.query(m.Customer).filter_by(phone_number=data.phone_number).first()
+    phone_number = db.query(m.PhoneNumber).filter_by(number=data.phone_number).first()
 
-    if not customer:
-        customer = m.Customer(**data.dict())
-        db.add(customer)
+    if not phone_number:
+        phone_number = m.PhoneNumber(number=data.phone_number)
+        db.add(phone_number)
         db.commit()
-    if not customer.is_number_verified:
-        customer.confirm_code = m.gen_confirm_code()
+    if not phone_number.is_number_verified:
+        phone_number.confirm_code = m.gen_confirm_code()
         db.commit()
         try:
             send_sms(
-                confirm_code=customer.confirm_code,
-                phone_number=customer.phone_number,
+                confirm_code=phone_number.confirm_code,
+                phone_number=phone_number.number,
             )
         except TwilioRestException:
             log(
                 log.ERROR,
                 "Exception when send sms,  number: [%s]",
-                customer.phone_number,
+                phone_number.number,
             )
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail="Phone number is not valid",
             )
-    return customer
+    return phone_number
 
 
 @router.post(
     "/validate",
-    response_model=s.CreateCustomerOut,
+    response_model=s.CreatePhoneNumberOut,
     status_code=status.HTTP_200_OK,
 )
-def valid_customer(data: s.ValidCustomerPhone, db: Session = Depends(get_db)):
-    log(log.INFO, "validate_customer")
+def validate_phone_number(data: s.ValidPhoneNumber, db: Session = Depends(get_db)):
+    log(log.INFO, "validate_phone_number")
     phone_number = data.phone_number
     confirm_code = data.sms_code
 
     is_number_valid(phone_number)
 
-    customer = db.query(m.Customer).filter_by(phone_number=phone_number).first()
+    db_phone_number = db.query(m.PhoneNumber).filter_by(number=phone_number).first()
 
-    if not customer:
+    if not db_phone_number:
         log(log.ERROR, "validate_customer: Customer was not found")
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Customer was not found",
         )
 
-    if confirm_code == customer.confirm_code:
-        customer.is_number_verified = True
-        customer.confirm_code = m.gen_confirm_code()
+    if confirm_code == db_phone_number.confirm_code:
+        db_phone_number.is_number_verified = True
+        db_phone_number.confirm_code = m.gen_confirm_code()
         db.commit()
-        db.refresh(customer)
+        db.refresh(db_phone_number)
 
-        return customer
+        return db_phone_number
 
     raise HTTPException(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
