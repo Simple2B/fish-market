@@ -1,7 +1,8 @@
-from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy import Column, String, Integer, Boolean
 from sqlalchemy.orm import relationship
 
 from app.database import Base
+from .utils import gen_confirm_code
 
 
 class Customer(Base):
@@ -9,10 +10,11 @@ class Customer(Base):
 
     id = Column(Integer, primary_key=True)
     full_name = Column(String(128), nullable=False)
-    phone_number_id = Column(Integer, ForeignKey("phone_numbers.id"))
+    phone_number = Column(String(64), nullable=False, unique=True)
+    confirm_code = Column(String(6), default=gen_confirm_code)
+    is_number_verified = Column(Boolean, default=False)
     note = Column(String(512))
 
-    phone_number = relationship("PhoneNumber", viewonly=True)
     orders: list = relationship("Order", viewonly=True)
 
     def __repr__(self) -> str:

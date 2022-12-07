@@ -1,13 +1,12 @@
 from fastapi import Depends, APIRouter, status, HTTPException
 from sqlalchemy.orm import Session
-from twilio.base.exceptions import TwilioRestException
 
-from app.service import get_current_user, send_sms
+from app.service import get_current_user
 from app import schema as s
 from app import model as m
 from app.database import get_db
 from app.logger import log
-from .utils import check_access_to_business, check_access_to_order, is_number_valid
+from .utils import check_access_to_business, check_access_to_order
 
 
 router = APIRouter(prefix="/business", tags=["business"])
@@ -108,30 +107,18 @@ def create_order_for_business(
 
     customer_data: s.CreateCustomer = data.customer
 
-    phone_number: m.PhoneNumber = (
-        db.query(m.PhoneNumber).filter_by(number=customer_data.phone_number).first()
+    customer = (
+        db.query(m.Customer)
+        .filter(m.Customer.phone_number.in_([customer_data.phone_number]))
+        .first()
     )
 
-    if not phone_number or not phone_number.is_number_verified:
-        log(log.ERROR, "Number is not valid")
+    if not customer or not customer.is_number_verified:
+        log(log.ERROR, "Customer or number is not valid")
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="Number is not valid",
+            detail="Customer or number is not valid",
         )
-
-    customer = db.query(m.Customer).filter_by(phone_number_id=phone_number.id).first()
-
-    if not customer:
-        log(log.INFO, "create customer")
-        create_customer = m.Customer(
-            full_name=customer_data.full_name,
-            phone_number_id=phone_number.id,
-            note=customer_data.note,
-        )
-        db.add(create_customer)
-        db.commit()
-        db.refresh(create_customer)
-        customer = create_customer
 
     log(log.INFO, "create order")
     order = m.Order(customer_id=customer.id)
@@ -241,83 +228,3 @@ def get_business_out_by_uid(business_uid: str, db: Session = Depends(get_db)):
     check_access_to_business(business=business, data_mes=business_uid)
 
     return business
-
-
-@router.post(
-    "/{business_uid}/phone",
-    status_code=status.HTTP_201_CREATED,
-)
-def create_customer_phone_number(
-    business_uid: str, data: s.CreateCustomerPhone, db: Session = Depends(get_db)
-):
-
-    log(log.INFO, "create_customer_phone_number")
-    business: m.Business = (
-        db.query(m.Business).filter_by(web_site_id=business_uid).first()
-    )
-    check_access_to_business(business=business, data_mes=business_uid)
-    phone_number = data.phone_number
-
-    is_number_valid(phone_number)
-
-    db_phone_number = db.query(m.PhoneNumber).filter_by(number=phone_number).first()
-
-    if not db_phone_number:
-        db_phone_number = m.PhoneNumber(number=phone_number)
-        db.add(db_phone_number)
-        db.commit()
-    db.refresh(db_phone_number)
-
-    try:
-        send_sms(
-            confirm_code=db_phone_number.confirm_code,
-            phone_number=db_phone_number.number,
-        )
-    except TwilioRestException:
-        log(log.ERROR, "Exception when send sms,  number: [%s]", db_phone_number)
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="Phone number is not valid",
-        )
-
-    return s.CreateCustomerPhone(phone_number=db_phone_number.number)
-
-
-@router.post(
-    "/{business_uid}/phone/valid",
-    status_code=status.HTTP_200_OK,
-)
-def valid_customer_phone_number(
-    business_uid: str, data: s.ValidCustomerPhone, db: Session = Depends(get_db)
-):
-
-    business: m.Business = (
-        db.query(m.Business).filter_by(web_site_id=business_uid).first()
-    )
-    check_access_to_business(business=business, data_mes=business_uid)
-    phone_number = data.phone_number
-    confirm_code = data.sms_code
-
-    is_number_valid(phone_number)
-
-    db_phone_number: m.PhoneNumber = (
-        db.query(m.PhoneNumber).filter_by(number=phone_number).first()
-    )
-
-    if not db_phone_number:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="Number was not found",
-        )
-
-    if confirm_code == db_phone_number.confirm_code:
-        db_phone_number.is_number_verified = True
-        db_phone_number.confirm_code = m.gen_confirm_code()
-        db.commit()
-
-        return s.CreateCustomerPhone(phone_number=db_phone_number.number)
-
-    raise HTTPException(
-        status_code=status.HTTP_403_FORBIDDEN,
-        detail="Code is not valid",
-    )
