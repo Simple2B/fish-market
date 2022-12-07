@@ -110,14 +110,17 @@ def create_test_customer_order(db: SessionLocal) -> tuple:
     db.commit()
     db.refresh(phone_number)
 
+    business = db.query(m.Business).first()
+
     order: m.Order = m.Order(
-        phone_number_id=phone_number.id, customer_name="Alex", note="Do it"
+        phone_number_id=phone_number.id,
+        business_id=business.id,
+        customer_name="Alex",
+        note="Do it",
     )
     db.add(order)
     db.commit()
     db.refresh(order)
-
-    business = db.query(m.Business).first()
 
     products = business.products
 

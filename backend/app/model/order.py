@@ -14,6 +14,7 @@ class Order(Base):
 
     id = Column(Integer, primary_key=True)
     phone_number_id = Column(Integer, ForeignKey("phone_numbers.id"))
+    business_id = Column(Integer, ForeignKey("businesses.id"))
     created_at = Column(DateTime, default=datetime.now)
     customer_name = Column(String(128), nullable=False)
     note = Column(String(512))

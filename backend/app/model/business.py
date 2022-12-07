@@ -18,6 +18,7 @@ class Business(Base):
 
     user = relationship("User")
     products = relationship("Product", viewonly=True)
+    orders = relationship("Order")
 
     def __repr__(self) -> str:
         return f"<id:{self.id}, name:{self.name},  user:{self.user}>"

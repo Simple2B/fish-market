@@ -28,13 +28,14 @@ class CreateOrderItem(BaseModel):
 
 
 class CreateOrder(BaseModel):
-    phone_number: CreatePhoneNumber
+    phone_number: str
     customer_name: str
-    note: str
+    note: Optional[str]
     items: list[CreateOrderItem]
 
 
 class CreateOrderOut(BaseModel):
+    phone_number: str
     order_status: m.OrderStatus
 
     class Config:
