@@ -1,2 +1,7 @@
 export { Market } from "./Market";
-export { initialState, reducer } from "./Market.reducer";
+export {
+  initialStateCart,
+  initialStateCustomer,
+  cartReducer,
+  customerReducer,
+} from "./Market.reducer";

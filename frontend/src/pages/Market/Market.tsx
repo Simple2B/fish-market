@@ -2,7 +2,7 @@ import { useState, useReducer, useRef } from "react";
 import { Navigate, useParams } from "react-router-dom";
 
 import { ProductList } from "./components/ProductList";
-import { initialState, reducer } from "./Market.reducer";
+import { initialStateCart, cartReducer } from "./Market.reducer";
 
 import style from "./Market.module.css";
 import { Logo } from "./components/Logo";
@@ -28,7 +28,7 @@ export function Market() {
     return <Navigate to={"/"} replace={true} />;
   }
 
-  const [cartState, dispatchCart] = useReducer(reducer, initialState);
+  const [cartState, dispatchCart] = useReducer(cartReducer, initialStateCart);
 
   const [step, setStep] = useState<BusinessStep>(BusinessStep.START_ORDER);
 
