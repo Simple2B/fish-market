@@ -55,12 +55,12 @@ def create_check_customer(data: s.CreateCustomer, db: Session = Depends(get_db))
 
 
 @router.post(
-    "/valid",
+    "/validate",
     response_model=s.CreateCustomerOut,
     status_code=status.HTTP_200_OK,
 )
 def valid_customer(data: s.ValidCustomerPhone, db: Session = Depends(get_db)):
-    log(log.INFO, "valid_customer")
+    log(log.INFO, "validate_customer")
     phone_number = data.phone_number
     confirm_code = data.sms_code
 
@@ -71,7 +71,7 @@ def valid_customer(data: s.ValidCustomerPhone, db: Session = Depends(get_db)):
     )
 
     if not customer:
-        log(log.ERROR, "valid_customer: Customer was not found")
+        log(log.ERROR, "validate_customer: Customer was not found")
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Customer was not found",

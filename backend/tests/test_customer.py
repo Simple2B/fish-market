@@ -55,22 +55,22 @@ def test_valid_customer(client: TestClient, db: Session, customer_orders):
     req_data = s.ValidCustomerPhone(
         phone_number=test_phone_number, sms_code=customer.confirm_code
     )
-    res = client.post("/customer/valid", json=req_data.dict())
+    res = client.post("/customer/validate", json=req_data.dict())
     assert res.status_code == status.HTTP_200_OK
     assert customer.is_number_verified
 
     # test code is not valid
     req_data.sms_code = "123456"
-    res = client.post("/customer/valid", json=req_data.dict())
+    res = client.post("/customer/validate", json=req_data.dict())
     assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     # test number is not valid
     req_data.sms_code = customer.confirm_code
     req_data.phone_number = "123456778"
-    res = client.post("/customer/valid", json=req_data.dict())
+    res = client.post("/customer/validate", json=req_data.dict())
     assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     # test if number not found
     req_data.phone_number = "3805023123456"
-    res = client.post("/customer/valid", json=req_data.dict())
+    res = client.post("/customer/validate", json=req_data.dict())
     assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
