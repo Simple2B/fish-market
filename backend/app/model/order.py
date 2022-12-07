@@ -25,4 +25,4 @@ class Order(Base):
     items = relationship("OrderItem", viewonly=True)
 
     def __repr__(self) -> str:
-        return f"<id:{self.id}>, customer:{self.customer}"
+        return f"<id:{self.id}>, customer:{self.customer_name}"
