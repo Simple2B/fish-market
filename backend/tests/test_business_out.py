@@ -8,7 +8,7 @@ from app import model as m
 from app import schema as s
 
 FULL_NAME = "TEST USER"
-PHONE_NUMBER = "380502221085"
+PHONE_NUMBER = "972545657512"
 NOTE = "Do it quickly"
 
 
@@ -62,10 +62,10 @@ def test_get_business_product_out(
     assert len(res_products) == count_of_products - 3
 
 
-def test_create_product_order(client: TestClient, db: Session):
-
-    user = db.query(m.User).filter_by(role=m.UserRole.Marketeer).first()
-    user_business: m.Business = user.businesses[0]
+def test_create_product_order(client: TestClient, db: Session, customer_orders):
+    business, order = customer_orders
+    phone_number = order.phone_number
+    user_business: m.Business = business
 
     first_product = user_business.products[0]
 
@@ -81,68 +81,40 @@ def test_create_product_order(client: TestClient, db: Session):
     ]
 
     data_create_order = s.CreateOrder(
-        customer=s.CreateCustomer(
-            full_name=FULL_NAME, phone_number=PHONE_NUMBER, note=NOTE
-        ),
+        phone_number=phone_number.number,
+        business_id=business.id,
+        note=NOTE,
+        customer_name=FULL_NAME,
         items=order_items,
     )
 
     order_data = data_create_order.dict()
-    # test number not exist
-    res = client.post(f"/business/{user_business.web_site_id}/order", json=order_data)
-    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    # # test order is exist
+    # res = client.post(f"/business/{user_business.web_site_id}/order", json=order_data)
+    # assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-    phone_number = m.PhoneNumber(number=PHONE_NUMBER)
-    db.add(phone_number)
-    db.commit()
-
-    # test number is not valid
-    res = client.post(f"/business/{user_business.web_site_id}/order", json=order_data)
-    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-
-    # test number is valid
+    # test create order
     phone_number.is_number_verified = True
     db.commit()
     res = client.post(f"/business/{user_business.web_site_id}/order", json=order_data)
     assert res.status_code == status.HTTP_201_CREATED
     res_data = s.CreateOrderOut.parse_obj(res.json())
-    assert res_data.customer.full_name == FULL_NAME
+    assert res_data.phone_number == phone_number.number
     assert res_data.order_status == m.OrderStatus.created.value
-
-    # test the customer was created in db
-    customers = db.query(m.Customer).all()
-    assert customers
-    assert len(customers) == 1
-    customer = customers[0]
-    assert customer.phone_number.number == PHONE_NUMBER
 
     # test order was created in db
     orders = db.query(m.Order).all()
-    assert orders
-    assert len(orders) == 1
+    assert len(orders) == 2
 
     # test the customer has order
-    assert len(customer.orders) == 1
-    assert customer.orders[0].status == m.OrderStatus.created
+    assert len(phone_number.orders) == 2
+    second_order = phone_number.orders[1]
+    assert second_order.status == m.OrderStatus.created
+    assert len(second_order.items) == 2
 
     # test the order has correct customer
-    order = orders[0]
-    assert order.customer.full_name == FULL_NAME
-    assert order.customer.phone_number.number == PHONE_NUMBER
-    assert order.items
-    assert len(order.items) == 2
-
-    # test if the customer already exists
-    res = client.post(f"/business/{user_business.web_site_id}/order", json=order_data)
-    assert res.status_code == status.HTTP_201_CREATED
-    customers = db.query(m.Customer).all()
-    assert len(customers) == 1
-    customer = customers[0]
-    assert customer.phone_number.number == PHONE_NUMBER
-
-    # test customers order was created twice
-    assert len(customer.orders) == 2
-    assert sum([len(order.items) for order in customer.orders]) == 4
+    assert second_order.customer_name == FULL_NAME
+    assert second_order.phone_number.number == phone_number.number
 
     # test if prep_id is not correct
     data_create_order.items = [
@@ -155,12 +127,21 @@ def test_create_product_order(client: TestClient, db: Session):
     )
     assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
+    # test if the number not exists
+    data_create_order.phone_number = "380672215670"
+    res = client.post(
+        f"/business/{user_business.web_site_id}/order", json=data_create_order.dict()
+    )
+    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    phone_numbers = db.query(m.PhoneNumber).all()
+    assert len(phone_numbers) == 1
+
     # test id web_site_id is not correct
     res = client.post("/business/fasfaf76fa7f8afaffafaf/order", json=order_data)
     assert res.status_code == status.HTTP_404_NOT_FOUND
 
 
-def test_delete_customer_order(client: TestClient, db: Session, customer_orders):
+def test_delete_order(client: TestClient, db: Session, customer_orders):
     business, order = customer_orders
     fake_uid = uuid.uuid4()
 
@@ -179,7 +160,7 @@ def test_delete_customer_order(client: TestClient, db: Session, customer_orders)
     assert res.status_code == status.HTTP_404_NOT_FOUND
 
 
-def test_get_customer_orders(client: TestClient, db: Session, customer_orders):
+def test_get_orders(client: TestClient, db: Session, customer_orders):
     business, order = customer_orders
     fake_uid = uuid.uuid4()
 
@@ -285,68 +266,3 @@ def test_get_customer_orders(client: TestClient, db: Session, customer_orders):
 #         json=update_data.dict(),
 #     )
 #     assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-
-
-def test_route_phone(client: TestClient, db: Session, customer_orders, mocker):
-    mocker.patch("app.router.business.send_sms")
-    business, _ = customer_orders
-
-    test_phone_number = PHONE_NUMBER
-
-    req_data = s.CreateCustomerPhone(phone_number=test_phone_number)
-
-    res = client.post(f"/business/{business.web_site_id}/phone", json=req_data.dict())
-    assert res.status_code == status.HTTP_201_CREATED
-    res_data = s.CreateCustomerPhone.parse_obj(res.json())
-    assert res_data.phone_number == req_data.phone_number
-
-    # test number is not valid
-    req_data = s.CreateCustomerPhone(phone_number="123456789")
-    res = client.post(f"/business/{business.web_site_id}/phone", json=req_data.dict())
-    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-
-    req_data = s.CreateCustomerPhone(phone_number="gfdbdbdbb")
-    res = client.post(f"/business/{business.web_site_id}/phone", json=req_data.dict())
-    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-
-
-def test_route_phone_valid(client: TestClient, db: Session, customer_orders):
-    business, _ = customer_orders
-    # test is code valid
-    test_phone_number = "380502281085"
-    phone_number = m.PhoneNumber(number=test_phone_number)
-    db.add(phone_number)
-    db.commit()
-    db.refresh(phone_number)
-    req_data = s.ValidCustomerPhone(
-        phone_number=test_phone_number, sms_code=phone_number.confirm_code
-    )
-    res = client.post(
-        f"/business/{business.web_site_id}/phone/valid", json=req_data.dict()
-    )
-    assert res.status_code == status.HTTP_200_OK
-    assert phone_number.is_number_verified == True
-
-    # test number is not valid
-    req_data.phone_number = "123456778"
-    db.commit()
-    res = client.post(
-        f"/business/{business.web_site_id}/phone/valid", json=req_data.dict()
-    )
-    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-
-    # test if number not found
-    req_data.phone_number = "3805023123456"
-    db.commit()
-    res = client.post(
-        f"/business/{business.web_site_id}/phone/valid", json=req_data.dict()
-    )
-    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-
-    # test code is not valid
-    req_data.sms_code = "123456"
-    db.commit()
-    res = client.post(
-        f"/business/{business.web_site_id}/phone/valid", json=req_data.dict()
-    )
-    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
