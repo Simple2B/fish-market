@@ -62,10 +62,10 @@ def test_get_business_product_out(
     assert len(res_products) == count_of_products - 3
 
 
-def test_create_product_order(client: TestClient, db: Session):
-
-    user = db.query(m.User).filter_by(role=m.UserRole.Marketeer).first()
-    user_business: m.Business = user.businesses[0]
+def test_create_product_order(client: TestClient, db: Session, customer_orders):
+    business, order = customer_orders
+    customer = order.customer
+    user_business: m.Business = business
 
     first_product = user_business.products[0]
 
@@ -82,53 +82,37 @@ def test_create_product_order(client: TestClient, db: Session):
 
     data_create_order = s.CreateOrder(
         customer=s.CreateCustomer(
-            full_name=FULL_NAME, phone_number=PHONE_NUMBER, note=NOTE
+            full_name=customer.full_name, phone_number=customer.phone_number, note=NOTE
         ),
         items=order_items,
     )
 
     order_data = data_create_order.dict()
+    # test number is not valid
+    res = client.post(f"/business/{user_business.web_site_id}/order", json=order_data)
+    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
+    customer.is_number_verified = True
+    db.commit()
     res = client.post(f"/business/{user_business.web_site_id}/order", json=order_data)
     assert res.status_code == status.HTTP_201_CREATED
     res_data = s.CreateOrderOut.parse_obj(res.json())
-    assert res_data.customer.full_name == FULL_NAME
+    assert res_data.customer.full_name == customer.full_name
     assert res_data.order_status == m.OrderStatus.created.value
-
-    # test the customer was created in db
-    customers = db.query(m.Customer).all()
-    assert customers
-    assert len(customers) == 1
-    customer = customers[0]
-    assert customer.phone_number == PHONE_NUMBER
 
     # test order was created in db
     orders = db.query(m.Order).all()
-    assert orders
-    assert len(orders) == 1
+    assert len(orders) == 2
 
     # test the customer has order
-    assert len(customer.orders) == 1
-    assert customer.orders[0].status == m.OrderStatus.created
+    assert len(customer.orders) == 2
+    second_order = customer.orders[1]
+    assert second_order.status == m.OrderStatus.created
+    assert len(second_order.items) == 2
 
     # test the order has correct customer
-    order = orders[0]
-    assert order.customer.full_name == FULL_NAME
-    assert order.customer.phone_number == PHONE_NUMBER
-    assert order.items
-    assert len(order.items) == 2
-
-    # test if the customer already exists
-    res = client.post(f"/business/{user_business.web_site_id}/order", json=order_data)
-    assert res.status_code == status.HTTP_201_CREATED
-    customers = db.query(m.Customer).all()
-    assert len(customers) == 1
-    customer = customers[0]
-    assert customer.phone_number == PHONE_NUMBER
-
-    # test customers order was created twice
-    assert len(customer.orders) == 2
-    assert sum([len(order.items) for order in customer.orders]) == 4
+    assert second_order.customer.full_name == customer.full_name
+    assert second_order.customer.phone_number == customer.phone_number
 
     # test if prep_id is not correct
     data_create_order.items = [
@@ -140,6 +124,15 @@ def test_create_product_order(client: TestClient, db: Session):
         f"/business/{user_business.web_site_id}/order", json=data_create_order.dict()
     )
     assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+    # test if the customer not exists
+    data_create_order.customer.phone_number = "380672215670"
+    res = client.post(
+        f"/business/{user_business.web_site_id}/order", json=data_create_order.dict()
+    )
+    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    customers = db.query(m.Customer).all()
+    assert len(customers) == 1
 
     # test id web_site_id is not correct
     res = client.post("/business/fasfaf76fa7f8afaffafaf/order", json=order_data)

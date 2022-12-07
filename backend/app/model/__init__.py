@@ -11,4 +11,4 @@ from .customer import Customer
 from .order import Order
 from .order_item import OrderItem
 from .order_history import OrderHistory
-from .utils import gen_unique_uid
+from .utils import gen_unique_uid, gen_confirm_code

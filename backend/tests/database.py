@@ -5,6 +5,7 @@ from faker import Faker
 from app.database import SessionLocal
 from app import model as m
 
+
 fake = Faker()
 
 
@@ -103,8 +104,9 @@ def add_prep_to_product(product_id: int, db: SessionLocal) -> None:
 
 
 def create_test_customer_order(db: SessionLocal) -> tuple:
+
     customer = m.Customer(
-        full_name="test user", phone_number="234102221050", note="test note"
+        full_name="test user", phone_number="972545657514", note="test note"
     )
     db.add(customer)
     db.commit()

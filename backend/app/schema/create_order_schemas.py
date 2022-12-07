@@ -16,6 +16,16 @@ class CreateCustomer(BaseModel):
     note: Optional[str]
 
 
+class CreateCustomerOut(BaseModel):
+    full_name: str
+    phone_number: str
+    note: Optional[str]
+    is_number_verified: bool
+
+    class Config:
+        orm_mode = True
+
+
 class CreateOrder(BaseModel):
     customer: CreateCustomer
     items: list[CreateOrderItem]
@@ -34,3 +44,8 @@ class CreateOrderOut(BaseModel):
 
     class Config:
         use_enum_values = True
+
+
+class ValidCustomerPhone(BaseModel):
+    phone_number: str
+    sms_code: str

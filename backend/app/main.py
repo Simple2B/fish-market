@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqladmin import Admin, ModelView
 
-from app.router import user, auth, business, product
+from app.router import user, auth, business, product, customer
 from app import admin
 from app.database import engine
 from .config import settings
@@ -33,6 +33,7 @@ app.include_router(user.router)
 app.include_router(auth.router)
 app.include_router(business.router)
 app.include_router(product.router)
+app.include_router(customer.router)
 
 
 @app.get("/")
