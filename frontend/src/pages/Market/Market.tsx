@@ -32,21 +32,11 @@ export function Market() {
 
   const [step, setStep] = useState<BusinessStep>(BusinessStep.START_ORDER);
 
-  // const hiddenBtn = BusinessStep.CONFIRM === step;
-
   const customerConfirmRef = useRef<HTMLButtonElement>(null);
-  const onConfirm = () => console.log("ON CONFIRM CALLED");
   const handleStepBusiness = () => {
-    console.log({ step });
-
     if (step === BusinessStep.ORDER && cartState.length < 1) return;
     setStep((value) => value + 1);
-    if (step === BusinessStep.CONFIRM) {
-      console.log(customerConfirmRef.current);
 
-      customerConfirmRef.current?.click();
-      return;
-    }
     console.log(buttonTitle[step]);
   };
 
@@ -77,7 +67,7 @@ export function Market() {
           <Confirm
             cartState={cartState}
             dispatchCart={dispatchCart}
-            onConfirm={onConfirm}
+            onConfirm={handleStepBusiness}
             submitRef={customerConfirmRef}
           />
           <div

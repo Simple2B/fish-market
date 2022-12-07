@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import classNames from "classnames";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 
 import { ErrorMessage } from "./ErrorMessage";
 import style from "./PersonalInfo.module.css";
@@ -19,9 +20,12 @@ const PersonalInfo = ({ onConfirm, submitRef }: PersonalInfoProps) => {
 
   const contentNote = classNames(style.contentInput, style.contentWrapNote);
 
-  const handleSubmitBtn = (data: object) => {
-    console.log({ data });
-    onConfirm();
+  const handleSubmitBtn = (data: any) => {
+    if (data) {
+    }
+    console.log(data);
+
+    // onConfirm();
   };
 
   return (
@@ -31,11 +35,22 @@ const PersonalInfo = ({ onConfirm, submitRef }: PersonalInfoProps) => {
     >
       <div className={style.contentWrap}>
         <div className={style.contentWrapLabel}>Phone number</div>
-        {/* pattern: /\d+/ */}
         <input
-          {...register("phoneNumber", { required: true })}
+          {...register("phoneNumber", {
+            required: true,
+            minLength: 10,
+            maxLength: 14,
+            validate: {
+              isValidNumber: (v) => {
+                if (!v.startsWith("+")) {
+                  v = `+${v}`;
+                }
+                return isValidPhoneNumber(v);
+              },
+            },
+          })}
           className={style.contentInput}
-          placeholder="Enter your phone number"
+          placeholder="+972 55 85 55 642"
         />
         {errors.phoneNumber && (
           <ErrorMessage text="Phone number should consist from 10 characters. Please provide a valid phone number." />
@@ -45,7 +60,11 @@ const PersonalInfo = ({ onConfirm, submitRef }: PersonalInfoProps) => {
       <div className={style.contentWrap}>
         <div className={style.contentWrapLabel}>Name</div>
         <input
-          {...register("name", { required: true })}
+          {...register("name", {
+            required: true,
+            minLength: 3,
+            maxLength: 127,
+          })}
           className={style.contentInput}
           placeholder="Enter your name"
         />
