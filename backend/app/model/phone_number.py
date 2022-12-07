@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String, Integer, Boolean
+from sqlalchemy.orm import relationship
 
 from app.database import Base
-
 from .utils import gen_confirm_code
 
 
@@ -13,5 +13,7 @@ class PhoneNumber(Base):
     confirm_code = Column(String(6), default=gen_confirm_code)
     is_number_verified = Column(Boolean, default=False)
 
+    orders: list = relationship("Order", viewonly=True)
+
     def __repr__(self) -> str:
-        return f"<{self.number}>"
+        return f"<{self.id}:{self.full_name} orders:[{self.orders}]>"

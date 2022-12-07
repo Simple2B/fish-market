@@ -7,4 +7,6 @@ def gen_unique_uid() -> str:
 
 
 def gen_confirm_code() -> str:
-    return "".join([str(randint(0, 9)) for _ in range(6)])
+    return "".join(
+        [str(randint(0, 9)) if index >= 1 else str(randint(1, 9)) for index in range(6)]
+    )
