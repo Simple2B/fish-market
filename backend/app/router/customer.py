@@ -23,11 +23,7 @@ def create_check_customer(data: s.CreateCustomer, db: Session = Depends(get_db))
 
     is_number_valid(data.phone_number)
 
-    customer = (
-        db.query(m.Customer)
-        .filter(m.Customer.phone_number.in_([data.phone_number]))
-        .first()
-    )
+    customer = db.query(m.Customer).filter_by(phone_number=data.phone_number).first()
 
     if not customer:
         customer = m.Customer(**data.dict())
@@ -66,9 +62,7 @@ def valid_customer(data: s.ValidCustomerPhone, db: Session = Depends(get_db)):
 
     is_number_valid(phone_number)
 
-    customer = (
-        db.query(m.Customer).filter(m.Customer.phone_number.in_([phone_number])).first()
-    )
+    customer = db.query(m.Customer).filter_by(phone_number=phone_number).first()
 
     if not customer:
         log(log.ERROR, "validate_customer: Customer was not found")
