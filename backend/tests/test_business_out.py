@@ -8,7 +8,7 @@ from app import model as m
 from app import schema as s
 
 FULL_NAME = "TEST USER"
-PHONE_NUMBER = "380502221085"
+PHONE_NUMBER = "972545657512"
 NOTE = "Do it quickly"
 
 
@@ -64,7 +64,7 @@ def test_get_business_product_out(
 
 def test_create_product_order(client: TestClient, db: Session, customer_orders):
     business, order = customer_orders
-    customer = order.customer
+    phone_number = order.phone_number
     user_business: m.Business = business
 
     first_product = user_business.products[0]
@@ -81,23 +81,25 @@ def test_create_product_order(client: TestClient, db: Session, customer_orders):
     ]
 
     data_create_order = s.CreateOrder(
-        customer=s.CreateCustomer(
-            full_name=customer.full_name, phone_number=customer.phone_number, note=NOTE
-        ),
+        phone_number=phone_number.number,
+        business_id=business.id,
+        note=NOTE,
+        customer_name=FULL_NAME,
         items=order_items,
     )
 
     order_data = data_create_order.dict()
-    # test number is not valid
-    res = client.post(f"/business/{user_business.web_site_id}/order", json=order_data)
-    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    # # test order is exist
+    # res = client.post(f"/business/{user_business.web_site_id}/order", json=order_data)
+    # assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-    customer.is_number_verified = True
+    # test create order
+    phone_number.is_number_verified = True
     db.commit()
     res = client.post(f"/business/{user_business.web_site_id}/order", json=order_data)
     assert res.status_code == status.HTTP_201_CREATED
     res_data = s.CreateOrderOut.parse_obj(res.json())
-    assert res_data.customer.full_name == customer.full_name
+    assert res_data.phone_number == phone_number.number
     assert res_data.order_status == m.OrderStatus.created.value
 
     # test order was created in db
@@ -105,14 +107,14 @@ def test_create_product_order(client: TestClient, db: Session, customer_orders):
     assert len(orders) == 2
 
     # test the customer has order
-    assert len(customer.orders) == 2
-    second_order = customer.orders[1]
+    assert len(phone_number.orders) == 2
+    second_order = phone_number.orders[1]
     assert second_order.status == m.OrderStatus.created
     assert len(second_order.items) == 2
 
     # test the order has correct customer
-    assert second_order.customer.full_name == customer.full_name
-    assert second_order.customer.phone_number == customer.phone_number
+    assert second_order.customer_name == FULL_NAME
+    assert second_order.phone_number.number == phone_number.number
 
     # test if prep_id is not correct
     data_create_order.items = [
@@ -125,21 +127,21 @@ def test_create_product_order(client: TestClient, db: Session, customer_orders):
     )
     assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-    # test if the customer not exists
-    data_create_order.customer.phone_number = "380672215670"
+    # test if the number not exists
+    data_create_order.phone_number = "380672215670"
     res = client.post(
         f"/business/{user_business.web_site_id}/order", json=data_create_order.dict()
     )
     assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-    customers = db.query(m.Customer).all()
-    assert len(customers) == 1
+    phone_numbers = db.query(m.PhoneNumber).all()
+    assert len(phone_numbers) == 1
 
     # test id web_site_id is not correct
     res = client.post("/business/fasfaf76fa7f8afaffafaf/order", json=order_data)
     assert res.status_code == status.HTTP_404_NOT_FOUND
 
 
-def test_delete_customer_order(client: TestClient, db: Session, customer_orders):
+def test_delete_order(client: TestClient, db: Session, customer_orders):
     business, order = customer_orders
     fake_uid = uuid.uuid4()
 
@@ -158,7 +160,7 @@ def test_delete_customer_order(client: TestClient, db: Session, customer_orders)
     assert res.status_code == status.HTTP_404_NOT_FOUND
 
 
-def test_get_customer_orders(client: TestClient, db: Session, customer_orders):
+def test_get_orders(client: TestClient, db: Session, customer_orders):
     business, order = customer_orders
     fake_uid = uuid.uuid4()
 
