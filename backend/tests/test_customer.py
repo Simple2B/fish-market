@@ -6,7 +6,7 @@ from app import model as m
 from app import schema as s
 
 FULL_NAME = "TEST USER"
-PHONE_NUMBER = "380673838523"
+PHONE_NUMBER = "972545657514"
 NOTE = "Do it quickly"
 
 
@@ -51,7 +51,7 @@ def test_valid_customer(client: TestClient, db: Session, customer_orders):
     # test is code valid
     customer = order.customer
 
-    test_phone_number = "380502221085"
+    test_phone_number = PHONE_NUMBER
     req_data = s.ValidCustomerPhone(
         phone_number=test_phone_number, sms_code=customer.confirm_code
     )
