@@ -2,7 +2,12 @@ import { useState, useReducer, useRef } from "react";
 import { Navigate, useParams } from "react-router-dom";
 
 import { ProductList } from "./components/ProductList";
-import { initialStateCart, cartReducer } from "./Market.reducer";
+import {
+  initialStateCart,
+  cartReducer,
+  orderReducer,
+  initialStateOrder,
+} from "./Market.reducer";
 
 import style from "./Market.module.css";
 import { Logo } from "./components/Logo";
@@ -29,14 +34,22 @@ export function Market() {
   }
 
   const [cartState, dispatchCart] = useReducer(cartReducer, initialStateCart);
+  const [orderState, dispatchOrder] = useReducer(
+    orderReducer,
+    initialStateOrder
+  );
 
   const [step, setStep] = useState<BusinessStep>(BusinessStep.START_ORDER);
 
   const customerConfirmRef = useRef<HTMLButtonElement>(null);
   const handleStepBusiness = () => {
     if (step === BusinessStep.ORDER && cartState.length < 1) return;
-    setStep((value) => value + 1);
 
+    if (step === BusinessStep.CONFIRM && cartState.length < 1) {
+      setStep((value) => value - 1);
+    } else {
+      setStep((value) => value + 1);
+    }
     console.log(buttonTitle[step]);
   };
 
@@ -69,10 +82,15 @@ export function Market() {
             dispatchCart={dispatchCart}
             onConfirm={handleStepBusiness}
             submitRef={customerConfirmRef}
+            dispatchOrder={dispatchOrder}
           />
           <div
             className={style.businessBtn}
-            onClick={() => customerConfirmRef.current?.click()}
+            onClick={() =>
+              cartState.length < 1
+                ? handleStepBusiness()
+                : customerConfirmRef.current?.click()
+            }
           >
             {buttonTitle[step]}
           </div>

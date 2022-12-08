@@ -1,4 +1,4 @@
-import { IProduct, DeleteItemAction } from "../../Market.type";
+import { IProduct, DeleteItemAction, ISetOrderData } from "../../Market.type";
 import { CartItems } from "../CartItems";
 import { PersonalInfo } from "../PersonalInfo";
 
@@ -7,6 +7,7 @@ import style from "./Confirm.module.css";
 type ConfirmProps = {
   cartState: IProduct[];
   dispatchCart: (action: DeleteItemAction) => void;
+  dispatchOrder: (action: ISetOrderData) => void;
   onConfirm: () => void;
   submitRef: React.RefObject<HTMLButtonElement>;
 };
@@ -14,6 +15,7 @@ type ConfirmProps = {
 const Confirm = ({
   cartState,
   dispatchCart,
+  dispatchOrder,
   onConfirm,
   submitRef,
 }: ConfirmProps) => {
@@ -29,7 +31,11 @@ const Confirm = ({
           </div>
           <div className={style.contentForm}>
             <div className={style.contentFormWrap}>
-              <PersonalInfo onConfirm={onConfirm} submitRef={submitRef} />
+              <PersonalInfo
+                onConfirm={onConfirm}
+                submitRef={submitRef}
+                dispatchOrder={dispatchOrder}
+              />
             </div>
           </div>
         </div>
