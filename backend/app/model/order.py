@@ -16,7 +16,7 @@ class Order(Base):
     phone_number_id = Column(Integer, ForeignKey("phone_numbers.id"))
     business_id = Column(Integer, ForeignKey("businesses.id"))
     created_at = Column(DateTime, default=datetime.now)
-    customer_name = Column(String(128), nullable=False)
+    customer_name = Column(String(64), nullable=True, default="")
     note = Column(String(512))
     status = Column(Enum(OrderStatus), default=OrderStatus.created)
     order_uid = Column(String(36), default=gen_unique_uid)

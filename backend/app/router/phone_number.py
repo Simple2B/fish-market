@@ -65,10 +65,10 @@ def validate_phone_number(data: s.ValidPhoneNumber, db: Session = Depends(get_db
     db_phone_number = db.query(m.PhoneNumber).filter_by(number=phone_number).first()
 
     if not db_phone_number:
-        log(log.ERROR, "validate_customer: Customer was not found")
+        log(log.ERROR, "validate_customer: Phone number was not found")
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="Customer was not found",
+            detail="Phone number was not found",
         )
 
     if confirm_code == db_phone_number.confirm_code:

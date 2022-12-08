@@ -105,7 +105,7 @@ def create_order_for_business(
 
     check_access_to_business(business=business, data_mes=business_uid)
 
-    phone_number: s.CreateCustomer = data.phone_number
+    phone_number = data.phone_number
 
     db_phone_number = db.query(m.PhoneNumber).filter_by(number=phone_number).first()
 
