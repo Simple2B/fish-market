@@ -6,6 +6,7 @@ import { isValidPhoneNumber } from "react-phone-number-input";
 import { ErrorMessage } from "./ErrorMessage";
 import style from "./PersonalInfo.module.css";
 import { useMutation } from "@tanstack/react-query";
+import { createCheckPhoneNumber } from "../../../../services";
 
 type PersonalInfoProps = {
   onConfirm: () => void;
@@ -22,20 +23,18 @@ const PersonalInfo = ({ onConfirm, submitRef }: PersonalInfoProps) => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<PersonalInfoFormValues>();
 
   const mutation = useMutation({
-    mutationFn: (dataForm: PersonalInfoFormValues) => {
-      console.log(dataForm, "data");
-
-      return fetch(`${import.meta.env.VITE_API_BASE_URL}/customer`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataForm),
-      });
+    mutationFn: createCheckPhoneNumber,
+    onSuccess: async (data: {
+      number: string;
+      is_number_verified: boolean;
+    }) => {
+      console.log(data);
+      console.log("why not?");
     },
   });
 
@@ -43,18 +42,24 @@ const PersonalInfo = ({ onConfirm, submitRef }: PersonalInfoProps) => {
 
   const handleSubmitBtn: SubmitHandler<PersonalInfoFormValues> = (data) => {
     if (data) {
-      const newData = {
-        ...data,
+      const phoneNumber = {
         phone_number: data.phone_number.startsWith("+")
           ? data.phone_number.slice(1)
           : data.phone_number,
       };
-      mutation.mutate(newData);
+      mutation.mutate(phoneNumber);
+      if (mutation.isError) {
+        setError("phone_number", {
+          type: "postNumber",
+          message: "Please provide a valid phone number.",
+        });
+      }
+      if (mutation.isSuccess) {
+        console.log("isSuccess");
+        // onConfirm()
+      }
     }
-    // onConfirm();
   };
-
-  console.log(mutation);
 
   return (
     <form
@@ -81,7 +86,13 @@ const PersonalInfo = ({ onConfirm, submitRef }: PersonalInfoProps) => {
           placeholder="+972 55 85 55 642"
         />
         {errors.phone_number && (
-          <ErrorMessage text="Phone number should consist from 12 characters. Please provide a valid phone number." />
+          <ErrorMessage
+            text={
+              errors.phone_number.type !== "postNumber"
+                ? "Phone number should consist from 12 characters. Please provide a valid phone number."
+                : errors.phone_number.message!
+            }
+          />
         )}
       </div>
 
