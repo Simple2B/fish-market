@@ -11,7 +11,7 @@ import {
 
 import style from "./Market.module.css";
 import { Logo } from "./components/Logo";
-import { Confirm } from "./components/Confirm";
+import { Confirm, ConfirmCode } from "./components/Confirm";
 
 enum BusinessStep {
   START_ORDER,
@@ -96,7 +96,7 @@ export function Market() {
           </div>
         </>
       )}
-      {step === BusinessStep.CONFIRM_CODE && <h1>Hello world</h1>}
+      {step === BusinessStep.CONFIRM_CODE && <ConfirmCode />}
     </>
   );
 }
