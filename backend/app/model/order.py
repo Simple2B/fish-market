@@ -13,13 +13,16 @@ class Order(Base):
     __tablename__ = "orders"
 
     id = Column(Integer, primary_key=True)
-    customer_id = Column(Integer, ForeignKey("customers.id"))
+    phone_number_id = Column(Integer, ForeignKey("phone_numbers.id"))
+    business_id = Column(Integer, ForeignKey("businesses.id"))
     created_at = Column(DateTime, default=datetime.now)
+    customer_name = Column(String(64), nullable=True, default="")
+    note = Column(String(512))
     status = Column(Enum(OrderStatus), default=OrderStatus.created)
     order_uid = Column(String(36), default=gen_unique_uid)
 
-    customer = relationship("Customer")
+    phone_number = relationship("PhoneNumber", viewonly=True)
     items = relationship("OrderItem", viewonly=True)
 
     def __repr__(self) -> str:
-        return f"<id:{self.id}>, customer:{self.customer}"
+        return f"<id:{self.id}>, customer:{self.customer_name}"

@@ -105,23 +105,24 @@ def create_order_for_business(
 
     check_access_to_business(business=business, data_mes=business_uid)
 
-    customer_data: s.CreateCustomer = data.customer
+    phone_number = data.phone_number
 
-    customer = (
-        db.query(m.Customer)
-        .filter(m.Customer.phone_number.in_([customer_data.phone_number]))
-        .first()
-    )
+    db_phone_number = db.query(m.PhoneNumber).filter_by(number=phone_number).first()
 
-    if not customer or not customer.is_number_verified:
-        log(log.ERROR, "Customer or number is not valid")
+    if not db_phone_number or not db_phone_number.is_number_verified:
+        log(log.ERROR, "Phone number is not valid")
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="Customer or number is not valid",
+            detail="Phone number is not valid",
         )
 
     log(log.INFO, "create order")
-    order = m.Order(customer_id=customer.id)
+    order = m.Order(
+        phone_number_id=db_phone_number.id,
+        business_id=business.id,
+        customer_name=data.customer_name,
+        note=data.note,
+    )
     db.add(order)
     db.commit()
     db.refresh(order)
@@ -136,14 +137,14 @@ def create_order_for_business(
         db.add(create_order_item)
     db.commit()
 
-    return s.CreateOrderOut(customer=customer, order_status=order.status)
+    return s.CreateOrderOut(
+        phone_number=order.phone_number.number, order_status=order.status
+    )
 
 
 @router.delete("/{business_uid}/order/{order_uid}", status_code=status.HTTP_200_OK)
-def delete_customer_order(
-    business_uid: str, order_uid: str, db: Session = Depends(get_db)
-):
-    log(log.INFO, "delete_customer_order")
+def delete_order(business_uid: str, order_uid: str, db: Session = Depends(get_db)):
+    log(log.INFO, "delete_order")
     business: m.Business = (
         db.query(m.Business).filter_by(web_site_id=business_uid).first()
     )
@@ -161,10 +162,8 @@ def delete_customer_order(
 
 
 @router.get("/{business_uid}/order/{order_uid}", status_code=status.HTTP_200_OK)
-def get_customer_order(
-    business_uid: str, order_uid: str, db: Session = Depends(get_db)
-):
-    log(log.INFO, "get_customer_order")
+def get_order(business_uid: str, order_uid: str, db: Session = Depends(get_db)):
+    log(log.INFO, "get_order")
     business: m.Business = (
         db.query(m.Business).filter_by(web_site_id=business_uid).first()
     )

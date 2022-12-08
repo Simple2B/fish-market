@@ -1,8 +1,8 @@
-import { useState, useReducer } from "react";
+import { useState, useReducer, useRef } from "react";
 import { Navigate, useParams } from "react-router-dom";
 
 import { ProductList } from "./components/ProductList";
-import { initialState, reducer } from "./Market.reducer";
+import { initialStateCart, cartReducer } from "./Market.reducer";
 
 import style from "./Market.module.css";
 import { Logo } from "./components/Logo";
@@ -28,12 +28,11 @@ export function Market() {
     return <Navigate to={"/"} replace={true} />;
   }
 
-  const [cartState, dispatchCart] = useReducer(reducer, initialState);
+  const [cartState, dispatchCart] = useReducer(cartReducer, initialStateCart);
 
   const [step, setStep] = useState<BusinessStep>(BusinessStep.START_ORDER);
 
-  const hiddenBtn = BusinessStep.CONFIRM === step;
-
+  const customerConfirmRef = useRef<HTMLButtonElement>(null);
   const handleStepBusiness = () => {
     if (step === BusinessStep.ORDER && cartState.length < 1) return;
     setStep((value) => value + 1);
@@ -43,28 +42,43 @@ export function Market() {
 
   return (
     <>
-      {step === BusinessStep.START_ORDER && <Logo marketId={marketId} />}
+      {step === BusinessStep.START_ORDER && (
+        <>
+          <Logo marketId={marketId} />
+          <div className={style.businessBtn} onClick={handleStepBusiness}>
+            {buttonTitle[step]}
+          </div>
+        </>
+      )}
       {step === BusinessStep.ORDER && (
-        <ProductList
-          marketId={marketId}
-          cartState={cartState}
-          dispatchCart={dispatchCart}
-        />
+        <>
+          <ProductList
+            marketId={marketId}
+            cartState={cartState}
+            dispatchCart={dispatchCart}
+          />
+          <div className={style.businessBtn} onClick={handleStepBusiness}>
+            {buttonTitle[step]}
+          </div>
+        </>
       )}
       {step === BusinessStep.CONFIRM && (
-        <Confirm
-          cartState={cartState}
-          dispatchCart={dispatchCart}
-          onConfirm={handleStepBusiness}
-        />
+        <>
+          <Confirm
+            cartState={cartState}
+            dispatchCart={dispatchCart}
+            onConfirm={handleStepBusiness}
+            submitRef={customerConfirmRef}
+          />
+          <div
+            className={style.businessBtn}
+            onClick={() => customerConfirmRef.current?.click()}
+          >
+            {buttonTitle[step]}
+          </div>
+        </>
       )}
       {step === BusinessStep.CONFIRM_CODE && <h1>Hello world</h1>}
-      <div
-        className={hiddenBtn ? undefined : style.businessBtn}
-        onClick={handleStepBusiness}
-      >
-        {buttonTitle[step]}
-      </div>
     </>
   );
 }
