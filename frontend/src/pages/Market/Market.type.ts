@@ -3,18 +3,19 @@ import { ItemUnit } from "./components/ProductList/ProductList.type";
 export enum MarketActionTypes {
   ADD_ITEM = "ADD_ITEM",
   DELETE_ITEM = "DELETE_ITEM",
-  SET_CUSTOMER_DATA = "SET_CUSTOMER_DATA",
+  SET_ORDER_DATA = "SET_ORDER_DATA",
 }
 
-export interface ICustomer {
+export interface IOrder {
   phoneNumber: string;
+  isNumberVerified: boolean;
   name: string;
   note: string;
 }
 
-export interface ISetCustomerData {
-  type: MarketActionTypes.SET_CUSTOMER_DATA;
-  payload: ICustomer;
+export interface ISetOrderData {
+  type: MarketActionTypes.SET_ORDER_DATA;
+  payload: IOrder;
 }
 
 export interface IProduct {

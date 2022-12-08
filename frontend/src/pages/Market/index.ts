@@ -1,7 +1,7 @@
 export { Market } from "./Market";
 export {
   initialStateCart,
-  initialStateCustomer,
+  initialStateOrder,
   cartReducer,
-  customerReducer,
+  orderReducer,
 } from "./Market.reducer";
