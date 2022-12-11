@@ -12,6 +12,7 @@ import {
 import style from "./Market.module.css";
 import { Logo } from "./components/Logo";
 import { Confirm, ConfirmCode } from "./components/Confirm";
+import { BusinessBtn } from "./components/BusinessBtn/BusinessBtn";
 
 enum BusinessStep {
   START_ORDER,
@@ -53,14 +54,27 @@ export function Market() {
     console.log(buttonTitle[step]);
   };
 
+  const handlerStepBusinessConfirm = () => {
+    cartState.length < 1
+      ? handleStepBusiness()
+      : customerConfirmRef.current?.click();
+  };
+
+  if (orderState.isNumberVerified) {
+    console.log("Create order");
+  }
+
+  console.log(orderState, "orderState");
+
   return (
     <>
       {step === BusinessStep.START_ORDER && (
         <>
           <Logo marketId={marketId} />
-          <div className={style.businessBtn} onClick={handleStepBusiness}>
-            {buttonTitle[step]}
-          </div>
+          <BusinessBtn
+            onClick={handleStepBusiness}
+            textBtn={buttonTitle[step]}
+          />
         </>
       )}
       {step === BusinessStep.ORDER && (
@@ -70,9 +84,10 @@ export function Market() {
             cartState={cartState}
             dispatchCart={dispatchCart}
           />
-          <div className={style.businessBtn} onClick={handleStepBusiness}>
-            {buttonTitle[step]}
-          </div>
+          <BusinessBtn
+            onClick={handleStepBusiness}
+            textBtn={buttonTitle[step]}
+          />
         </>
       )}
       {step === BusinessStep.CONFIRM && (
@@ -84,19 +99,18 @@ export function Market() {
             submitRef={customerConfirmRef}
             dispatchOrder={dispatchOrder}
           />
-          <div
-            className={style.businessBtn}
-            onClick={() =>
-              cartState.length < 1
-                ? handleStepBusiness()
-                : customerConfirmRef.current?.click()
-            }
-          >
-            {buttonTitle[step]}
-          </div>
+          <BusinessBtn
+            onClick={handlerStepBusinessConfirm}
+            textBtn={buttonTitle[step]}
+          />
         </>
       )}
-      {step === BusinessStep.CONFIRM_CODE && (
+      {step === BusinessStep.CONFIRM_CODE && orderState.isNumberVerified ? (
+        <>
+          <h1>Next Client</h1>
+          <BusinessBtn onClick={() => setStep(0)} textBtn="Next client" />
+        </>
+      ) : (
         <ConfirmCode
           dispatchOrder={dispatchOrder}
           orderState={orderState}
