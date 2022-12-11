@@ -96,7 +96,13 @@ export function Market() {
           </div>
         </>
       )}
-      {step === BusinessStep.CONFIRM_CODE && <ConfirmCode />}
+      {step === BusinessStep.CONFIRM_CODE && (
+        <ConfirmCode
+          dispatchOrder={dispatchOrder}
+          orderState={orderState}
+          onConfirm={handleStepBusiness}
+        />
+      )}
     </>
   );
 }

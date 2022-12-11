@@ -1,48 +1,110 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  createCheckPhoneNumber,
+  validatePhoneNumber,
+} from "../../../../services";
+import {
+  IOrder,
+  ISetOrderNumberIsVerified,
+  MarketActionTypes,
+} from "../../Market.type";
 import { ErrorMessage } from "../PersonalInfo/ErrorMessage";
 import style from "./ConfirmCodeForm.module.css";
 
-type ConfirmCodeFormProps = {};
+type ConfirmCodeFormProps = {
+  dispatchOrder: (action: ISetOrderNumberIsVerified) => void;
+  orderState: IOrder;
+  onConfirm: () => void;
+};
 
-const ConfirmCodeForm = (props: ConfirmCodeFormProps) => {
+type ConfirmCodeFormValue = {
+  sms_code: string;
+};
+
+const ConfirmCodeForm = ({
+  dispatchOrder,
+  orderState,
+  onConfirm,
+}: ConfirmCodeFormProps) => {
+  const mutationSendAgain = useMutation({
+    mutationFn: createCheckPhoneNumber,
+  });
+
+  const mutationConfirmCode = useMutation({
+    mutationFn: validatePhoneNumber,
+    onSuccess: async (data: {
+      number: string;
+      is_number_verified: boolean;
+    }) => {
+      dispatchOrder({
+        type: MarketActionTypes.SET_NUMBER_IS_VERIFIED,
+        payload: data.is_number_verified,
+      });
+      onConfirm();
+    },
+
+    onError: async () => {
+      setError("sms_code", {
+        type: "smsCode",
+        message:
+          'Your code is incorrect, please enter the incorrect code or click on "Send again" to get a new code',
+      });
+    },
+  });
+
   const {
     register,
     handleSubmit,
     setError,
-    getValues,
     formState: { errors },
-  } = useForm();
+  } = useForm<ConfirmCodeFormValue>();
+
+  const handlerSubmitBtn: SubmitHandler<ConfirmCodeFormValue> = (data) => {
+    if (data) {
+      const resData = { ...data, phone_number: orderState.phoneNumber };
+      mutationConfirmCode.mutate(resData);
+    }
+  };
+
+  const handlerSendAgainBtn = () => {
+    mutationSendAgain.mutate({ phone_number: orderState.phoneNumber });
+  };
 
   return (
     <div className={style.confirmCodeFormPage}>
       <form
         className={style.formContent}
-        onSubmit={handleSubmit(() => console.log("hi"))}
+        onSubmit={handleSubmit(handlerSubmitBtn)}
       >
         <div className={style.formLabelText}>Confirmation code</div>
         <input
           {...register("sms_code", {
-            required: true,
-            minLength: 6,
-            maxLength: 6,
+            required: "The field is required",
+            minLength: {
+              value: 6,
+              message: "The field must have 6 digits", // JS only: <p>error message</p> TS only support string
+            },
+            maxLength: {
+              value: 6,
+              message: "The field must have 6 digits", // JS only: <p>error message</p> TS only support string
+            },
           })}
           className={style.smsCode}
           placeholder="Enter your code"
         />
-        {errors.sms_code && (
-          <ErrorMessage text="The verification code is incorrect" />
-        )}
-        <button type="submit" className={style.submitBtn}>
+        {errors.sms_code && <ErrorMessage text={errors.sms_code.message!} />}
+        <button
+          type="submit"
+          className={style.submitBtn}
+          disabled={mutationConfirmCode.isLoading}
+        >
           Confirm
         </button>
       </form>
       <div className={style.contentSendAgain}>
         <div>Did not receive a code?</div>
-        <div
-          className={style.btnSendAgain}
-          onClick={() => console.log("Send again.")}
-        >
+        <div className={style.btnSendAgain} onClick={handlerSendAgainBtn}>
           Send again.
         </div>
       </div>
