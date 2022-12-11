@@ -5,6 +5,7 @@ export enum MarketActionTypes {
   DELETE_ITEM = "DELETE_ITEM",
   SET_ORDER_DATA = "SET_ORDER_DATA",
   SET_NUMBER_IS_VERIFIED = "SET_NUMBER_IS_VERIFIED",
+  RESET_DATA = "RESET_DATA",
 }
 
 export interface IOrder {
@@ -24,7 +25,14 @@ export interface ISetOrderNumberIsVerified {
   payload: boolean;
 }
 
-export type OrderActions = ISetOrderData | ISetOrderNumberIsVerified;
+export interface IResetOrderData {
+  type: MarketActionTypes.RESET_DATA;
+}
+
+export type OrderActions =
+  | ISetOrderData
+  | ISetOrderNumberIsVerified
+  | IResetOrderData;
 
 export interface IProduct {
   itemPrice: number;
@@ -46,7 +54,11 @@ export interface DeleteItemAction {
   payload: number;
 }
 
-export type MarketActions = AddItemAction | DeleteItemAction;
+export interface ResetCart {
+  type: MarketActionTypes.RESET_DATA;
+}
+
+export type MarketActions = AddItemAction | DeleteItemAction | ResetCart;
 
 export interface IBusinessOut {
   logo: string | null;

@@ -20,6 +20,8 @@ export function cartReducer(state: IProduct[], action: MarketActions) {
       return [...state, action.payload];
     case MarketActionTypes.DELETE_ITEM:
       return [...state.filter((_, index) => index !== action.payload)];
+    case MarketActionTypes.RESET_DATA:
+      return [];
     default:
       return state;
   }
@@ -31,6 +33,8 @@ export function orderReducer(state: IOrder, action: OrderActions) {
       return { ...state, isNumberVerified: action.payload };
     case MarketActionTypes.SET_ORDER_DATA:
       return { ...action.payload };
+    case MarketActionTypes.RESET_DATA:
+      return { ...initialStateOrder };
     default:
       return state;
   }
