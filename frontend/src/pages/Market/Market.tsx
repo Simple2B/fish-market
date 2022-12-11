@@ -13,6 +13,7 @@ import style from "./Market.module.css";
 import { Logo } from "./components/Logo";
 import { Confirm, ConfirmCode } from "./components/Confirm";
 import { BusinessBtn } from "./components/BusinessBtn/BusinessBtn";
+import { NextClient } from "./components/NextClient/NextClient";
 
 enum BusinessStep {
   START_ORDER,
@@ -107,7 +108,7 @@ export function Market() {
       )}
       {step === BusinessStep.CONFIRM_CODE && orderState.isNumberVerified ? (
         <>
-          <h1>Next Client</h1>
+          <NextClient />
           <BusinessBtn onClick={() => setStep(0)} textBtn="Next client" />
         </>
       ) : (
