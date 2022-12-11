@@ -1,1 +1,1 @@
-export { createCheckPhoneNumber } from "./marketService";
+export { createCheckPhoneNumber, validatePhoneNumber } from "./marketService";
