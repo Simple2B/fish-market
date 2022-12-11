@@ -3,7 +3,7 @@ import {
   IProduct,
   MarketActions,
   MarketActionTypes,
-  ISetOrderData,
+  OrderActions,
 } from "./Market.type";
 
 export const initialStateCart: IProduct[] = [];
@@ -25,8 +25,10 @@ export function cartReducer(state: IProduct[], action: MarketActions) {
   }
 }
 
-export function orderReducer(state: IOrder, action: ISetOrderData) {
+export function orderReducer(state: IOrder, action: OrderActions) {
   switch (action.type) {
+    case MarketActionTypes.SET_NUMBER_IS_VERIFIED:
+      return { ...state, isNumberVerified: action.payload };
     case MarketActionTypes.SET_ORDER_DATA:
       return { ...action.payload };
     default:

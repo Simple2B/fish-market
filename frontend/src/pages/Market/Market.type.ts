@@ -4,6 +4,7 @@ export enum MarketActionTypes {
   ADD_ITEM = "ADD_ITEM",
   DELETE_ITEM = "DELETE_ITEM",
   SET_ORDER_DATA = "SET_ORDER_DATA",
+  SET_NUMBER_IS_VERIFIED = "SET_NUMBER_IS_VERIFIED",
 }
 
 export interface IOrder {
@@ -17,6 +18,13 @@ export interface ISetOrderData {
   type: MarketActionTypes.SET_ORDER_DATA;
   payload: IOrder;
 }
+
+export interface ISetOrderNumberIsVerified {
+  type: MarketActionTypes.SET_NUMBER_IS_VERIFIED;
+  payload: boolean;
+}
+
+export type OrderActions = ISetOrderData | ISetOrderNumberIsVerified;
 
 export interface IProduct {
   itemPrice: number;
