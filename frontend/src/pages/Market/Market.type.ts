@@ -64,3 +64,15 @@ export interface IBusinessOut {
   logo: string | null;
   name: string;
 }
+
+export interface IOrderItem {
+  prep_id: number;
+  qty: number;
+}
+
+export type CreateOrderItems = {
+  phone_number: string;
+  customer_name: string;
+  note: string;
+  items: IOrderItem[];
+};

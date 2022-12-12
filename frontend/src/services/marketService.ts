@@ -1,3 +1,5 @@
+import { CreateOrderItems } from "../pages/Market/Market.type";
+
 export const createCheckPhoneNumber = async (dataForm: {
   phone_number: string;
 }) => {
@@ -30,6 +32,27 @@ export const validatePhoneNumber = async (dataForm: {
   );
   if (!res.ok) {
     throw new Error("THE VERIFICATION CODE IS INCORRECT");
+  }
+  return await res.json();
+};
+
+export const createOrder = async (data: {
+  body: CreateOrderItems;
+  business_uid: string;
+}) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/business/${data.business_uid}/order`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data.body),
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("ORDER CREATION FAILED");
   }
   return await res.json();
 };
