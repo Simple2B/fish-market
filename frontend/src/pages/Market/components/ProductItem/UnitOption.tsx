@@ -8,15 +8,17 @@ export const UnitOption = ({
   value,
 }: {
   itemUnit: ItemUnit;
-  onClick?: () => void;
+  onClick?: (value: ItemUnit | string) => void;
   value: ItemUnit | string;
 }) => {
   const wrapperClass = classNames(style.itemWrap, {
     [style.itemWrapSelected]: value === itemUnit,
   });
-
+  const handleClick = () => {
+    onClick && onClick(value);
+  };
   return (
-    <div onClick={onClick} className={wrapperClass}>
+    <div onClick={handleClick} className={wrapperClass}>
       {value}
     </div>
   );

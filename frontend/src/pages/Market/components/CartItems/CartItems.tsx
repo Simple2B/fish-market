@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { DeleteItemAction, IProduct } from "../../Market.type";
 import { CartItem } from "./CartItem";
 
@@ -32,7 +31,9 @@ export const CartItems = ({ cartState, dispatchCart }: CartItemsProps) => {
             })}
             <div className={style.productCartTotal}>
               <div className={style.productCartTotalText}>Total Price</div>
-              <div className={style.productCartTotalPrice}>$ {totalPrice}</div>
+              <div className={style.productCartTotalPrice}>
+                $ {Math.round(totalPrice)}
+              </div>
             </div>
           </>
         ) : (

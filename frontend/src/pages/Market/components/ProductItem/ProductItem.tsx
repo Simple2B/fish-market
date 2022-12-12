@@ -23,8 +23,8 @@ export function ProductItem({
   const [selectedPrepId, setSelectedPrepId] = useState<number | undefined>(
     undefined
   );
-  const [amount, setAmount] = useState<number>(0);
-  const isBtnEnable = amount > 0 && selectedPrepId !== undefined;
+  const [amount, setAmount] = useState<number | undefined>(undefined);
+  const isBtnEnable = amount && amount > 0 && selectedPrepId !== undefined;
 
   const handleAddItem = () => {
     if (isBtnEnable) {
