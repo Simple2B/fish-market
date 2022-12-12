@@ -17,6 +17,9 @@ export const UnitOption = ({
   const handleClick = () => {
     onClick && onClick(value);
   };
+
+  console.log(itemUnit, value);
+
   return (
     <div onClick={handleClick} className={wrapperClass}>
       {value}

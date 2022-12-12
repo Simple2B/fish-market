@@ -1,7 +1,7 @@
 import { AddItemAction } from "../../Market.type";
 
 export enum ItemUnit {
-  kilogram = "Kg",
+  by_kilogram = "Kg",
   by_unit = "Unit",
   by_both = "by_both",
 }

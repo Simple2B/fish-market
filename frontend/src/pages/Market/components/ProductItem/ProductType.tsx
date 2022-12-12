@@ -45,6 +45,7 @@ export function ProductType({
 
     setAmount(selectType === "Unit" ? Math.round(numVAlue) : numVAlue);
   };
+  console.log(ItemUnit[soldBy], soldBy);
 
   return (
     <>
@@ -59,7 +60,7 @@ export function ProductType({
           />
           <UnitOption
             onClick={handleSelect}
-            value={ItemUnit.kilogram}
+            value={ItemUnit.by_kilogram}
             itemUnit={selectType}
           />
         </div>
@@ -68,7 +69,7 @@ export function ProductType({
         <input
           type="number"
           className={style.inputQty}
-          step={selectType !== ItemUnit.kilogram ? 1 : 0.1}
+          step={selectType !== ItemUnit.by_kilogram ? 1 : 0.1}
           value={amount}
           onChange={handleInputChange}
           placeholder="0"
