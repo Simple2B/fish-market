@@ -1,14 +1,15 @@
 import {
-  ICustomer,
+  IOrder,
   IProduct,
-  ISetCustomerData,
   MarketActions,
   MarketActionTypes,
+  OrderActions,
 } from "./Market.type";
 
 export const initialStateCart: IProduct[] = [];
-export const initialStateCustomer: ICustomer = {
+export const initialStateOrder: IOrder = {
   phoneNumber: "",
+  isNumberVerified: false,
   name: "",
   note: "",
 };
@@ -19,15 +20,21 @@ export function cartReducer(state: IProduct[], action: MarketActions) {
       return [...state, action.payload];
     case MarketActionTypes.DELETE_ITEM:
       return [...state.filter((_, index) => index !== action.payload)];
+    case MarketActionTypes.RESET_DATA:
+      return [];
     default:
       return state;
   }
 }
 
-export function customerReducer(state: ICustomer, action: ISetCustomerData) {
+export function orderReducer(state: IOrder, action: OrderActions) {
   switch (action.type) {
-    case MarketActionTypes.SET_CUSTOMER_DATA:
+    case MarketActionTypes.SET_NUMBER_IS_VERIFIED:
+      return { ...state, isNumberVerified: action.payload };
+    case MarketActionTypes.SET_ORDER_DATA:
       return { ...action.payload };
+    case MarketActionTypes.RESET_DATA:
+      return { ...initialStateOrder };
     default:
       return state;
   }

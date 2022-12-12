@@ -2,11 +2,18 @@ import { useState, useReducer, useRef } from "react";
 import { Navigate, useParams } from "react-router-dom";
 
 import { ProductList } from "./components/ProductList";
-import { initialStateCart, cartReducer } from "./Market.reducer";
+import {
+  initialStateCart,
+  cartReducer,
+  orderReducer,
+  initialStateOrder,
+} from "./Market.reducer";
 
-import style from "./Market.module.css";
 import { Logo } from "./components/Logo";
-import { Confirm } from "./components/Confirm";
+import { Confirm, ConfirmCode } from "./components/Confirm";
+import { BusinessBtn } from "./components/BusinessBtn/BusinessBtn";
+import { NextClient } from "./components/NextClient/NextClient";
+import { MarketActionTypes } from "./Market.type";
 
 enum BusinessStep {
   START_ORDER,
@@ -29,25 +36,53 @@ export function Market() {
   }
 
   const [cartState, dispatchCart] = useReducer(cartReducer, initialStateCart);
+  const [orderState, dispatchOrder] = useReducer(
+    orderReducer,
+    initialStateOrder
+  );
 
   const [step, setStep] = useState<BusinessStep>(BusinessStep.START_ORDER);
 
   const customerConfirmRef = useRef<HTMLButtonElement>(null);
+
   const handleStepBusiness = () => {
     if (step === BusinessStep.ORDER && cartState.length < 1) return;
-    setStep((value) => value + 1);
 
+    if (step === BusinessStep.CONFIRM && cartState.length < 1) {
+      setStep((value) => value - 1);
+    } else {
+      setStep((value) => value + 1);
+    }
     console.log(buttonTitle[step]);
   };
 
-  return (
+  const handlerStepConfirm = () => {
+    cartState.length < 1
+      ? handleStepBusiness()
+      : customerConfirmRef.current?.click();
+  };
+
+  const handlerStepNextClient = () => {
+    const resetActionType = MarketActionTypes.RESET_DATA;
+    dispatchOrder({ type: resetActionType });
+    dispatchCart({ type: resetActionType });
+    setStep(0);
+  };
+
+  return orderState.isNumberVerified ? (
+    <>
+      <NextClient />
+      <BusinessBtn onClick={handlerStepNextClient} textBtn="Next client" />
+    </>
+  ) : (
     <>
       {step === BusinessStep.START_ORDER && (
         <>
           <Logo marketId={marketId} />
-          <div className={style.businessBtn} onClick={handleStepBusiness}>
-            {buttonTitle[step]}
-          </div>
+          <BusinessBtn
+            onClick={handleStepBusiness}
+            textBtn={buttonTitle[step]}
+          />
         </>
       )}
       {step === BusinessStep.ORDER && (
@@ -57,28 +92,37 @@ export function Market() {
             cartState={cartState}
             dispatchCart={dispatchCart}
           />
-          <div className={style.businessBtn} onClick={handleStepBusiness}>
-            {buttonTitle[step]}
-          </div>
+          <BusinessBtn
+            onClick={handleStepBusiness}
+            textBtn={buttonTitle[step]}
+          />
         </>
       )}
       {step === BusinessStep.CONFIRM && (
         <>
           <Confirm
             cartState={cartState}
+            marketId={marketId}
             dispatchCart={dispatchCart}
             onConfirm={handleStepBusiness}
             submitRef={customerConfirmRef}
+            dispatchOrder={dispatchOrder}
           />
-          <div
-            className={style.businessBtn}
-            onClick={() => customerConfirmRef.current?.click()}
-          >
-            {buttonTitle[step]}
-          </div>
+          <BusinessBtn
+            onClick={handlerStepConfirm}
+            textBtn={buttonTitle[step]}
+          />
         </>
       )}
-      {step === BusinessStep.CONFIRM_CODE && <h1>Hello world</h1>}
+      {step === BusinessStep.CONFIRM_CODE && (
+        <ConfirmCode
+          dispatchOrder={dispatchOrder}
+          orderState={orderState}
+          cartState={cartState}
+          onConfirm={handleStepBusiness}
+          marketId={marketId}
+        />
+      )}
     </>
   );
 }

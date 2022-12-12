@@ -18,13 +18,13 @@ export function ProductItem({
   dispatchCart,
 }: ProductItemProps) {
   const [selectType, setSelectType] = useState<ItemUnit>(
-    ItemUnit.by_both === sold_by ? ItemUnit.kilogram : ItemUnit[sold_by]
+    ItemUnit.by_both === sold_by ? ItemUnit.by_kilogram : ItemUnit[sold_by]
   );
   const [selectedPrepId, setSelectedPrepId] = useState<number | undefined>(
     undefined
   );
-  const [amount, setAmount] = useState<number>(0);
-  const isBtnEnable = amount > 0 && selectedPrepId !== undefined;
+  const [amount, setAmount] = useState<number | undefined>(undefined);
+  const isBtnEnable = amount && amount > 0 && selectedPrepId !== undefined;
 
   const handleAddItem = () => {
     if (isBtnEnable) {
@@ -60,7 +60,7 @@ export function ProductItem({
             <div className={style.cardProductName}>{name}</div>
             <div
               className={style.cardProductPrice}
-            >{`$${price} per ${ItemUnit.kilogram}`}</div>
+            >{`$${price} per ${ItemUnit.by_kilogram}`}</div>
           </div>
         </div>
         <div className={style.typeBlock}>

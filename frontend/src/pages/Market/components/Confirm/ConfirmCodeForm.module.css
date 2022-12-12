@@ -1,0 +1,95 @@
+.confirmCodeFormPage {
+    height: 70%;
+    width: 100%;
+}
+
+.formContent {
+    display: flex;
+    width: 276px;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+
+}
+
+.formLabelText {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    margin-bottom: 8px;
+
+
+    color: #000000;
+}
+
+.smsCode {
+    height: 60px;
+    width: 100%;
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    box-sizing: border-box;
+
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    padding-left: 16px;
+
+    text-align: start;
+
+    /* black */
+
+    color: #000000;
+
+}
+
+
+.submitBtn {
+    height: 60px;
+    width: 100%;
+    margin-top: 36px;
+    background: #A2D2FF;
+    border-radius: 5px;
+
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    /* identical to box height */
+
+    text-align: center;
+
+    color: #000000;
+}
+
+.contentSendAgain {
+    display: flex;
+    justify-content: center;
+
+    margin-top: 48px;
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    /* identical to box height */
+
+    text-align: center;
+
+    color: #000000;
+
+}
+
+
+.btnSendAgain {
+    text-decoration: underline;
+}

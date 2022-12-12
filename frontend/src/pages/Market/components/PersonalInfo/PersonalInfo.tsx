@@ -6,10 +6,16 @@ import { isValidPhoneNumber } from "react-phone-number-input";
 import { ErrorMessage } from "./ErrorMessage";
 import style from "./PersonalInfo.module.css";
 import { useMutation } from "@tanstack/react-query";
+import { createCheckPhoneNumber } from "../../../../services";
+import { MarketActionTypes, ISetOrderData, IProduct } from "../../Market.type";
+import { createOrder } from "../../../../services/marketService";
 
 type PersonalInfoProps = {
   onConfirm: () => void;
+  dispatchOrder: (action: ISetOrderData) => void;
   submitRef: React.RefObject<HTMLButtonElement>;
+  marketId: string;
+  cartState: IProduct[];
 };
 
 type PersonalInfoFormValues = {
@@ -18,23 +24,71 @@ type PersonalInfoFormValues = {
   note: string;
 };
 
-const PersonalInfo = ({ onConfirm, submitRef }: PersonalInfoProps) => {
+const PersonalInfo = ({
+  onConfirm,
+  submitRef,
+  dispatchOrder,
+  cartState,
+  marketId,
+}: PersonalInfoProps) => {
   const {
     register,
     handleSubmit,
+    setError,
+    getValues,
     formState: { errors },
   } = useForm<PersonalInfoFormValues>();
 
-  const mutation = useMutation({
-    mutationFn: (dataForm: PersonalInfoFormValues) => {
-      console.log(dataForm, "data");
+  const mutationCreateOrder = useMutation({
+    mutationFn: createOrder,
+    onSuccess: async () => {
+      console.log("Order is created");
+    },
+    onError: async (err) => {
+      console.log(`Create order error ${err}`);
+    },
+  });
 
-      return fetch(`${import.meta.env.VITE_API_BASE_URL}/customer`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+  const mutation = useMutation({
+    mutationFn: createCheckPhoneNumber,
+    onSuccess: async (data: {
+      number: string;
+      is_number_verified: boolean;
+    }) => {
+      const [fullName, noteValue] = getValues(["full_name", "note"]);
+
+      dispatchOrder({
+        type: MarketActionTypes.SET_ORDER_DATA,
+        payload: {
+          phoneNumber: data.number,
+          isNumberVerified: data.is_number_verified,
+          name: fullName,
+          note: noteValue,
         },
-        body: JSON.stringify(dataForm),
+      });
+
+      if (data.is_number_verified) {
+        const resData = {
+          body: {
+            phone_number: data.number,
+            customer_name: fullName,
+            note: noteValue,
+            items: cartState.map((product) => {
+              return { prep_id: product.prepId, qty: product.qty };
+            }),
+          },
+          business_uid: marketId,
+        };
+
+        mutationCreateOrder.mutate(resData);
+      }
+
+      onConfirm();
+    },
+    onError: async () => {
+      setError("phone_number", {
+        type: "postNumber",
+        message: "Please provide a valid phone number.",
       });
     },
   });
@@ -43,18 +97,14 @@ const PersonalInfo = ({ onConfirm, submitRef }: PersonalInfoProps) => {
 
   const handleSubmitBtn: SubmitHandler<PersonalInfoFormValues> = (data) => {
     if (data) {
-      const newData = {
-        ...data,
+      const phoneNumber = {
         phone_number: data.phone_number.startsWith("+")
           ? data.phone_number.slice(1)
           : data.phone_number,
       };
-      mutation.mutate(newData);
+      mutation.mutate(phoneNumber);
     }
-    // onConfirm();
   };
-
-  console.log(mutation);
 
   return (
     <form
@@ -79,9 +129,16 @@ const PersonalInfo = ({ onConfirm, submitRef }: PersonalInfoProps) => {
           })}
           className={style.contentInput}
           placeholder="+972 55 85 55 642"
+          disabled={mutation.isLoading}
         />
         {errors.phone_number && (
-          <ErrorMessage text="Phone number should consist from 12 characters. Please provide a valid phone number." />
+          <ErrorMessage
+            text={
+              errors.phone_number.type !== "postNumber"
+                ? "Phone number should consist from 12 characters. Please provide a valid phone number."
+                : errors.phone_number.message!
+            }
+          />
         )}
       </div>
 
@@ -95,6 +152,7 @@ const PersonalInfo = ({ onConfirm, submitRef }: PersonalInfoProps) => {
           })}
           className={style.contentInput}
           placeholder="Enter your name"
+          disabled={mutation.isLoading}
         />
         {errors.full_name && (
           <ErrorMessage text="Your name should consist from minimum 3 characters. Please provide a valid name." />
@@ -106,9 +164,15 @@ const PersonalInfo = ({ onConfirm, submitRef }: PersonalInfoProps) => {
           {...register("note")}
           className={contentNote}
           placeholder="Type here"
+          disabled={mutation.isLoading}
         />
       </div>
-      <button ref={submitRef} type="submit" style={{ display: "none" }} />
+      <button
+        ref={submitRef}
+        type="submit"
+        style={{ display: "none" }}
+        disabled={mutation.isLoading}
+      />
     </form>
   );
 };

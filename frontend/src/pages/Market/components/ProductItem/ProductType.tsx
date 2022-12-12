@@ -5,8 +5,8 @@ import { UnitOption } from "./UnitOption";
 
 type PrepProductType = {
   soldBy: keyof typeof ItemUnit;
-  amount: number;
-  setAmount: (n: number) => void;
+  amount?: number;
+  setAmount: (n?: number) => void;
   selectType: ItemUnit;
   setSelectType: (n: ItemUnit) => void;
 };
@@ -18,24 +18,34 @@ export function ProductType({
   selectType,
   setSelectType,
 }: PrepProductType) {
-  const handleSelect = (option: ItemUnit.by_unit | ItemUnit.kilogram) => {
-    setSelectType(option);
+  const handleSelect = (option: ItemUnit | string) => {
+    if (option === "by_both") {
+      return;
+    }
+    setSelectType(option as ItemUnit);
+    if (option === "Unit") {
+      if (amount) {
+        setAmount(Math.round(amount));
+      }
+    }
   };
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const { value } = e.target;
     const numVAlue = Number(value);
+
     if (isNaN(numVAlue)) {
       console.log("not a number");
       return;
     }
-    if (numVAlue < 0) {
-      setAmount(0);
+    if (numVAlue <= 0) {
+      setAmount(undefined);
       return;
     }
-    // TODO make normal
-    setAmount(numVAlue);
+
+    setAmount(selectType === "Unit" ? Math.round(numVAlue) : numVAlue);
   };
+  console.log(ItemUnit[soldBy], soldBy);
 
   return (
     <>
@@ -44,13 +54,13 @@ export function ProductType({
       ) : (
         <div className={style.itemsWrap}>
           <UnitOption
-            onClick={() => handleSelect(ItemUnit.by_unit)}
+            onClick={handleSelect}
             value={ItemUnit.by_unit}
             itemUnit={selectType}
           />
           <UnitOption
-            onClick={() => handleSelect(ItemUnit.kilogram)}
-            value={ItemUnit.kilogram}
+            onClick={handleSelect}
+            value={ItemUnit.by_kilogram}
             itemUnit={selectType}
           />
         </div>
@@ -59,9 +69,10 @@ export function ProductType({
         <input
           type="number"
           className={style.inputQty}
-          step={selectType !== ItemUnit.kilogram ? 1 : 0.1}
+          step={selectType !== ItemUnit.by_kilogram ? 1 : 0.1}
           value={amount}
           onChange={handleInputChange}
+          placeholder="0"
         />
         <div className={style.textQty}>{selectType}</div>
       </div>
