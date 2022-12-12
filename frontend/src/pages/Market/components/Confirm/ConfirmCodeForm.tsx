@@ -69,7 +69,6 @@ const ConfirmCodeForm = ({
           },
           business_uid: marketId,
         };
-        console.log(resData, "resData");
 
         mutationCreateOrder.mutate(resData);
       }
