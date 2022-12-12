@@ -10,6 +10,7 @@ type ConfirmProps = {
   dispatchOrder: (action: ISetOrderData) => void;
   onConfirm: () => void;
   submitRef: React.RefObject<HTMLButtonElement>;
+  marketId: string;
 };
 
 const Confirm = ({
@@ -18,6 +19,7 @@ const Confirm = ({
   dispatchOrder,
   onConfirm,
   submitRef,
+  marketId,
 }: ConfirmProps) => {
   return (
     <>
@@ -35,6 +37,8 @@ const Confirm = ({
                 onConfirm={onConfirm}
                 submitRef={submitRef}
                 dispatchOrder={dispatchOrder}
+                cartState={cartState}
+                marketId={marketId}
               />
             </div>
           </div>

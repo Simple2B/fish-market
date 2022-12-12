@@ -7,12 +7,15 @@ import { ErrorMessage } from "./ErrorMessage";
 import style from "./PersonalInfo.module.css";
 import { useMutation } from "@tanstack/react-query";
 import { createCheckPhoneNumber } from "../../../../services";
-import { MarketActionTypes, ISetOrderData } from "../../Market.type";
+import { MarketActionTypes, ISetOrderData, IProduct } from "../../Market.type";
+import { createOrder } from "../../../../services/marketService";
 
 type PersonalInfoProps = {
   onConfirm: () => void;
   dispatchOrder: (action: ISetOrderData) => void;
   submitRef: React.RefObject<HTMLButtonElement>;
+  marketId: string;
+  cartState: IProduct[];
 };
 
 type PersonalInfoFormValues = {
@@ -25,6 +28,8 @@ const PersonalInfo = ({
   onConfirm,
   submitRef,
   dispatchOrder,
+  cartState,
+  marketId,
 }: PersonalInfoProps) => {
   const {
     register,
@@ -33,6 +38,16 @@ const PersonalInfo = ({
     getValues,
     formState: { errors },
   } = useForm<PersonalInfoFormValues>();
+
+  const mutationCreateOrder = useMutation({
+    mutationFn: createOrder,
+    onSuccess: async () => {
+      console.log("Order is created");
+    },
+    onError: async (err) => {
+      console.log(`Create order error ${err}`);
+    },
+  });
 
   const mutation = useMutation({
     mutationFn: createCheckPhoneNumber,
@@ -51,6 +66,22 @@ const PersonalInfo = ({
           note: noteValue,
         },
       });
+
+      if (data.is_number_verified) {
+        const resData = {
+          body: {
+            phone_number: data.number,
+            customer_name: fullName,
+            note: noteValue,
+            items: cartState.map((product) => {
+              return { prep_id: product.prepId, qty: product.qty };
+            }),
+          },
+          business_uid: marketId,
+        };
+
+        mutationCreateOrder.mutate(resData);
+      }
 
       onConfirm();
     },
