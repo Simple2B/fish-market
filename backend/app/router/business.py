@@ -91,7 +91,7 @@ def create_order_for_business(
 ):
     log(log.INFO, "create_order_for_business")
 
-    prep_ids = set(item.prep_id for item in data.items)
+    prep_ids = {item.prep_id for item in data.items}
     preps = db.query(m.Prep).filter(m.Prep.id.in_(prep_ids)).all()
 
     if len(prep_ids) != len(preps):
