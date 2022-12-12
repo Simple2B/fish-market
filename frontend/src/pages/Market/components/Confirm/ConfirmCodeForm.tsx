@@ -4,8 +4,10 @@ import {
   createCheckPhoneNumber,
   validatePhoneNumber,
 } from "../../../../services";
+import { createOrder } from "../../../../services/marketService";
 import {
   IOrder,
+  IProduct,
   ISetOrderNumberIsVerified,
   MarketActionTypes,
 } from "../../Market.type";
@@ -14,8 +16,10 @@ import style from "./ConfirmCodeForm.module.css";
 
 type ConfirmCodeFormProps = {
   dispatchOrder: (action: ISetOrderNumberIsVerified) => void;
-  orderState: IOrder;
   onConfirm: () => void;
+  orderState: IOrder;
+  cartState: IProduct[];
+  marketId: string;
 };
 
 type ConfirmCodeFormValue = {
@@ -25,10 +29,22 @@ type ConfirmCodeFormValue = {
 const ConfirmCodeForm = ({
   dispatchOrder,
   orderState,
+  cartState,
+  marketId,
   onConfirm,
 }: ConfirmCodeFormProps) => {
   const mutationSendAgain = useMutation({
     mutationFn: createCheckPhoneNumber,
+  });
+
+  const mutationCreateOrder = useMutation({
+    mutationFn: createOrder,
+    onSuccess: async () => {
+      console.log("Order is created");
+    },
+    onError: async (err) => {
+      console.log(`Create order error ${err}`);
+    },
   });
 
   const mutationConfirmCode = useMutation({
@@ -41,6 +57,22 @@ const ConfirmCodeForm = ({
         type: MarketActionTypes.SET_NUMBER_IS_VERIFIED,
         payload: data.is_number_verified,
       });
+      if (data.is_number_verified) {
+        const resData = {
+          body: {
+            phone_number: orderState.phoneNumber,
+            customer_name: orderState.name,
+            note: orderState.note,
+            items: cartState.map((product) => {
+              return { prep_id: product.prepId, qty: product.qty };
+            }),
+          },
+          business_uid: marketId,
+        };
+        console.log(resData, "resData");
+
+        mutationCreateOrder.mutate(resData);
+      }
       onConfirm();
     },
 
@@ -104,9 +136,13 @@ const ConfirmCodeForm = ({
       </form>
       <div className={style.contentSendAgain}>
         <div>Did not receive a code?</div>
-        <div className={style.btnSendAgain} onClick={handlerSendAgainBtn}>
+        <button
+          className={style.btnSendAgain}
+          onClick={handlerSendAgainBtn}
+          disabled={mutationSendAgain.isLoading}
+        >
           Send again.
-        </div>
+        </button>
       </div>
     </div>
   );

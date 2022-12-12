@@ -1,18 +1,21 @@
-import React from "react";
-import { IOrder, ISetOrderNumberIsVerified } from "../../Market.type";
+import { IOrder, IProduct, ISetOrderNumberIsVerified } from "../../Market.type";
 import style from "./ConfirmCode.module.css";
 import { ConfirmCodeForm } from "./ConfirmCodeForm";
 
 type ConfirmCodeProps = {
   dispatchOrder: (action: ISetOrderNumberIsVerified) => void;
-  orderState: IOrder;
   onConfirm: () => void;
+  orderState: IOrder;
+  cartState: IProduct[];
+  marketId: string;
 };
 
 const ConfirmCode = ({
   dispatchOrder,
   orderState,
+  cartState,
   onConfirm,
+  marketId,
 }: ConfirmCodeProps) => {
   return (
     <div className={style.confirmCodePage}>
@@ -24,6 +27,8 @@ const ConfirmCode = ({
         dispatchOrder={dispatchOrder}
         orderState={orderState}
         onConfirm={onConfirm}
+        cartState={cartState}
+        marketId={marketId}
       />
     </div>
   );
