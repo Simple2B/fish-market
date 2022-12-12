@@ -9,11 +9,11 @@ import {
   initialStateOrder,
 } from "./Market.reducer";
 
-import style from "./Market.module.css";
 import { Logo } from "./components/Logo";
 import { Confirm, ConfirmCode } from "./components/Confirm";
 import { BusinessBtn } from "./components/BusinessBtn/BusinessBtn";
 import { NextClient } from "./components/NextClient/NextClient";
+import { MarketActionTypes } from "./Market.type";
 
 enum BusinessStep {
   START_ORDER,
@@ -44,6 +44,7 @@ export function Market() {
   const [step, setStep] = useState<BusinessStep>(BusinessStep.START_ORDER);
 
   const customerConfirmRef = useRef<HTMLButtonElement>(null);
+
   const handleStepBusiness = () => {
     if (step === BusinessStep.ORDER && cartState.length < 1) return;
 
@@ -55,19 +56,25 @@ export function Market() {
     console.log(buttonTitle[step]);
   };
 
-  const handlerStepBusinessConfirm = () => {
+  const handlerStepConfirm = () => {
     cartState.length < 1
       ? handleStepBusiness()
       : customerConfirmRef.current?.click();
   };
 
-  if (orderState.isNumberVerified) {
-    console.log("Create order");
-  }
+  const handlerStepNextClient = () => {
+    const resetActionType = MarketActionTypes.RESET_DATA;
+    dispatchOrder({ type: resetActionType });
+    dispatchCart({ type: resetActionType });
+    setStep(0);
+  };
 
-  console.log(orderState, "orderState");
-
-  return (
+  return orderState.isNumberVerified ? (
+    <>
+      <NextClient />
+      <BusinessBtn onClick={handlerStepNextClient} textBtn="Next client" />
+    </>
+  ) : (
     <>
       {step === BusinessStep.START_ORDER && (
         <>
@@ -95,27 +102,25 @@ export function Market() {
         <>
           <Confirm
             cartState={cartState}
+            marketId={marketId}
             dispatchCart={dispatchCart}
             onConfirm={handleStepBusiness}
             submitRef={customerConfirmRef}
             dispatchOrder={dispatchOrder}
           />
           <BusinessBtn
-            onClick={handlerStepBusinessConfirm}
+            onClick={handlerStepConfirm}
             textBtn={buttonTitle[step]}
           />
         </>
       )}
-      {step === BusinessStep.CONFIRM_CODE && orderState.isNumberVerified ? (
-        <>
-          <NextClient />
-          <BusinessBtn onClick={() => setStep(0)} textBtn="Next client" />
-        </>
-      ) : (
+      {step === BusinessStep.CONFIRM_CODE && (
         <ConfirmCode
           dispatchOrder={dispatchOrder}
           orderState={orderState}
+          cartState={cartState}
           onConfirm={handleStepBusiness}
+          marketId={marketId}
         />
       )}
     </>
