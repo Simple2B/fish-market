@@ -63,7 +63,7 @@ export function ProductList({ marketId, cartState, dispatchCart }: Props) {
           </div>
           <div className={style.productCardContent}>
             <div className={style.contentBlockTitle}>
-              <div className={style.blockTitle}>Cart</div>
+              <div className={style.blockTitleCart}>Cart</div>
             </div>
             <CartItems cartState={cartState} dispatchCart={dispatchCart} />
           </div>
