@@ -19,6 +19,8 @@ services:
     build: backend
     restart: always
     command: bash ./start_server.sh
+    env_file:
+      - .env
     environment:
       DATABASE_URI: ${PROD_DATABASE_URI}
     ports:
