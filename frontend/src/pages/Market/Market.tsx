@@ -66,7 +66,7 @@ export function Market() {
     const resetActionType = MarketActionTypes.RESET_DATA;
     dispatchOrder({ type: resetActionType });
     dispatchCart({ type: resetActionType });
-    setStep(0);
+    setStep(BusinessStep.START_ORDER);
   };
 
   return orderState.isNumberVerified ? (

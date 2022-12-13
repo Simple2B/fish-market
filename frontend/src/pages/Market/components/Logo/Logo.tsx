@@ -28,8 +28,7 @@ const Logo = ({ marketId, onConfirm, textBtn }: LogoProps) => {
   });
 
   const logoElement = data?.logo ? (
-    <img
-      style={{ width: "100%", height: "100%" }}
+    <img className={style.businessLogoImg}
       src={data.logo}
       alt="Business logo"
     />

@@ -6,6 +6,7 @@
     align-items: center;
     justify-content: space-between;
     margin: 0 auto;
+    padding-top: 20px;
 }
 
 .businessTitle {
@@ -23,8 +24,8 @@
 }
 
 .businessLogoWrap {
-    height: 82px;
-    width: 132px;
+    height: 320px;
+    /* width: 132px; */
 }
 
 .businessLogo {
@@ -32,4 +33,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.businessLogoImg {
+    height: 100%;
+    width: 100%;
 }
