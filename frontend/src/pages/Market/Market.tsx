@@ -78,9 +78,9 @@ export function Market() {
     <>
       {step === BusinessStep.START_ORDER && (
         <>
-          <Logo marketId={marketId} />
-          <BusinessBtn
-            onClick={handleStepBusiness}
+          <Logo
+            marketId={marketId}
+            onConfirm={handleStepBusiness}
             textBtn={buttonTitle[step]}
           />
         </>
