@@ -1,7 +1,7 @@
 from invoke import task
 
 from app.config import settings
-from app.model import User, UserRole
+from app.model import User, UserRole, PhoneNumber
 
 
 @task
@@ -30,3 +30,16 @@ def fill_test_data(_):
     from tests.database import fill_test_data
 
     fill_test_data(SessionLocal())
+
+
+@task
+def phone(_, number):
+    """get phone info"""
+    from app.database import SessionLocal
+
+    db = SessionLocal()
+    query = db.query(PhoneNumber).filter(PhoneNumber.number.ilike(f"%{number}%"))
+    print(f"Found: {query.count()} records")
+    for phone in query.all():
+        phone: PhoneNumber = phone
+        print(f"Prone: {phone.number} - code: {phone.confirm_code}")
