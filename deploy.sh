@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# git pull
+git pull
 
 docker compose build && \
 docker compose down && \
