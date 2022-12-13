@@ -7,7 +7,8 @@ jinja2.contextfunction = jinja2.pass_context
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqladmin import Admin, ModelView
+from fastapi.staticfiles import StaticFiles
+from sqladmin import Admin
 
 from app.router import phone_number, user, auth, business, product
 from app import admin
@@ -16,6 +17,8 @@ from .config import settings
 
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.add_middleware(
     CORSMiddleware,
