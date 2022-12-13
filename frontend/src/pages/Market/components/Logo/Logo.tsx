@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Navigate } from "react-router-dom";
+import { API_BASE_URL } from "../../constants";
 import { IBusinessOut } from "../../Market.type";
 
 import style from "./Logo.module.css";
@@ -12,9 +13,7 @@ const Logo = ({ marketId }: LogoProps) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["marketDetails"],
     queryFn: async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/business/${marketId}`
-      );
+      const res = await fetch(`${API_BASE_URL}/business/${marketId}`);
 
       if (!res.ok) {
         throw new Error("Business not found");

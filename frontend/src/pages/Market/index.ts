@@ -5,3 +5,5 @@ export {
   cartReducer,
   orderReducer,
 } from "./Market.reducer";
+
+export { API_BASE_URL } from "./constants";

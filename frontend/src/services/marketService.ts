@@ -1,9 +1,10 @@
+import { API_BASE_URL } from "../pages/Market";
 import { CreateOrderItems } from "../pages/Market/Market.type";
 
 export const createCheckPhoneNumber = async (dataForm: {
   phone_number: string;
 }) => {
-  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/phone-number`, {
+  const res = await fetch(`${API_BASE_URL}/phone-number`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -20,16 +21,13 @@ export const validatePhoneNumber = async (dataForm: {
   phone_number: string;
   sms_code: string;
 }) => {
-  const res = await fetch(
-    `${import.meta.env.VITE_API_BASE_URL}/phone-number/validate`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(dataForm),
-    }
-  );
+  const res = await fetch(`${API_BASE_URL}/phone-number/validate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(dataForm),
+  });
   if (!res.ok) {
     throw new Error("THE VERIFICATION CODE IS INCORRECT");
   }
@@ -41,7 +39,7 @@ export const createOrder = async (data: {
   business_uid: string;
 }) => {
   const res = await fetch(
-    `${import.meta.env.VITE_API_BASE_URL}/business/${data.business_uid}/order`,
+    `${API_BASE_URL}/business/${data.business_uid}/order`,
     {
       method: "POST",
       headers: {

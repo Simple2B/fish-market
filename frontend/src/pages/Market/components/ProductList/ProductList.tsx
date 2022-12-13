@@ -5,6 +5,7 @@ import style from "./ProductList.module.css";
 import { ProductItem } from "../ProductItem";
 import { IProduct, MarketActions } from "../../Market.type";
 import { CartItems } from "../CartItems";
+import { API_BASE_URL } from "../../constants";
 
 type Props = {
   marketId: string;
@@ -16,9 +17,7 @@ export function ProductList({ marketId, cartState, dispatchCart }: Props) {
   const { data, isLoading } = useQuery({
     queryKey: [`marketProductList-${marketId}`],
     queryFn: async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/business/${marketId}/product`
-      );
+      const res = await fetch(`${API_BASE_URL}/business/${marketId}/product`);
       const data: { products: ProductItemProps[] } = await res.json();
 
       return data.products;
