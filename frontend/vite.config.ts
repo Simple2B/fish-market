@@ -6,6 +6,9 @@ export default defineConfig({
   plugins: [react()],
   build: {
     sourcemap: true  // this option only for development
+  },
+  server: {
+    port: 8088
   }
 
 })
