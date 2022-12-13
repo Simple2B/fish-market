@@ -77,17 +77,18 @@ export function ProductItem({
           <div className={style.preparationTitle}>Preparation method</div>
           <select
             className={style.preparationSelect}
-            placeholder="Choose prep"
+            placeholder="Choose option"
             defaultValue={selectedPrepId}
             onChange={(e) => handelSelectPrep(Number(e.target.value))}
           >
             <option className={style.preparationOption} disabled selected>
-              please choose...
+              Choose option...
             </option>
             {preps.map(({ id, name }) => {
               return (
                 <option className={style.preparationOption} key={id} value={id}>
-                  {name}
+                  {name[0].toUpperCase() + name.slice(1)}
+                  {/* temporarily */}
                 </option>
               );
             })}
