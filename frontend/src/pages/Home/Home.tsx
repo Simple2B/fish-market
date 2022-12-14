@@ -1,3 +1,9 @@
+import { MarketNotFound } from "../Market/components/MarketNotFound/MarketNotFound";
+
 export function Home() {
-  return <h2>Home</h2>;
+  return (
+    <>
+      <MarketNotFound />{" "}
+    </>
+  );
 }

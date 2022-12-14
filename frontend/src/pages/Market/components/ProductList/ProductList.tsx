@@ -6,6 +6,7 @@ import { ProductItem } from "../ProductItem";
 import { IProduct, MarketActions } from "../../Market.type";
 import { CartItems } from "../CartItems";
 import { API_BASE_URL } from "../../constants";
+import Spinner from "../Spinner/Spinner";
 
 type Props = {
   marketId: string;
@@ -25,7 +26,7 @@ export function ProductList({ marketId, cartState, dispatchCart }: Props) {
   });
 
   return isLoading ? (
-    <p>LOADING...</p>
+    <Spinner />
   ) : (
     <>
       <div className={style.productListPage}>

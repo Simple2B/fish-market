@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 import { API_BASE_URL } from "../../constants";
 import { IBusinessOut } from "../../Market.type";
 import { BusinessBtn } from "../BusinessBtn/BusinessBtn";
+import Spinner from "../Spinner/Spinner";
 
 import style from "./Logo.module.css";
 
@@ -28,7 +29,8 @@ const Logo = ({ marketId, onConfirm, textBtn }: LogoProps) => {
   });
 
   const logoElement = data?.logo ? (
-    <img className={style.businessLogoImg}
+    <img
+      className={style.businessLogoImg}
       src={data.logo}
       alt="Business logo"
     />
@@ -41,7 +43,7 @@ const Logo = ({ marketId, onConfirm, textBtn }: LogoProps) => {
   }
 
   return isLoading ? (
-    <p>LOADING...</p>
+    <Spinner />
   ) : (
     <>
       <div className={style.marketLogoStart}>
