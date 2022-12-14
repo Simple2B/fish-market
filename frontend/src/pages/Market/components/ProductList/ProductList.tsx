@@ -24,7 +24,6 @@ export function ProductList({ marketId, cartState, dispatchCart }: Props) {
     },
   });
 
-  console.log(cartState, !cartState);
   return isLoading ? (
     <p>LOADING...</p>
   ) : (

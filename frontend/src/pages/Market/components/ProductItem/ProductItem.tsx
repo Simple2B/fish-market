@@ -19,27 +19,28 @@ export function ProductItem({
   const [selectType, setSelectType] = useState<ItemUnit>(
     ItemUnit.by_both === sold_by ? ItemUnit.by_kilogram : ItemUnit[sold_by]
   );
-  const [selectedPrepId, setSelectedPrepId] = useState<number | undefined>(
-    undefined
-  );
-  const [amount, setAmount] = useState<number | undefined>(undefined);
-  const isBtnEnable = amount && amount > 0 && selectedPrepId !== undefined;
+  const [selectedPrepId, setSelectedPrepId] = useState<number>(-1);
+  const [amount, setAmount] = useState<number | string>("");
+  const isBtnEnable = amount && amount > 0 && selectedPrepId >= 0;
 
   const handleAddItem = () => {
-    if (isBtnEnable) {
-      dispatchCart({
-        type: MarketActionTypes.ADD_ITEM,
-        payload: {
-          itemPrice: price,
-          itemType: selectType,
-          itemName: name,
-          itemImage: image,
-          prepName: preps.find((p) => p.id === selectedPrepId)!.name,
-          prepId: selectedPrepId,
-          qty: amount,
-        },
-      });
+    if (!isBtnEnable) {
+      return;
     }
+    dispatchCart({
+      type: MarketActionTypes.ADD_ITEM,
+      payload: {
+        itemPrice: price,
+        itemType: selectType,
+        itemName: name,
+        itemImage: image,
+        prepName: preps.find((p) => p.id === selectedPrepId)!.name,
+        prepId: selectedPrepId,
+        qty: Number(amount),
+      },
+    });
+    setAmount("");
+    setSelectedPrepId(-1);
   };
 
   const handelSelectPrep = (value: number) => {
@@ -80,7 +81,12 @@ export function ProductItem({
             defaultValue={selectedPrepId}
             onChange={(e) => handelSelectPrep(Number(e.target.value))}
           >
-            <option className={style.preparationOption} disabled selected>
+            <option
+              className={style.preparationOption}
+              disabled
+              selected={selectedPrepId === -1}
+              value={-1}
+            >
               Choose option...
             </option>
             {preps.map(({ id, name }) => {
