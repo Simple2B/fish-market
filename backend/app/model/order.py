@@ -23,6 +23,7 @@ class Order(Base):
 
     phone_number = relationship("PhoneNumber", viewonly=True)
     items = relationship("OrderItem", viewonly=True)
+    business = relationship("Business", viewonly=True)
 
     def __repr__(self) -> str:
         return f"<id:{self.id}>, customer:{self.customer_name}"

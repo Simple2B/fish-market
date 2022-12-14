@@ -34,7 +34,13 @@ sql_admin = Admin(
     authentication_backend=admin.authentication_backend,
 )
 
-for view in (admin.UserView, admin.ProductView, admin.PhoneView):
+for view in (
+    admin.UserView,
+    admin.BusinessView,
+    admin.PhoneView,
+    admin.ProductView,
+    admin.OrderView,
+):
     sql_admin.add_view(view)
 
 app.include_router(user.router)
