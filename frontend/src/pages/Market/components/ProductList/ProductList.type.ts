@@ -13,7 +13,6 @@ export type ProductItemProps = {
   price: number;
   sold_by: keyof typeof ItemUnit;
   preps: ProductPrep[];
-  onClick: (id: number) => void;
   dispatchCart: (action: AddItemAction) => void;
 };
 
