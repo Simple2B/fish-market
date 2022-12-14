@@ -50,7 +50,7 @@ export function ProductType({
   return (
     <>
       {ItemUnit.by_both !== soldBy ? (
-        <UnitOption value={ItemUnit[soldBy]} itemUnit={ItemUnit[soldBy]} />
+        <div></div>
       ) : (
         <div className={style.itemsWrap}>
           <UnitOption
@@ -74,7 +74,7 @@ export function ProductType({
           onChange={handleInputChange}
           placeholder="0"
         />
-        <div className={style.textQty}>{selectType}</div>
+        <div className={style.textQty}>{selectType.toLocaleLowerCase()}</div>
       </div>
     </>
   );
