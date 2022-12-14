@@ -36,12 +36,9 @@ export const CartItem = ({
           <div className={style.leftWrapTitle}>{itemName}</div>
           <div className={style.leftWrapContent}>
             <div>{prepName}</div>
-            <div>
-              {qty} {itemType}
-            </div>
           </div>
           <div className={style.leftWrapTotal}>
-            $ {Math.floor(qty * itemPrice)}
+            {qty} {itemType.toLocaleLowerCase()}
           </div>
         </div>
       </div>
