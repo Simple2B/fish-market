@@ -24,14 +24,6 @@ export function ProductList({ marketId, cartState, dispatchCart }: Props) {
     },
   });
 
-  const onProductClicked = (id: number) => {
-    const selectedItem = data?.find((item) => item.id === id);
-    if (selectedItem) {
-      console.log(id);
-      // TODO completed it
-    }
-  };
-
   console.log(cartState, !cartState);
   return isLoading ? (
     <p>LOADING...</p>
@@ -52,7 +44,6 @@ export function ProductList({ marketId, cartState, dispatchCart }: Props) {
                 (props: Omit<ProductItemProps, "onClick" | "dispatchCart">) => (
                   <ProductItem
                     key={props.id}
-                    onClick={onProductClicked}
                     dispatchCart={dispatchCart}
                     {...props}
                   />

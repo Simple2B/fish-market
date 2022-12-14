@@ -14,7 +14,6 @@ export function ProductItem({
   sold_by,
   price,
   preps,
-  onClick,
   dispatchCart,
 }: ProductItemProps) {
   const [selectType, setSelectType] = useState<ItemUnit>(
