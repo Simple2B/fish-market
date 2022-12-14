@@ -11,7 +11,7 @@ class OrderView(ModelView, model=Order):
     can_edit = False
     can_delete = False
     can_view_details = False
-    can_export = False
+    can_export = True
 
     # Metadata
     name = "Order"

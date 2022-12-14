@@ -9,7 +9,7 @@ class ProductView(ModelView, model=Product):
     # Permission
     can_create = False
     can_edit = True
-    can_delete = True
+    can_delete = False
     can_view_details = True
     can_export = False
 
