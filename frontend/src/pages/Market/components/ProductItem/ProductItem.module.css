@@ -38,6 +38,8 @@
 }
 
 .cardProductName {
+    height: 35%;
+    width: 100%;
     font-family: 'Avenir';
     font-style: normal;
     font-weight: 500;
@@ -48,6 +50,8 @@
 }
 
 .cardProductPrice {
+    height: 35%;
+    width: 100%;
     font-family: 'Avenir';
     font-style: normal;
     font-weight: 800;

@@ -60,7 +60,7 @@ export function ProductItem({
             <div className={style.cardProductName}>{name}</div>
             <div
               className={style.cardProductPrice}
-            >{`$${price} per ${ItemUnit.by_kilogram}`}</div>
+            >{`$${price} - ${ItemUnit.by_kilogram.toLocaleLowerCase()}`}</div>
           </div>
         </div>
         <div className={style.typeBlock}>
