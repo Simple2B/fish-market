@@ -9,11 +9,6 @@ type CartItemsProps = {
 };
 
 export const CartItems = ({ cartState, dispatchCart }: CartItemsProps) => {
-  const totalPrice = cartState.reduce(
-    (acc, currentValue) => acc + currentValue.qty * currentValue.itemPrice,
-    0
-  );
-
   return (
     <div style={{ paddingBottom: "15vh" }}>
       <div className={style.productCartItems}>
@@ -29,12 +24,6 @@ export const CartItems = ({ cartState, dispatchCart }: CartItemsProps) => {
                 />
               );
             })}
-            <div className={style.productCartTotal}>
-              <div className={style.productCartTotalText}>Total Price</div>
-              <div className={style.productCartTotalPrice}>
-                $ {Math.round(totalPrice)}
-              </div>
-            </div>
           </>
         ) : (
           <div className={style.productCartText}>

@@ -5,8 +5,8 @@ import { UnitOption } from "./UnitOption";
 
 type PrepProductType = {
   soldBy: keyof typeof ItemUnit;
-  amount?: number;
-  setAmount: (n?: number) => void;
+  amount?: number | string;
+  setAmount: (n: number | string) => void;
   selectType: ItemUnit;
   setSelectType: (n: ItemUnit) => void;
 };
@@ -24,8 +24,8 @@ export function ProductType({
     }
     setSelectType(option as ItemUnit);
     if (option === "Unit") {
-      if (amount) {
-        setAmount(Math.round(amount));
+      if (amount && amount !== "") {
+        setAmount(Math.round(Number(amount)));
       }
     }
   };
@@ -39,18 +39,17 @@ export function ProductType({
       return;
     }
     if (numVAlue <= 0) {
-      setAmount(undefined);
+      setAmount("");
       return;
     }
 
     setAmount(selectType === "Unit" ? Math.round(numVAlue) : numVAlue);
   };
-  console.log(ItemUnit[soldBy], soldBy);
 
   return (
     <>
       {ItemUnit.by_both !== soldBy ? (
-        <UnitOption value={ItemUnit[soldBy]} itemUnit={ItemUnit[soldBy]} />
+        <div></div>
       ) : (
         <div className={style.itemsWrap}>
           <UnitOption
@@ -74,7 +73,7 @@ export function ProductType({
           onChange={handleInputChange}
           placeholder="0"
         />
-        <div className={style.textQty}>{selectType}</div>
+        <div className={style.textQty}>{selectType.toLocaleLowerCase()}</div>
       </div>
     </>
   );
