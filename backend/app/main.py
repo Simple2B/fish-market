@@ -28,9 +28,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-sql_admin = Admin(app, engine)
+sql_admin = Admin(
+    app=app,
+    engine=engine,
+    authentication_backend=admin.authentication_backend,
+)
 
-sql_admin.add_view(admin.user.UserAdmin)
+for view in (
+    admin.UserView,
+    admin.BusinessView,
+    admin.PhoneView,
+    admin.ProductView,
+    admin.OrderView,
+):
+    sql_admin.add_view(view)
 
 app.include_router(user.router)
 app.include_router(auth.router)
