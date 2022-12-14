@@ -54,4 +54,4 @@ class User(Base):
             return user
 
     def __repr__(self):
-        return f"<{self.id}: {self.username}>"
+        return f"<{self.id}: {'*' if self.role == UserRole.Admin else ' '}  {self.username}>"
