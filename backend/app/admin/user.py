@@ -3,14 +3,15 @@ from sqladmin import ModelView
 from app.model import User
 
 
-class UserAdmin(ModelView, model=User):
+class UserView(ModelView, model=User):
     """Class for setting up the Admin panel for the User model"""
 
     # Permission
-    can_create = True
-    can_edit = True
+    can_create = False
+    can_edit = False
     can_delete = True
     can_view_details = True
+    can_export = False
 
     # Metadata
     name = "User Model"
@@ -18,7 +19,7 @@ class UserAdmin(ModelView, model=User):
     icon = "fa-solid fa-user"
 
     column_list = [User.id, User.email, User.username]
-    column_searchable_list = [User.email]
+    column_searchable_list = ["businesses"]
     column_sortable_list = [User.id, User.email, User.username]
 
     # Details
