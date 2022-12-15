@@ -1,5 +1,3 @@
-import React from "react";
-
 import style from "./ErrorMessage.module.css";
 
 type ErrorMessageProps = {
