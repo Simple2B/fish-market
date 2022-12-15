@@ -5,8 +5,9 @@ import style from "./ProductList.module.css";
 import { ProductItem } from "../ProductItem";
 import { IProduct, MarketActions } from "../../Market.type";
 import { CartItems } from "../CartItems";
-import { API_BASE_URL } from "../../constants";
+
 import Spinner from "../Spinner/Spinner";
+import { API_BASE_URL } from "../../../../constants";
 
 type Props = {
   marketId: string;

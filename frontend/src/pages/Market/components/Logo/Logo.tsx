@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Navigate } from "react-router-dom";
-import { API_BASE_URL } from "../../constants";
+import { API_BASE_URL } from "../../../../constants";
 import { IBusinessOut } from "../../Market.type";
 import { BusinessBtn } from "../BusinessBtn/BusinessBtn";
 import Spinner from "../Spinner/Spinner";
