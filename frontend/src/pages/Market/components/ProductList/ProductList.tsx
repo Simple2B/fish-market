@@ -6,8 +6,8 @@ import { ProductItem } from "../ProductItem";
 import { IProduct, MarketActions } from "../../Market.type";
 import { CartItems } from "../CartItems";
 
-import Spinner from "../Spinner/Spinner";
 import { API_BASE_URL } from "../../../../constants";
+import { Spinner } from "../../../../components";
 
 type Props = {
   marketId: string;
