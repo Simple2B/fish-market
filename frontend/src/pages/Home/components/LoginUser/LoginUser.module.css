@@ -61,12 +61,12 @@
     color: #000000;
 }
 
-.formBtn {
+.formBtnDisable {
     width: 249px;
     height: 57px;
     margin-top: 36px;
 
-    background: #C1E1FF;
+    background: #D1D1D1;
     border-radius: 5px;
 
     font-family: 'Avenir';
@@ -78,4 +78,8 @@
     text-align: center;
 
     color: #000000;
+}
+
+.formBtnEnable {
+    background: #C1E1FF;
 }

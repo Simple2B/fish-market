@@ -1,22 +1,52 @@
-import { useForm, SubmitHandler, FieldError } from "react-hook-form";
-import { ErrorMessage } from "../../..";
+import classNames from "classnames";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
 
+import { ErrorMessage } from "../../..";
 import style from "./LoginUser.module.css";
+import { loginUser } from "../../../../services/homeService";
+import { TOKEN_KEY } from "../../../../constants";
+import { useState } from "react";
+import { queryClient } from "../../../../queryClient";
 
 type Inputs = {
-  userName: string;
-  userPassword: string;
+  username: string;
+  password: string;
 };
 
 const LoginUser = () => {
+  const mutationLoginUser = useMutation({
+    mutationFn: loginUser,
+    onSuccess: async (data: { access_token: string; token_type: string }) => {
+      console.log("Set token", data);
+
+      localStorage.setItem(TOKEN_KEY, data.access_token);
+      queryClient.invalidateQueries(["checkToken"]);
+    },
+    onError: async () => {
+      setError("password", {
+        type: "bad password",
+        message: "Please provide a valid password.",
+      });
+    },
+  });
+
   const {
     register,
     handleSubmit,
+    setError,
+    watch,
     formState: { errors },
   } = useForm<Inputs>();
 
+  const styleBtnSubmit = classNames(style.formBtnDisable, {
+    [style.formBtnEnable]: watch("username") && watch("password"),
+  });
+
   const handlerSubmitBtn: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
+    if (data) {
+      mutationLoginUser.mutate(data);
+    }
   };
 
   return (
@@ -31,26 +61,28 @@ const LoginUser = () => {
           <div className={style.formLabel}>Email</div>
           <input
             type="text"
-            {...register("userName", { required: "The field is required" })}
+            {...register("username", { required: "The field is required" })}
             className={style.formInput}
             placeholder="Type here"
           />
-          {errors.userName && <ErrorMessage text={errors.userName.message!} />}
+          {errors.username && <ErrorMessage text={errors.username.message!} />}
         </div>
         <div>
           <div className={style.formLabel}>Password</div>
           <input
             type="password"
-            {...register("userPassword", { required: "The field is required" })}
+            {...register("password", { required: "The field is required" })}
             className={style.formInput}
             placeholder="Type here"
           />
-          {errors.userPassword && (
-            <ErrorMessage text={errors.userPassword.message!} />
-          )}
+          {errors.password && <ErrorMessage text={errors.password.message!} />}
         </div>
 
-        <button type="submit" className={style.formBtn}>
+        <button
+          type="submit"
+          className={styleBtnSubmit}
+          disabled={mutationLoginUser.isLoading}
+        >
           Login
         </button>
       </form>
