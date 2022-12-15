@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { ErrorMessage } from "../../..";
+import { ErrorMessage } from "../../../../components";
 
 import {
   createCheckPhoneNumber,

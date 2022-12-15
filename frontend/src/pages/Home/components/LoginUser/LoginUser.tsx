@@ -2,12 +2,12 @@ import classNames from "classnames";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 
-import { ErrorMessage } from "../../..";
 import style from "./LoginUser.module.css";
 import { loginUser } from "../../../../services/homeService";
 import { TOKEN_KEY } from "../../../../constants";
 import { useState } from "react";
 import { queryClient } from "../../../../queryClient";
+import { ErrorMessage } from "../../../../components";
 
 type Inputs = {
   username: string;

@@ -8,7 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { createCheckPhoneNumber } from "../../../../services";
 import { MarketActionTypes, ISetOrderData, IProduct } from "../../Market.type";
 import { createOrder } from "../../../../services/marketService";
-import { ErrorMessage } from "../../..";
+import { ErrorMessage } from "../../../../components";
 
 type PersonalInfoProps = {
   onConfirm: () => void;
