@@ -1,0 +1,81 @@
+.pageLoginUser {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto 0;
+}
+
+
+.pageLoginUserForm {
+    height: 65%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.formTitle {
+    margin-bottom: 36px;
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 28px;
+    line-height: 38px;
+    text-align: center;
+
+    color: #000000;
+}
+
+.formLabel {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    margin-bottom: 8px;
+
+
+    color: #000000;
+}
+
+
+.formInput {
+    box-sizing: border-box;
+    width: 276px;
+    height: 60px;
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    padding: 16px;
+
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+
+    color: #000000;
+}
+
+.formBtn {
+    width: 249px;
+    height: 57px;
+    margin-top: 36px;
+
+    background: #C1E1FF;
+    border-radius: 5px;
+
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 25px;
+
+    text-align: center;
+
+    color: #000000;
+}
