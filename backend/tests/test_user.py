@@ -22,7 +22,17 @@ new_user_data = s.UserCreate(
 )
 
 
-def test_login(client: TestClient, db: Session):
+def test_authorization(marketer_client: TestClient):
+    res = marketer_client.get("/is-authorization")
+    assert res.status_code == status.HTTP_200_OK
+
+
+def test_not_authorization(client: TestClient):
+    res = client.get("/is-authorization")
+    assert res.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_login_admin(client: TestClient, db: Session):
     # get admin user:
     # admin: m.User = db.query(m.User).filter(m.User.role == m.UserRole.Admin).first()
     admin: m.User = db.query(m.User).filter_by(role=m.UserRole.Admin).first()
