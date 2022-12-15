@@ -14,6 +14,7 @@ import { Confirm, ConfirmCode } from "./components/Confirm";
 import { BusinessBtn } from "./components/BusinessBtn/BusinessBtn";
 import { NextClient } from "./components/NextClient/NextClient";
 import { MarketActionTypes } from "./Market.type";
+import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 
 enum BusinessStep {
   START_ORDER,
@@ -45,6 +46,8 @@ export function Market() {
 
   const customerConfirmRef = useRef<HTMLButtonElement>(null);
 
+  const { height, width } = useWindowDimensions();
+
   const handleStepBusiness = () => {
     if (step === BusinessStep.ORDER && cartState.length < 1) return;
 
@@ -68,6 +71,8 @@ export function Market() {
     dispatchCart({ type: resetActionType });
     setStep(BusinessStep.START_ORDER);
   };
+
+  console.log({ height, width });
 
   return orderState.isNumberVerified ? (
     <>

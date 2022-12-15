@@ -62,3 +62,11 @@
 
     color: #000000;
 }
+
+/* @media screen and (max-width: 700px) {
+    .itemsWrap {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+} */

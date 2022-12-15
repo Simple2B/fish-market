@@ -8,6 +8,7 @@
     margin-bottom: 8px;
 }
 
+
 .cardBlock {
     height: 100%;
     width: 35%;
@@ -72,7 +73,6 @@
     justify-content: center;
 }
 
-.addBtn,
 .disabledAddBtn {
     height: 100%;
     width: 10%;
@@ -81,17 +81,17 @@
     align-items: center;
     font-size: 50px;
     text-align: center;
+    color: #D1D1D1;
+    background: white;
+    border-left: 1px solid black;
+
+}
+
+.availableAddBtn {
     background: #C1E1FF;
     color: black;
     border-radius: 0px 5px 5px 0px;
     ;
-
-}
-
-.disabledAddBtn {
-    color: #D1D1D1;
-    background: white;
-    border-left: 1px solid black;
 }
 
 .preparationBlock {
@@ -131,4 +131,56 @@
     line-height: 22px;
     color: #000000;
     border: 1px solid black;
+}
+
+@media screen and (max-width: 700px) {
+    .cardWrap {
+        height: 254px;
+
+        display: grid;
+        grid-template-columns: 80% 20%;
+        border: 1px solid black;
+        border-radius: 5px;
+
+
+    }
+
+
+    .cardBlock {
+        width: 100%;
+        grid-column: 1;
+        grid-row: 1;
+        border-bottom: 1px solid black;
+    }
+
+    .typeBlock {
+        width: 100%;
+        grid-column: 1;
+        grid-row: 2;
+        border-bottom: 1px solid black;
+    }
+
+    .preparationBlock {
+        width: 100%;
+        grid-column: 1;
+        grid-row: 3;
+        border-right: 1px solid black;
+    }
+
+
+    .disabledAddBtn {
+        height: 100%;
+        width: 100%;
+        grid-row-start: 1;
+        grid-row-end: 4;
+        grid-column: 2;
+        border-right: 1px solid black;
+    }
+
+    .availableAddBtn {
+        border-right: 1px solid black;
+
+    }
+
+
 }

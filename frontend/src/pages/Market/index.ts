@@ -6,4 +6,4 @@ export {
   orderReducer,
 } from "./Market.reducer";
 
-export { API_BASE_URL } from "./constants";
+export { API_BASE_URL, PHONE_WIDTH } from "./constants";

@@ -6,6 +6,8 @@
     align-items: center;
 }
 
+
+
 .pageContent {
     display: flex;
     width: 90%;
@@ -69,4 +71,22 @@
     height: 100%;
     overflow-y: scroll;
     padding-bottom: 15vh;
+}
+
+@media screen and (max-width: 1000px) {
+    .productCardContent {
+        display: none;
+        visibility: hidden;
+    }
+
+    .pageContent {
+        display: flex;
+        width: 90%;
+        justify-content: center
+    }
+
+    .productListContent {
+        width: 100%;
+    }
+
 }
