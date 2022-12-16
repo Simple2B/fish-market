@@ -15,11 +15,12 @@ export function Home() {
       });
 
       if (!res.ok) {
-        // localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem(TOKEN_KEY);
         return false;
       }
 
       const data = await res.json();
+
       return data.is_valid;
     },
   });
