@@ -1,14 +1,11 @@
 from fastapi import Depends, APIRouter, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.service import get_current_user
+from app.service import get_current_user, get_business_from_cur_user
 from app import schema as s
 from app import model as m
 from app.database import get_db
 from app.logger import log
-from .utils import (
-    get_business_from_cur_user,
-)
 
 
 router = APIRouter(prefix="/order", tags=["Orders"])
@@ -16,11 +13,10 @@ router = APIRouter(prefix="/order", tags=["Orders"])
 
 @router.get("/", status_code=status.HTTP_200_OK)
 def get_orders(
-    db: Session = Depends(get_db), current_user: m.User = Depends(get_current_user)
+    business: m.Business = Depends(get_business_from_cur_user),
 ):
 
     log(log.INFO, "get_orders")
-    business = get_business_from_cur_user(current_user)
 
     orders = business.orders
 
@@ -58,7 +54,7 @@ def change_status_order(
     order_id: int,
     data: s.ChangeOrderStatus,
     db: Session = Depends(get_db),
-    current_user: m.User = Depends(get_current_user),
+    business: m.Business = Depends(get_business_from_cur_user),
 ):
     log(log.INFO, "change_status_order")
 
@@ -71,7 +67,6 @@ def change_status_order(
             detail="Order was not found",
         )
 
-    business = get_business_from_cur_user(current_user)
     order_ids = [order.id for order in business.orders]
 
     if order.id not in order_ids:
