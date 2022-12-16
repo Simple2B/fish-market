@@ -4,10 +4,9 @@ import { useMutation } from "@tanstack/react-query";
 
 import style from "./LoginUser.module.css";
 import { loginUser } from "../../../../services/homeService";
-import { CHECK_TOKEN, TOKEN_KEY } from "../../../../constants";
-import { useState } from "react";
 import { queryClient } from "../../../../queryClient";
 import { ErrorMessage } from "../../../../components";
+import { CHECK_TOKEN, TOKEN_KEY } from "../../../../services";
 
 type Inputs = {
   email: string;
