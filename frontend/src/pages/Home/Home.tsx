@@ -8,7 +8,7 @@ export function Home() {
   const { data, isLoading } = useQuery({
     queryKey: [CHECK_TOKEN],
     queryFn: async () => {
-      const res = await fetch(`${API_BASE_URL}/is-authorization`, {
+      const res = await fetch(`${API_BASE_URL}/me-info`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
