@@ -39,7 +39,7 @@ def test_change_order_by_id(marketer_client: TestClient, customer_orders, db: Se
     assert res_data.status == order.status.value
 
     # test order was not found
-    res = marketer_client.patch(f"/order/{100}", json=order_data.dict())
+    res = marketer_client.patch("/order/100", json=order_data.dict())
     assert res.status_code == status.HTTP_404_NOT_FOUND
 
     # test order not belong to the business
