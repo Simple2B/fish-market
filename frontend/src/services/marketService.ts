@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../pages/Market";
+import { API_BASE_URL } from "../constants";
 import { CreateOrderItems } from "../pages/Market/Market.type";
 
 export const createCheckPhoneNumber = async (dataForm: {

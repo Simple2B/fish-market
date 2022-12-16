@@ -3,12 +3,12 @@ import classNames from "classnames";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { isValidPhoneNumber } from "react-phone-number-input";
 
-import { ErrorMessage } from "./ErrorMessage";
 import style from "./PersonalInfo.module.css";
 import { useMutation } from "@tanstack/react-query";
 import { createCheckPhoneNumber } from "../../../../services";
 import { MarketActionTypes, ISetOrderData, IProduct } from "../../Market.type";
 import { createOrder } from "../../../../services/marketService";
+import { ErrorMessage } from "../../../../components";
 
 type PersonalInfoProps = {
   onConfirm: () => void;

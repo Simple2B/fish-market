@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { Navigate } from "react-router-dom";
-import { API_BASE_URL } from "../../constants";
+import { Spinner } from "../../../../components";
+import { API_BASE_URL } from "../../../../constants";
 import { IBusinessOut } from "../../Market.type";
 import { BusinessBtn } from "../BusinessBtn/BusinessBtn";
-import Spinner from "../Spinner/Spinner";
 
 import style from "./Logo.module.css";
 

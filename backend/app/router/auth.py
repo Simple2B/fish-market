@@ -5,8 +5,10 @@ from sqlalchemy.orm import Session
 
 from app.schema import Token
 from app.database import get_db
+from app import model as m
 from app.model import User
 from app.service.oauth2 import create_access_token
+from app.service import get_current_user
 
 router = APIRouter(tags=["Authentication"])
 
@@ -30,3 +32,10 @@ def login(
     access_token = create_access_token(data={"user_id": user.id})
 
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.get("/me-info", status_code=status.HTTP_200_OK)
+def user_info(
+    current_user: m.User = Depends(get_current_user),
+):
+    return {"is_valid": True}

@@ -1,5 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { ErrorMessage } from "../../../../components";
+
 import {
   createCheckPhoneNumber,
   validatePhoneNumber,
@@ -11,7 +13,7 @@ import {
   ISetOrderNumberIsVerified,
   MarketActionTypes,
 } from "../../Market.type";
-import { ErrorMessage } from "../PersonalInfo/ErrorMessage";
+
 import style from "./ConfirmCodeForm.module.css";
 
 type ConfirmCodeFormProps = {
