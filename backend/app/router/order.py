@@ -62,7 +62,7 @@ def change_status_order(
 
     order = db.query(m.Order).get(order_id)
 
-    if not order:
+    if not order or order.is_deleted:
         log(log.WARNING, "Order [%s] was not found", order_id)
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -101,7 +101,7 @@ def delete_order_by_marketer(
 
     order = db.query(m.Order).get(order_id)
 
-    if not order:
+    if not order or order.is_deleted:
         log(log.WARNING, "Order [%s] was not found", order_id)
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
