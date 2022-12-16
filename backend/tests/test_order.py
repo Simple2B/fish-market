@@ -19,7 +19,7 @@ def test_get_orders(marketer_client: TestClient, customer_orders):
     assert len(order.items) == len(first_order.items)
 
     # test order is removed
-    order.status = m.OrderStatus.removed
+    order.is_deleted = True
     res = marketer_client.get("/order/")
 
     assert res.status_code == status.HTTP_200_OK

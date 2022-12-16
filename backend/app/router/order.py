@@ -22,7 +22,7 @@ def get_orders(
 
     orders_out = []
     for order in orders:
-        if order.status != m.OrderStatus.removed:
+        if not order.is_deleted:
             order_items = []
             for item in order.items:
                 product = item.prep.product
@@ -39,6 +39,8 @@ def get_orders(
                 customer_name=order.customer_name,
                 note=order.note,
                 phone_number=order.phone_number.number,
+                created_at=order.created_at,
+                pick_up_data=order.pick_up_data,
                 status=order.status,
                 items=order_items,
             )

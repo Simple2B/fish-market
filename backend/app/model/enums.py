@@ -23,4 +23,3 @@ class OrderStatus(enum.Enum):
     ready = "ready"
     picked_up = "picked_up"
     can_not_complete = "can_not_complete"
-    removed = "removed"
