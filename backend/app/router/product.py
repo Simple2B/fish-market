@@ -23,9 +23,7 @@ def get_products(
 
     business = get_business_from_cur_user(current_user)
 
-    products = (
-        db.query(m.Product).filter_by(business_id=business.id, is_deleted=False).all()
-    )
+    products = business.active_products
 
     return s.ProductsOut(products=products)
 
