@@ -156,7 +156,7 @@ def delete_order(business_uid: str, order_uid: str, db: Session = Depends(get_db
 
     check_access_to_order(order=order)
 
-    order.status = m.OrderStatus.cancelled
+    order.status = m.OrderStatus.removed
     db.commit()
 
     return {"ok", True}
