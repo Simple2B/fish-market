@@ -16,7 +16,7 @@ def get_orders(
     business: m.Business = Depends(get_business_from_cur_user),
 ):
 
-    log(log.INFO, "get_orders")
+    log(log.INFO, "get_orders, business_id: [%s]", business.id)
 
     orders = business.orders
 
@@ -56,7 +56,7 @@ def change_status_order(
     db: Session = Depends(get_db),
     business: m.Business = Depends(get_business_from_cur_user),
 ):
-    log(log.INFO, "change_status_order")
+    log(log.INFO, "change_status_order, order_id: [%s] data: [%s]", order_id, data)
 
     order = db.query(m.Order).get(order_id)
 
