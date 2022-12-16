@@ -1,7 +1,7 @@
 from fastapi import Depends, APIRouter, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.service import get_current_user, get_business_from_cur_user
+from app.service import get_business_from_cur_user
 from app import schema as s
 from app import model as m
 from app.database import get_db
