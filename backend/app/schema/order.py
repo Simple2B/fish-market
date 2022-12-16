@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app import model as m
 
@@ -12,16 +12,22 @@ class OrderItemOut(BaseModel):
     prep_name: str
     qty: float
 
+    class Config:
+        orm_mode = True
+
 
 class OrderOut(BaseModel):
     id: int
     customer_name: str
-    phone_number: str
+    phone_number: str = Field(alias="prone_number_value")
     note: Optional[str]
     created_at: datetime
     pick_up_data: Optional[datetime]
     status: m.OrderStatus
     items: list[OrderItemOut]
+
+    class Config:
+        orm_mode = True
 
 
 class OrdersOut(BaseModel):

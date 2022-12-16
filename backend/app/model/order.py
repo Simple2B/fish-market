@@ -27,5 +27,9 @@ class Order(Base):
     items = relationship("OrderItem", viewonly=True)
     business = relationship("Business", viewonly=True)
 
+    @property
+    def prone_number_value(self) -> str:
+        return self.phone_number.number
+
     def __repr__(self) -> str:
         return f"<id:{self.id}>, customer:{self.customer_name}"

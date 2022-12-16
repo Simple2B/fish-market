@@ -19,5 +19,17 @@ class OrderItem(Base):
     def product(self):
         return self.prep.product
 
+    @property
+    def product_name(self):
+        return self.prep.product.name
+
+    @property
+    def product_image(self):
+        return self.prep.product.image
+
+    @property
+    def prep_name(self):
+        return self.prep.name
+
     def __repr__(self) -> str:
         return f"<order_id:{self.order_id}, product:{self.product}, prep:{self.prep}>"
