@@ -22,13 +22,13 @@ new_user_data = s.UserCreate(
 )
 
 
-def test_authorization(marketer_client: TestClient):
-    res = marketer_client.get("/is-authorization")
+def test_user_info(marketer_client: TestClient):
+    res = marketer_client.get("/me-info")
     assert res.status_code == status.HTTP_200_OK
 
 
-def test_not_authorization(client: TestClient):
-    res = client.get("/is-authorization")
+def test_user_not_info(client: TestClient):
+    res = client.get("/me-info")
     assert res.status_code == status.HTTP_401_UNAUTHORIZED
 
 
