@@ -1,12 +1,12 @@
 import { API_BASE_URL } from "../constants";
 
 export const loginUser = async (dataForm: {
-  username: string;
+  email: string;
   password: string;
 }) => {
   const params = new URLSearchParams();
   params.append("grant_type", "");
-  params.append("username", dataForm.username);
+  params.append("username", dataForm.email);
   params.append("password", dataForm.password);
   params.append("scope", "");
   params.append("client_id", "");
