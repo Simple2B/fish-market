@@ -6,10 +6,10 @@ services:
       - db_data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_DB: ${DATABASE_NAME:-db}
       POSTGRES_USER: ${DATABASE_USERNAME}
       PGUSER: ${DATABASE_USERNAME}
-      PGDATABASE: ${DATABASE_NAME}
+      PGDATABASE: ${DATABASE_NAME:-db}
       PGPASSWORD: ${DATABASE_PASSWORD}
     ports:
       - 127.0.0.1:${DATABASE_LOCAL_PORT}:5432
@@ -25,6 +25,22 @@ services:
       - 127.0.0.1:8008:80
     depends_on:
       - db
+
+  backup:
+    build: pg-backup/
+    restart: always
+    volumes:
+      - ./backup:/backup
+    links:
+      - db
+    environment:
+      SCHEDULE: "@daily"
+      POSTGRES_DATABASE: ${DATABASE_NAME:-db}
+      POSTGRES_HOST: db
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_EXTRA_OPTS: "--schema=public --blobs"
+      DAYS_HISTORY: 7
 
 volumes:
   db_data:
