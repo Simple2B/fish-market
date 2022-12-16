@@ -55,7 +55,7 @@ const LoginUser = () => {
       >
         <div className={style.formTitle}>Login</div>
 
-        <div>
+        <div className={style.inputRow}>
           <div className={style.formLabel}>Email</div>
           <input
             type="email"
