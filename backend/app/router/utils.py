@@ -9,21 +9,21 @@ from app.config import settings
 from app.logger import log
 
 
-def get_business_id_from_cur_user(user: m.User) -> int:
+def get_business_from_cur_user(user: m.User) -> m.Business:
 
-    business_id = None
+    business = None
 
     if user.businesses and user.role == m.UserRole.Marketeer:
-        business_id = user.businesses[0].id
+        business = user.businesses[0]
 
-    if not business_id:
+    if not business:
         log(log.WARNING, "User [%s] does not have business", user)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You don't  have permission to the business",
         )
 
-    return business_id
+    return business
 
 
 def check_access_to_product(product: m.Product, user: m.User, product_id: int) -> None:
