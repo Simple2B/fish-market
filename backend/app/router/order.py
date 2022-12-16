@@ -16,7 +16,7 @@ def get_orders(
     business: m.Business = Depends(get_business_from_cur_user),
 ):
 
-    log(log.INFO, "get_orders, business_id: [%s]", business.id)
+    log(log.INFO, "get_orders, business_id: [%d]", business.id)
 
     orders = business.orders
 
@@ -69,9 +69,7 @@ def change_status_order(
             detail="Order was not found",
         )
 
-    order_ids = [order.id for order in business.orders]
-
-    if order.id not in order_ids:
+    if order.business_id != business.id:
         log(log.WARNING, "Order [%s] does not belong to the business", order_id)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -108,9 +106,7 @@ def delete_order_by_marketer(
             detail="Order was not found",
         )
 
-    order_ids = [order.id for order in business.orders]
-
-    if order.id not in order_ids:
+    if order.business_id != business.id:
         log(log.WARNING, "Order [%s] does not belong to the business", order_id)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
