@@ -83,3 +83,41 @@ def change_status_order(
     db.refresh(order)
 
     return order
+
+
+@router.delete("/{order_id}", status_code=status.HTTP_200_OK)
+def delete_order_by_marketer(
+    order_id: int,
+    db: Session = Depends(get_db),
+    business: m.Business = Depends(get_business_from_cur_user),
+):
+
+    log(
+        log.INFO,
+        "delete_order_by_marketer, order_id:[%s], business_id: [%s]",
+        order_id,
+        business.id,
+    )
+
+    order = db.query(m.Order).get(order_id)
+
+    if not order:
+        log(log.WARNING, "Order [%s] was not found", order_id)
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Order was not found",
+        )
+
+    order_ids = [order.id for order in business.orders]
+
+    if order.id not in order_ids:
+        log(log.WARNING, "Order [%s] does not belong to the business", order_id)
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Order does not belong to the business",
+        )
+
+    order.is_deleted = True
+    db.commit()
+
+    return {"ok", "true"}

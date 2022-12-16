@@ -49,3 +49,11 @@ def test_change_order_by_id(marketer_client: TestClient, customer_orders, db: Se
     db.refresh(new_order)
     res = marketer_client.patch(f"/order/{new_order.id}", json=order_data.dict())
     assert res.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_delete_order_by_marketer(marketer_client: TestClient, customer_orders):
+    business, order = customer_orders
+
+    res = marketer_client.delete(f"/order/{order.id}")
+    assert res.status_code == status.HTTP_200_OK
+    assert len([order for order in business.orders if not order.is_deleted]) == 0
