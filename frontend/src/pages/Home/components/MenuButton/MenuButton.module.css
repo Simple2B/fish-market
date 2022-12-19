@@ -1,0 +1,35 @@
+.menuButtonContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 208px;
+    height: 73px;
+    background: #FFFFFF;
+    border-right: 1px solid #000000;
+    border-top: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+
+
+    text-decoration: none;
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 33px;
+
+    text-align: center;
+
+    color: #000000;
+}
+
+.menuButtonContentActive {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 33px;
+    text-align: center;
+
+    background: #C1E1FF;
+}
