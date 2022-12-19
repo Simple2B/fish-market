@@ -1,0 +1,36 @@
+.ordersPage {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 33px;
+
+
+    color: #000000;
+
+
+}
+
+.buttonsFilter {
+    /* height: 100%; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: blanchedalmond;
+    /* transform: rotate(-90deg); */
+    /* margin-top: 2.5rem; */
+
+}
+
+.ordersContent {
+    height: 100%;
+}
+
+.buttonFilter {
+    /* width: 206px; */
+    /* height: 206px; */
+}

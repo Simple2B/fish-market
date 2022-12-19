@@ -1,11 +1,12 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { Home, Market } from "./pages";
+import { Orders } from "./pages/Home";
 import { rebuildUrl } from "./services";
 
 export const contentManager = [
   {
     nameBtn: "Orders",
-    outLet: <h1>orders</h1>,
+    outLet: <Orders />,
   },
   {
     nameBtn: "Out of stock",
