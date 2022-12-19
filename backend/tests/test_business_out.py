@@ -149,7 +149,7 @@ def test_delete_order(client: TestClient, db: Session, customer_orders):
     assert res.status_code == status.HTTP_200_OK
     assert "ok" in res.json()
     db.refresh(order)
-    assert order.status == m.OrderStatus.cancelled
+    assert order.is_deleted
 
     # test bad order uid
     res = client.delete(f"/business/{business.web_site_id}/order/{fake_uid}")

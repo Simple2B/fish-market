@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqladmin import Admin
 
-from app.router import phone_number, user, auth, business, product
+from app.router import phone_number, user, auth, business, product, order
 from app import admin
 from app.database import engine
 from .config import settings
@@ -48,6 +48,7 @@ app.include_router(auth.router)
 app.include_router(business.router)
 app.include_router(product.router)
 app.include_router(phone_number.router)
+app.include_router(order.router)
 
 
 @app.get("/")

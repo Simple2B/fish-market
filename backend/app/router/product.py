@@ -1,13 +1,12 @@
 from fastapi import Depends, APIRouter, status
 from sqlalchemy.orm import Session
 
-from app.service import get_current_user
+from app.service import get_current_user, get_business_from_cur_user
 from app import schema as s
 from app import model as m
 from app.database import get_db
 from app.logger import log
 from .utils import (
-    get_business_id_from_cur_user,
     check_access_to_product,
     check_access_to_product_prep,
 )
@@ -17,15 +16,9 @@ router = APIRouter(prefix="/product", tags=["Product"])
 
 
 @router.get("/", status_code=status.HTTP_200_OK)
-def get_products(
-    db: Session = Depends(get_db), current_user: m.User = Depends(get_current_user)
-):
+def get_products(business: m.Business = Depends(get_business_from_cur_user)):
 
-    business_id = get_business_id_from_cur_user(current_user)
-
-    products = (
-        db.query(m.Product).filter_by(business_id=business_id, is_deleted=False).all()
-    )
+    products = business.active_products
 
     return s.ProductsOut(products=products)
 
@@ -34,12 +27,11 @@ def get_products(
 def create_product(
     data: s.CreateProduct,
     db: Session = Depends(get_db),
-    current_user: m.User = Depends(get_current_user),
+    business: m.Business = Depends(get_business_from_cur_user),
 ):
     log(log.INFO, "create_product")
-    business_id = get_business_id_from_cur_user(current_user)
 
-    new_product = m.Product(business_id=business_id, **data.dict())
+    new_product = m.Product(business_id=business.id, **data.dict())
     db.add(new_product)
     db.commit()
     db.refresh(new_product)
