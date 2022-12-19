@@ -10,6 +10,10 @@
     margin: 2.375rem 14.25rem 1.625rem 14.25rem;
 }
 
+.outLet {
+    height: 100%;
+}
+
 .navBar a:last-child {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;

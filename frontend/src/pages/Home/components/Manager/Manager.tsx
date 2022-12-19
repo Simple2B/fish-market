@@ -19,9 +19,10 @@ const Manager = (props: ManagerProps) => {
           return <MenuButton key={idex} btnName={obj.nameBtn} />;
         })}
       </div>
-      <div>
+      <Outlet />
+      {/* <div className={style.outLet}>
         <Outlet />
-      </div>
+      </div> */}
     </div>
   );
 };
