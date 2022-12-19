@@ -13,40 +13,15 @@ router = APIRouter(prefix="/order", tags=["Orders"])
 
 @router.get("/", status_code=status.HTTP_200_OK)
 def get_orders(
+    db: Session = Depends(get_db),
     business: m.Business = Depends(get_business_from_cur_user),
 ):
 
     log(log.INFO, "get_orders, business_id: [%d]", business.id)
 
-    orders = business.orders
-
-    orders_out = []
-    for order in orders:
-        if not order.is_deleted:
-            order_items = []
-            for item in order.items:
-                product = item.prep.product
-                item_out = s.OrderItemOut(
-                    prep_name=item.prep.name,
-                    qty=item.qty,
-                    product_name=product.name,
-                    product_image=product.image,
-                )
-                order_items.append(item_out)
-
-            order_out = s.OrderOut(
-                id=order.id,
-                customer_name=order.customer_name,
-                note=order.note,
-                phone_number=order.phone_number.number,
-                created_at=order.created_at,
-                pick_up_data=order.pick_up_data,
-                status=order.status,
-                items=order_items,
-            )
-            orders_out.append(order_out)
-
-    return s.OrdersOut(orders=orders_out)
+    return s.OrdersOut(
+        orders=db.query(m.Order).filter_by(business=business, is_deleted=False).all()
+    )
 
 
 @router.patch(

@@ -8,8 +8,12 @@ from app import schema as s
 PHONE_NUMBER = "972545657512"
 
 
-def test_get_orders(marketer_client: TestClient, customer_orders):
-    business, order = customer_orders
+def test_get_orders(
+    marketer_client: TestClient,
+    customer_orders: tuple[m.Business, m.Order],
+    db: Session,
+):
+    _, order = customer_orders
 
     res = marketer_client.get("/order/")
     assert res.status_code == status.HTTP_200_OK
@@ -20,6 +24,8 @@ def test_get_orders(marketer_client: TestClient, customer_orders):
 
     # test order is removed
     order.is_deleted = True
+    db.commit()
+    db.refresh(order)
     res = marketer_client.get("/order/")
 
     assert res.status_code == status.HTTP_200_OK

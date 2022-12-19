@@ -70,5 +70,5 @@ def marketer_client(client: TestClient, db: Session) -> Generator:
 
 
 @pytest.fixture
-def customer_orders(db: Session):
+def customer_orders(db: Session) -> tuple[m.Business, m.Order]:
     return create_test_customer_order(db)
