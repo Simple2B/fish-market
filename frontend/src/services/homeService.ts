@@ -23,3 +23,7 @@ export const loginUser = async (dataForm: {
   }
   return await res.json();
 };
+
+export const rebuildUrl = (url: string) => {
+  return url.toLocaleLowerCase().replace(/ /g, "-");
+};
