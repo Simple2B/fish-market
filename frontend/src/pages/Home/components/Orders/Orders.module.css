@@ -1,7 +1,7 @@
 .ordersPage {
-    height: 100%;
+    height: 80%;
     display: flex;
-    align-items: center;
+    justify-content: space-between;
     border-radius: 5px;
     font-family: 'Avenir';
     font-style: normal;
@@ -16,21 +16,40 @@
 }
 
 .buttonsFilter {
-    /* height: 100%; */
+    height: 100%;
+    width: 4.063rem;
+    margin-left: 1rem;
+    margin-right: 2.5rem;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: blanchedalmond;
-    /* transform: rotate(-90deg); */
-    /* margin-top: 2.5rem; */
+    justify-content: space-evenly;
+    transform: rotate(180deg);
+    writing-mode: vertical-lr;
+    border: 1px solid #000000;
+    border-radius: 5px;
 
 }
 
 .ordersContent {
     height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    margin-right: 3.75rem;
+    margin-left: 0;
+    /* justify-content: space-evenly; */
 }
 
 .buttonFilter {
-    /* width: 206px; */
-    /* height: 206px; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #000000;
+    height: 12.5rem;
+    cursor: pointer;
+}
+
+.buttonsFilter div:first-child {
+    border-top: none;
 }

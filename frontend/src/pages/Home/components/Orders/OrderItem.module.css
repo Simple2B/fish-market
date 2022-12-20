@@ -57,13 +57,10 @@
 
 
 .orderItemContentNoteText {
+    height: 100%;
     border-top: 1px solid #000000;
-    box-sizing: border-box;
-}
-
-.orderItemContentNoteText {
     padding: 0.5rem 1.5rem 1.375rem 1.5rem;
-    overflow-wrap: break-word;
+    overflow-y: scroll;
 }
 
 .orderItemContentNoteText span {

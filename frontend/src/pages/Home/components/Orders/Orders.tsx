@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Spinner } from "../../../../components";
 import { API_BASE_URL } from "../../../../constants";
 import { TOKEN_KEY } from "../../../../services";
 import { OrderItem } from "./OrderItem";
@@ -33,12 +34,14 @@ const Orders = (props: OrdersProps) => {
     },
   });
 
-  return (
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <div className={style.ordersPage}>
       <div className={style.buttonsFilter}>
-        <div className={style.buttonFilter}>In progress</div>
-        <div className={style.buttonFilter}>Pending</div>
         <div className={style.buttonFilter}>Future orders</div>
+        <div className={style.buttonFilter}>Pending</div>
+        <div className={style.buttonFilter}>In progress</div>
       </div>
       <div className={style.ordersContent}>
         {data && data.map((el: any) => <OrderItem key={el.id} {...el} />)}
