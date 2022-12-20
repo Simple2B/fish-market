@@ -2,6 +2,7 @@
     height: 204px;
 
     display: flex;
+    justify-content: center;
 
     border: 1px solid #000000;
     border-radius: 5px;
@@ -29,7 +30,6 @@
 
 .orderItemContentDataRow {
     margin-top: 0.5rem;
-
 }
 
 .orderItemContentDataRow span {
@@ -42,7 +42,7 @@
 
 .orderItemContentNote {
     display: flex;
-    width: 316px;
+    width: 19.75rem;
     flex-direction: column;
     border-right: 1px solid #000000;
 }
@@ -69,4 +69,44 @@
     font-weight: 800;
     font-size: 1.125rem;
     line-height: 1.563rem;
+}
+
+.orderItemContentStatus {
+    height: 100%;
+    width: 34.188rem;
+    /* width: 34.188rem; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.orderItemContentStatusWrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.orderItemContentStatusBtn {
+    width: 15.563rem;
+    height: 3.688rem;
+    margin-right: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #C1E1FF;
+    border-radius: 5px;
+
+    /* margin-left: 7.563rem; */
+
+}
+
+.orderItemContentStatusIconBtn {
+    width: 74px;
+    height: 57px;
+    border: 2px solid #C1E1FF;
+    border-radius: 5px;
+    margin-left: 0.75rem;
+    /* margin-right: 4.938em; */
 }

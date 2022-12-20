@@ -1,13 +1,7 @@
 import { CiAlarmOn } from "react-icons/ci";
+import { BiChevronDown } from "react-icons/bi";
+import { OrderData } from "./Order.type";
 import style from "./OrderItem.module.css";
-
-type OrderItemProps = {
-  customer_name: string;
-  prone_number_value: string;
-  note: string | null;
-  created_at: string;
-  pick_up_data: string | null;
-};
 
 const OrderItem = ({
   customer_name,
@@ -15,7 +9,7 @@ const OrderItem = ({
   note,
   created_at,
   pick_up_data,
-}: OrderItemProps) => {
+}: OrderData) => {
   return (
     <div className={style.orderItemContent}>
       <div className={style.orderItemContentData}>
@@ -48,7 +42,18 @@ const OrderItem = ({
         </div>
       </div>
       <div className={style.orderItemContentStatus}>
-        <div>status</div>
+        <div>Progress bar</div>
+        <div className={style.orderItemContentStatusWrap}>
+          <div className={style.orderItemContentStatusBtn}>BTN</div>
+          <div className={style.orderItemContentStatusIconBtn}>
+            <BiChevronDown
+              style={{
+                height: " 100%",
+                width: "100%",
+              }}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
