@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "../constants";
+import { OrderData, OrderStatus } from "../pages/Home/components/Orders";
 
 export const loginUser = async (dataForm: {
   email: string;
@@ -26,4 +27,29 @@ export const loginUser = async (dataForm: {
 
 export const rebuildUrl = (url: string) => {
   return url.toLocaleLowerCase().replace(/ /g, "-");
+};
+
+export const setFilterInProgress = (order: OrderData) => {
+  return (
+    order.status === OrderStatus.in_progress ||
+    order.status === OrderStatus.ready
+  );
+};
+
+export const setFilterCreated = (order: OrderData) => {
+  return order.status === OrderStatus.created;
+};
+
+export const setFilterPending = (order: OrderData) => {
+  return order.status === OrderStatus.pending;
+};
+
+export type FilteringFunctions =
+  | typeof setFilterInProgress
+  | typeof setFilterCreated
+  | typeof setFilterPending;
+
+export type FilterBtnItem = {
+  filterFn: FilteringFunctions;
+  name: string;
 };
