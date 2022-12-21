@@ -19,6 +19,15 @@
     justify-content: space-evenly;
 }
 
+.orderItemContentRow div:last-child {
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 25px;
+    color: #000000;
+}
+
 .orderItemImage {
     height: 4.688rem;
     width: 5.813rem;

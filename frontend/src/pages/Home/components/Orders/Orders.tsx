@@ -11,10 +11,10 @@ import {
   setFilterPending,
   TOKEN_KEY,
 } from "../../../../services";
-import { OrderData } from "./Order.type";
 import { Order } from "./Order";
 import style from "./Orders.module.css";
 import { FilterButton } from "./FilterButton";
+import { OrderData } from "../../../../main.type";
 
 type OrdersProps = {};
 
@@ -24,12 +24,13 @@ enum FilterBtnName {
   IN_PROGRESS = "In progress",
 }
 
+const FILTER_OPTIONS = [
+  { name: FilterBtnName.FUTURE_ORDERS, filterFn: setFilterCreated },
+  { name: FilterBtnName.PENDING, filterFn: setFilterPending },
+  { name: FilterBtnName.IN_PROGRESS, filterFn: setFilterInProgress },
+];
+
 const Orders = (props: OrdersProps) => {
-  const FILTER_OPTIONS = [
-    { name: FilterBtnName.FUTURE_ORDERS, filterFn: setFilterCreated },
-    { name: FilterBtnName.PENDING, filterFn: setFilterPending },
-    { name: FilterBtnName.IN_PROGRESS, filterFn: setFilterInProgress },
-  ];
   const [ordersData, setOrdersData] = useState<OrderData[]>([]);
   const [activeBtn, setActiveBtn] = useState<string>(FilterBtnName.PENDING);
 

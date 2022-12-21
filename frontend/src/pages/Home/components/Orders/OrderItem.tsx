@@ -1,5 +1,4 @@
-import React from "react";
-import { IOrder } from "./Order.type";
+import { IOrder } from "../../../../main.type";
 
 import style from "./OrderItem.module.css";
 

@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "../constants";
-import { OrderData, OrderStatus } from "../pages/Home/components/Orders";
+import { OrderData, OrderStatus } from "../main.type";
 
 export const loginUser = async (dataForm: {
   email: string;

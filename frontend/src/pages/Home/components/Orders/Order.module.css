@@ -1,6 +1,5 @@
 .orderContent {
     height: 13.75rem;
-    /* max-width: 68.438rem; */
 
     display: flex;
     justify-content: space-between;
@@ -80,9 +79,7 @@
 
 .orderContentStatus {
     height: 100%;
-    /* width: 50%; */
     width: 34.188rem;
-    /* width: 34.188rem; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -106,8 +103,10 @@
     border: 2px solid #C1E1FF;
     border-radius: 5px;
 
-    /* margin-left: 7.563rem; */
+}
 
+.btnActive {
+    background: #C1E1FF;
 }
 
 .orderContentStatusIconBtn {
@@ -116,7 +115,6 @@
     border: 2px solid #C1E1FF;
     border-radius: 5px;
     margin-left: 0.75rem;
-    /* margin-right: 4.938em; */
 }
 
 .iconContent {
@@ -130,15 +128,8 @@
     height: 100%;
     width: 100%;
 
-    /* flex-direction: column; */
     align-content: flex-start;
     flex-wrap: wrap;
-
-    /* border: 1px solid #000000; */
-
-    /* border-left: 1px solid #000000; */
-    /* border-right: 1px solid #000000; */
-    /* border-bottom: 1px solid #000000; */
 }
 
 .orderItemContent div:nth-of-type(even) {
