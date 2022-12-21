@@ -9,6 +9,9 @@ import { OrderItem } from "./OrderItem";
 import { StepStyleDTO } from "react-form-stepper/dist/components/Step/StepTypes";
 import { OrderData, OrderStatus } from "../../../../main.type";
 import { ConnectorStyleProps } from "react-form-stepper/dist/components/Connector/ConnectorTypes";
+import { useMutation } from "@tanstack/react-query";
+import { changeOrder, GET_ORDERS } from "../../../../services";
+import { queryClient } from "../../../../queryClient";
 
 const buttonsNameByStatus = [
   { key: OrderStatus.created, btnName: "Pending order" },
@@ -20,6 +23,7 @@ const buttonsNameByStatus = [
 ];
 
 const Order = ({
+  id,
   customer_name,
   prone_number_value,
   note,
@@ -29,6 +33,30 @@ const Order = ({
   status,
 }: OrderData) => {
   const [showItems, setShowItems] = useState<boolean>(false);
+
+  const changeStatusOrder = useMutation({
+    mutationFn: changeOrder,
+    onSuccess: async () => {
+      queryClient.invalidateQueries([GET_ORDERS]);
+    },
+    onError: async (err) => {
+      console.log(`changeStatusOrder error ${err}`);
+    },
+  });
+
+  const handelBtnStatus = () => {
+    if (showItems) {
+      const currentStatusIndex = buttonsNameByStatus.findIndex(
+        (obj) => obj.key === status
+      );
+      const reqData = {
+        order_id: id,
+        body: { new_status: buttonsNameByStatus[currentStatusIndex + 1].key },
+      };
+
+      changeStatusOrder.mutate(reqData);
+    }
+  };
 
   const orderContent = classNames(style.orderContent, {
     [style.orderContentButton]: !showItems,
@@ -108,7 +136,7 @@ const Order = ({
             ))}
           </Stepper>
           <div className={style.orderContentStatusWrap}>
-            <div className={orderContentStatusBtn}>
+            <div className={orderContentStatusBtn} onClick={handelBtnStatus}>
               {buttonsNameByStatus.find((obj) => obj.key === status)?.btnName}
             </div>
             <div

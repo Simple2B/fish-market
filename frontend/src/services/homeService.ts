@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "../constants";
 import { OrderData, OrderStatus } from "../main.type";
+import { TOKEN_KEY } from "./queryKeys";
 
 export const loginUser = async (dataForm: {
   email: string;
@@ -23,6 +24,20 @@ export const loginUser = async (dataForm: {
     throw new Error("FAILED TO LOGIN USER");
   }
   return await res.json();
+};
+
+export const changeOrder = async (data: {
+  order_id: number;
+  body: { new_status: string };
+}) => {
+  const res = await fetch(`${API_BASE_URL}/order/${data.order_id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+    },
+    body: JSON.stringify(data.body),
+  });
 };
 
 export const rebuildUrl = (url: string) => {

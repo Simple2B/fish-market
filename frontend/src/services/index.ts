@@ -7,5 +7,6 @@ export {
   setFilterInProgress,
   setFilterCreated,
   setFilterPending,
+  changeOrder,
 } from "./homeService";
 export type { FilteringFunctions, FilterBtnItem } from "./homeService";
