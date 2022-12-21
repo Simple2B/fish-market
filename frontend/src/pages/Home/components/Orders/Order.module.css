@@ -1,12 +1,12 @@
 .orderContent {
-    height: 204px;
+    height: 13.75rem;
+    /* max-width: 68.438rem; */
 
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
 
     border: 1px solid #000000;
     border-radius: 5px;
-    margin-bottom: 0.5rem;
 
     font-family: 'Avenir';
     font-style: normal;
@@ -17,19 +17,26 @@
     color: #000000;
 }
 
+.orderContentButton {
+    margin-bottom: 0.5rem;
+}
 
+
+
+.orderContentWrap {
+    display: flex;
+    width: 50%;
+    justify-content: space-between;
+}
 
 .orderContentData {
-    width: 14.5rem;
     display: flex;
+    width: 16.5rem;
     flex-direction: column;
     justify-content: space-evenly;
     padding: 1.5rem;
 }
 
-.orderContentDataRow {
-    margin-top: 0.5rem;
-}
 
 .orderContentDataRow span {
     font-family: 'Avenir';
@@ -41,7 +48,7 @@
 
 .orderContentNote {
     display: flex;
-    width: 19.75rem;
+    width: 19.125rem;
     flex-direction: column;
     border-right: 1px solid #000000;
     border-left: 1px solid #000000;
@@ -73,6 +80,7 @@
 
 .orderContentStatus {
     height: 100%;
+    /* width: 50%; */
     width: 34.188rem;
     /* width: 34.188rem; */
     display: flex;
@@ -109,4 +117,30 @@
     border-radius: 5px;
     margin-left: 0.75rem;
     /* margin-right: 4.938em; */
+}
+
+.iconContent {
+    height: 100%;
+    width: 100%;
+}
+
+.orderItemContent {
+
+    display: flex;
+    height: 100%;
+    width: 100%;
+
+    /* flex-direction: column; */
+    align-content: flex-start;
+    flex-wrap: wrap;
+
+    /* border: 1px solid #000000; */
+
+    /* border-left: 1px solid #000000; */
+    /* border-right: 1px solid #000000; */
+    /* border-bottom: 1px solid #000000; */
+}
+
+.orderItemContent div:nth-of-type(even) {
+    border-left: none;
 }
