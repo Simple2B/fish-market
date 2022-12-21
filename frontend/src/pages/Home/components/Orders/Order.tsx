@@ -10,7 +10,7 @@ import { StepStyleDTO } from "react-form-stepper/dist/components/Step/StepTypes"
 import { OrderData, OrderStatus } from "../../../../main.type";
 import { ConnectorStyleProps } from "react-form-stepper/dist/components/Connector/ConnectorTypes";
 import { useMutation } from "@tanstack/react-query";
-import { changeOrder, GET_ORDERS } from "../../../../services";
+import { changeOrder, GET_ORDERS, removeOrder } from "../../../../services";
 import { queryClient } from "../../../../queryClient";
 
 const buttonsNameByStatus = [
@@ -44,6 +44,16 @@ const Order = ({
     },
   });
 
+  const removeOrderData = useMutation({
+    mutationFn: removeOrder,
+    onSuccess: async () => {
+      queryClient.invalidateQueries([GET_ORDERS]);
+    },
+    onError: async (err) => {
+      console.log(`removeOrderData error ${err}`);
+    },
+  });
+
   const handelBtnStatus = () => {
     if (showItems) {
       const currentStatusIndex = buttonsNameByStatus.findIndex(
@@ -56,6 +66,21 @@ const Order = ({
 
       changeStatusOrder.mutate(reqData);
     }
+  };
+
+  const handlerCantComplete = () => {
+    const reqData = {
+      order_id: id,
+      body: { new_status: OrderStatus.can_not_complete },
+    };
+    changeStatusOrder.mutate(reqData);
+  };
+
+  const handlerRemove = () => {
+    const reqData = {
+      order_id: id,
+    };
+    removeOrderData.mutate(reqData);
   };
 
   const orderContent = classNames(style.orderContent, {
@@ -158,6 +183,19 @@ const Order = ({
           {items.map((item, indx) => (
             <OrderItem key={indx} {...item} />
           ))}
+          {/* // TODO modal */}
+          <div className={style.orderItemButtons}>
+            <div className={style.orderItemBtn} onClick={handlerCantComplete}>
+              {
+                buttonsNameByStatus.find(
+                  (obj) => obj.key === OrderStatus.can_not_complete
+                )?.btnName
+              }
+            </div>
+            <div className={style.orderItemBtn} onClick={handlerRemove}>
+              Remove order
+            </div>
+          </div>
         </div>
       )}
     </>

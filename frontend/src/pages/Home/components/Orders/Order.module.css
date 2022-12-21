@@ -132,6 +132,43 @@
     flex-wrap: wrap;
 }
 
+
 .orderItemContent div:nth-of-type(even) {
     border-left: none;
+}
+
+.orderItemButtons {
+    height: 6.688rem;
+    width: 49.88%;
+
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border-left: 1px solid #000000;
+    border-right: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+}
+
+.orderItemBtn {
+    width: 15.5rem;
+    height: 3.563rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #C1E1FF;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+@media (max-width:1300px) {
+    .orderItemButtons {
+        width: 49.79%
+    }
+
+    .orderItemBtn {
+        width: 12.5rem;
+        height: 2.563rem;
+    }
 }

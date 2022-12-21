@@ -40,6 +40,16 @@ export const changeOrder = async (data: {
   });
 };
 
+export const removeOrder = async (data: { order_id: number }) => {
+  const res = await fetch(`${API_BASE_URL}/order/${data.order_id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+    },
+  });
+};
+
 export const rebuildUrl = (url: string) => {
   return url.toLocaleLowerCase().replace(/ /g, "-");
 };
