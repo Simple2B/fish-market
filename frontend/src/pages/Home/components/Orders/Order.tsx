@@ -1,10 +1,23 @@
 import { CiAlarmOn } from "react-icons/ci";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import classNames from "classnames";
-import { OrderData } from "./Order.type";
+import { Step, Stepper } from "react-form-stepper";
+
 import style from "./Order.module.css";
 import { useState } from "react";
 import { OrderItem } from "./OrderItem";
+import { StepStyleDTO } from "react-form-stepper/dist/components/Step/StepTypes";
+import { OrderData, OrderStatus } from "../../../../main.type";
+import { ConnectorStyleProps } from "react-form-stepper/dist/components/Connector/ConnectorTypes";
+
+const buttonsNameByStatus = [
+  { key: OrderStatus.created, btnName: "Pending order" },
+  { key: OrderStatus.pending, btnName: "Pick up order" },
+  { key: OrderStatus.in_progress, btnName: "Order is ready" },
+  { key: OrderStatus.ready, btnName: "Collected" },
+  { key: OrderStatus.picked_up, btnName: "Next step" },
+  { key: OrderStatus.can_not_complete, btnName: "Can’t complete" },
+];
 
 const Order = ({
   customer_name,
@@ -13,6 +26,7 @@ const Order = ({
   created_at,
   pick_up_data,
   items,
+  status,
 }: OrderData) => {
   const [showItems, setShowItems] = useState<boolean>(false);
 
@@ -22,6 +36,10 @@ const Order = ({
 
   const orderItemContent = classNames(style.orderItemContent, {
     [style.orderContentButton]: showItems,
+  });
+
+  const orderContentStatusBtn = classNames(style.orderContentStatusBtn, {
+    [style.btnActive]: showItems,
   });
 
   return (
@@ -56,9 +74,43 @@ const Order = ({
           </div>
         </div>
         <div className={style.orderContentStatus}>
-          <div>Progress bar</div>
+          <Stepper
+            activeStep={buttonsNameByStatus.findIndex(
+              (obj) => obj.key === status
+            )}
+            style={{ padding: "0" }}
+            connectorStateColors={true}
+            connectorStyleConfig={
+              {
+                size: "3px",
+                completedColor: "#C1E1FF",
+                activeColor: "#C1E1FF",
+              } as ConnectorStyleProps
+            }
+            styleConfig={
+              {
+                activeTextColor: "#5099dd",
+                activeBgColor: "#5099dd",
+                completedBgColor: "#C1E1FF",
+                completedTextColor: "#C1E1FF",
+                inactiveTextColor: "#D1D1D1",
+              } as StepStyleDTO
+            }
+          >
+            {buttonsNameByStatus.slice(0, -1).map((obj) => (
+              <Step
+                key={obj.key}
+                label={
+                  obj.key[0].toLocaleUpperCase() +
+                  obj.key.replace("_", " ").slice(1)
+                }
+              />
+            ))}
+          </Stepper>
           <div className={style.orderContentStatusWrap}>
-            <div className={style.orderContentStatusBtn}>BTN</div>
+            <div className={orderContentStatusBtn}>
+              {buttonsNameByStatus.find((obj) => obj.key === status)?.btnName}
+            </div>
             <div
               className={style.orderContentStatusIconBtn}
               onClick={() => setShowItems((currentIsShow) => !currentIsShow)}
