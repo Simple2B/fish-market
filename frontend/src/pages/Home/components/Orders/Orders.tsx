@@ -12,7 +12,7 @@ import {
   TOKEN_KEY,
 } from "../../../../services";
 import { OrderData } from "./Order.type";
-import { OrderItem } from "./OrderItem";
+import { Order } from "./Order";
 import style from "./Orders.module.css";
 import { FilterButton } from "./FilterButton";
 
@@ -92,7 +92,7 @@ const Orders = (props: OrdersProps) => {
       </div>
       <div className={style.ordersContent}>
         {ordersData &&
-          ordersData.map((el: OrderData) => <OrderItem key={el.id} {...el} />)}
+          ordersData.map((el: OrderData) => <Order key={el.id} {...el} />)}
       </div>
     </div>
   );

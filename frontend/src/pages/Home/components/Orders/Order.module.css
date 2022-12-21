@@ -1,4 +1,4 @@
-.orderItemContent {
+.orderContent {
     height: 204px;
 
     display: flex;
@@ -19,7 +19,7 @@
 
 
 
-.orderItemContentData {
+.orderContentData {
     width: 14.5rem;
     display: flex;
     flex-direction: column;
@@ -27,11 +27,11 @@
     padding: 1.5rem;
 }
 
-.orderItemContentDataRow {
+.orderContentDataRow {
     margin-top: 0.5rem;
 }
 
-.orderItemContentDataRow span {
+.orderContentDataRow span {
     font-family: 'Avenir';
     font-style: normal;
     font-weight: 800;
@@ -39,7 +39,7 @@
     line-height: 1.563rem;
 }
 
-.orderItemContentNote {
+.orderContentNote {
     display: flex;
     width: 19.75rem;
     flex-direction: column;
@@ -47,7 +47,7 @@
     border-left: 1px solid #000000;
 }
 
-.orderItemContentNoteAlarm {
+.orderContentNoteAlarm {
     padding-top: 1.875rem;
     padding-left: 1.875rem;
     padding-bottom: 0.75rem;
@@ -56,14 +56,14 @@
 }
 
 
-.orderItemContentNoteText {
+.orderContentNoteText {
     height: 100%;
     border-top: 1px solid #000000;
     padding: 0.5rem 1.5rem 1.375rem 1.5rem;
     overflow-y: scroll;
 }
 
-.orderItemContentNoteText span {
+.orderContentNoteText span {
     font-family: 'Avenir';
     font-style: normal;
     font-weight: 800;
@@ -71,7 +71,7 @@
     line-height: 1.563rem;
 }
 
-.orderItemContentStatus {
+.orderContentStatus {
     height: 100%;
     width: 34.188rem;
     /* width: 34.188rem; */
@@ -81,13 +81,13 @@
     justify-content: space-evenly;
 }
 
-.orderItemContentStatusWrap {
+.orderContentStatusWrap {
     width: 100%;
     display: flex;
     justify-content: center;
 }
 
-.orderItemContentStatusBtn {
+.orderContentStatusBtn {
     width: 15.563rem;
     height: 3.688rem;
     margin-right: 0.75rem;
@@ -102,7 +102,7 @@
 
 }
 
-.orderItemContentStatusIconBtn {
+.orderContentStatusIconBtn {
     width: 74px;
     height: 57px;
     border: 2px solid #C1E1FF;

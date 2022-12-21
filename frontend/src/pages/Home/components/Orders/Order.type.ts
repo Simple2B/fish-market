@@ -7,7 +7,7 @@ export enum OrderStatus {
   can_not_complete = "can_not_complete",
 }
 
-export interface IOrderItem {
+export interface IOrder {
   prep_name: string;
   product_image: string;
   product_name: string;
@@ -22,5 +22,5 @@ export type OrderData = {
   status: keyof typeof OrderStatus;
   note: string | null;
   pick_up_data: string | null;
-  items: IOrderItem[];
+  items: IOrder[];
 };
