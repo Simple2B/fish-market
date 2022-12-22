@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 import { ManagerOutletContext } from "../../../../main.type";
 import { contentManager } from "../../../../router";
@@ -43,6 +44,7 @@ const Manager = () => {
 
   return (
     <div className={style.managerPage}>
+      <ToastContainer />
       <div className={style.navBar}>
         {contentManager.map((obj, idex) => {
           return <MenuButton key={idex} btnName={obj.nameBtn} />;

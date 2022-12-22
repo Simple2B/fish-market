@@ -11,10 +11,12 @@ export const TEXT_DATA = {
     [modalData.CAN_NOT_COMPLETED]: {
       title: "Are you sure you can’t complete *order number*?",
       btnName: "Can’t complete",
+      toastMessage: "*order number* was successfully canceled",
     },
     [modalData.REMOVE_ORDER]: {
       title: "Are you sure you want to remove *order number*?",
       btnName: "Remove order",
+      toastMessage: "*order number* was successfully removed",
     },
   },
 };

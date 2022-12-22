@@ -3,6 +3,8 @@ import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import classNames from "classnames";
 import { Step, Stepper } from "react-form-stepper";
 import { useOutletContext } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import style from "./Order.module.css";
 import { useState } from "react";
@@ -29,6 +31,9 @@ const buttonsNameByStatus = [
   { key: OrderStatus.can_not_complete, btnName: "Can’t complete" },
 ];
 
+const textDataCanNotCompleted = TEXT_DATA.ENGLISH[modalData.CAN_NOT_COMPLETED];
+const textDataRemoved = TEXT_DATA.ENGLISH[modalData.REMOVE_ORDER];
+
 const Order = ({
   id,
   customer_name,
@@ -43,10 +48,23 @@ const Order = ({
 
   const { openModal } = useOutletContext<ManagerOutletContext>();
 
+  const notify = (message: string) =>
+    toast(message, {
+      position: "top-center",
+      autoClose: 10000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+      theme: "light",
+    });
+
   const changeStatusOrder = useMutation({
     mutationFn: changeOrder,
     onSuccess: async () => {
       queryClient.invalidateQueries([GET_ORDERS]);
+      notify(textDataCanNotCompleted.toastMessage);
     },
     onError: async (err) => {
       console.log(`changeStatusOrder error ${err}`);
@@ -57,6 +75,7 @@ const Order = ({
     mutationFn: removeOrder,
     onSuccess: async () => {
       queryClient.invalidateQueries([GET_ORDERS]);
+      notify(textDataRemoved.toastMessage);
     },
     onError: async (err) => {
       console.log(`removeOrderData error ${err}`);
@@ -93,20 +112,18 @@ const Order = ({
   };
 
   const handlerCantComplete = () => {
-    const textData = TEXT_DATA.ENGLISH[modalData.CAN_NOT_COMPLETED];
     const openModalData: IOpenModalData = {
-      modalTitle: textData.title,
-      modalConfirmLabel: textData.btnName,
+      modalTitle: textDataCanNotCompleted.title,
+      modalConfirmLabel: textDataCanNotCompleted.btnName,
       confirmCallback: confirmCanNotCompleted,
     };
     openModal(openModalData);
   };
 
   const handlerRemove = () => {
-    const textData = TEXT_DATA.ENGLISH[modalData.REMOVE_ORDER];
     const openModalData: IOpenModalData = {
-      modalTitle: textData.title,
-      modalConfirmLabel: textData.btnName,
+      modalTitle: textDataRemoved.title,
+      modalConfirmLabel: textDataRemoved.btnName,
       confirmCallback: confirmRemoveOrder,
     };
     openModal(openModalData);
@@ -215,10 +232,10 @@ const Order = ({
             ))}
             <div className={style.orderItemButtons}>
               <div className={style.orderItemBtn} onClick={handlerCantComplete}>
-                {TEXT_DATA.ENGLISH[modalData.CAN_NOT_COMPLETED].btnName}
+                {textDataCanNotCompleted.btnName}
               </div>
               <div className={style.orderItemBtn} onClick={handlerRemove}>
-                {TEXT_DATA.ENGLISH[modalData.REMOVE_ORDER].btnName}
+                {textDataRemoved.btnName}
               </div>
             </div>
           </div>
