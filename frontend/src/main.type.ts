@@ -24,3 +24,21 @@ export type OrderData = {
   pick_up_data: string | null;
   items: IOrder[];
 };
+
+export type CustomModalProps = {
+  isOpen: boolean;
+  title: string;
+  confirmLabel: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+};
+
+export interface IOpenModalData {
+  modalTitle: string;
+  modalConfirmLabel: string;
+  confirmCallback: () => void;
+}
+
+export type ManagerOutletContext = {
+  openModal: (OpenModalData: IOpenModalData) => void;
+};
