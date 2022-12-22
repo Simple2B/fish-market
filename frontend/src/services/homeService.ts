@@ -51,7 +51,7 @@ export const removeOrder = async (data: { order_id: number }) => {
 };
 
 export const rebuildUrl = (url: string) => {
-  return url.toLocaleLowerCase().replace(/ /g, "-");
+  return url.toLocaleLowerCase().replace(/\s+/g, "-");
 };
 
 export const setFilterInProgress = (order: OrderData) => {

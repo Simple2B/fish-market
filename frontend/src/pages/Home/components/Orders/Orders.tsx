@@ -16,8 +16,6 @@ import style from "./Orders.module.css";
 import { FilterButton } from "./FilterButton";
 import { OrderData } from "../../../../main.type";
 
-type OrdersProps = {};
-
 enum FilterBtnName {
   FUTURE_ORDERS = "Future orders",
   PENDING = "Pending",
@@ -30,7 +28,7 @@ const FILTER_OPTIONS = [
   { name: FilterBtnName.IN_PROGRESS, filterFn: setFilterInProgress },
 ];
 
-const Orders = (props: OrdersProps) => {
+const Orders = () => {
   const [ordersData, setOrdersData] = useState<OrderData[]>([]);
   const [activeBtn, setActiveBtn] = useState<string>(FilterBtnName.PENDING);
 
@@ -50,7 +48,6 @@ const Orders = (props: OrdersProps) => {
       }
 
       const data = await res.json();
-      console.log(data.orders);
 
       return data.orders;
     },
