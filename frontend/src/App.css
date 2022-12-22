@@ -114,4 +114,6 @@ input[type='number'] {
 .Toastify__toast-container--top-center {
     top: 2rem;
     right: 59%;
+    left: auto;
+    transform: none;
 }
