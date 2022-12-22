@@ -64,7 +64,6 @@ const Order = ({
     mutationFn: changeOrder,
     onSuccess: async () => {
       queryClient.invalidateQueries([GET_ORDERS]);
-      notify(textDataCanNotCompleted.toastMessage);
     },
     onError: async (err) => {
       console.log(`changeStatusOrder error ${err}`);
@@ -102,6 +101,7 @@ const Order = ({
       body: { new_status: OrderStatus.can_not_complete },
     };
     changeStatusOrder.mutate(reqData);
+    notify(textDataCanNotCompleted.toastMessage);
   };
 
   const confirmRemoveOrder = () => {
@@ -164,9 +164,21 @@ const Order = ({
             </div>
           </div>
           <div className={style.orderContentNote}>
-            <div className={style.orderContentNoteAlarm}>
-              <CiAlarmOn className={style.iconContent} />
-            </div>
+            {showItems ? (
+              <div className={style.orderContentNoteActive}>
+                <span>Urgency:</span>
+                <div className={style.orderContentNoteActiveAlarm}>
+                  <CiAlarmOn className={style.iconContentAlarmActive} />
+                </div>
+              </div>
+            ) : (
+              <div className={style.orderContentNoteAlarm}>
+                <div className={style.orderContentNoteAlarmWrap}>
+                  <CiAlarmOn className={style.iconContentAlarm} />
+                </div>
+              </div>
+            )}
+
             <div className={style.orderContentNoteText}>
               <span>Note: </span> {note}
             </div>
@@ -231,12 +243,15 @@ const Order = ({
               <OrderItem key={indx} {...item} />
             ))}
             <div className={style.orderItemButtons}>
-              <div className={style.orderItemBtn} onClick={handlerCantComplete}>
+              <button
+                className={style.orderItemBtn}
+                onClick={handlerCantComplete}
+              >
                 {textDataCanNotCompleted.btnName}
-              </div>
-              <div className={style.orderItemBtn} onClick={handlerRemove}>
+              </button>
+              <button className={style.orderItemBtn} onClick={handlerRemove}>
                 {textDataRemoved.btnName}
-              </div>
+              </button>
             </div>
           </div>
         </>
