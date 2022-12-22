@@ -2,16 +2,23 @@ import { CiAlarmOn } from "react-icons/ci";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import classNames from "classnames";
 import { Step, Stepper } from "react-form-stepper";
+import { useOutletContext } from "react-router-dom";
 
 import style from "./Order.module.css";
 import { useState } from "react";
 import { OrderItem } from "./OrderItem";
 import { StepStyleDTO } from "react-form-stepper/dist/components/Step/StepTypes";
-import { OrderData, OrderStatus } from "../../../../main.type";
+import {
+  IOpenModalData,
+  ManagerOutletContext,
+  OrderData,
+  OrderStatus,
+} from "../../../../main.type";
 import { ConnectorStyleProps } from "react-form-stepper/dist/components/Connector/ConnectorTypes";
 import { useMutation } from "@tanstack/react-query";
 import { changeOrder, GET_ORDERS, removeOrder } from "../../../../services";
 import { queryClient } from "../../../../queryClient";
+import { modalData, TEXT_DATA } from "../../../../constants";
 
 const buttonsNameByStatus = [
   { key: OrderStatus.created, btnName: "Pending order" },
@@ -33,6 +40,8 @@ const Order = ({
   status,
 }: OrderData) => {
   const [showItems, setShowItems] = useState<boolean>(false);
+
+  const { openModal } = useOutletContext<ManagerOutletContext>();
 
   const changeStatusOrder = useMutation({
     mutationFn: changeOrder,
@@ -68,7 +77,7 @@ const Order = ({
     }
   };
 
-  const handlerCantComplete = () => {
+  const confirmCanNotCompleted = () => {
     const reqData = {
       order_id: id,
       body: { new_status: OrderStatus.can_not_complete },
@@ -76,11 +85,31 @@ const Order = ({
     changeStatusOrder.mutate(reqData);
   };
 
-  const handlerRemove = () => {
+  const confirmRemoveOrder = () => {
     const reqData = {
       order_id: id,
     };
     removeOrderData.mutate(reqData);
+  };
+
+  const handlerCantComplete = () => {
+    const textData = TEXT_DATA.ENGLISH[modalData.CAN_NOT_COMPLETED];
+    const openModalData: IOpenModalData = {
+      modalTitle: textData.title,
+      modalConfirmLabel: textData.btnName,
+      confirmCallback: confirmCanNotCompleted,
+    };
+    openModal(openModalData);
+  };
+
+  const handlerRemove = () => {
+    const textData = TEXT_DATA.ENGLISH[modalData.REMOVE_ORDER];
+    const openModalData: IOpenModalData = {
+      modalTitle: textData.title,
+      modalConfirmLabel: textData.btnName,
+      confirmCallback: confirmRemoveOrder,
+    };
+    openModal(openModalData);
   };
 
   const orderContent = classNames(style.orderContent, {
@@ -178,25 +207,22 @@ const Order = ({
         </div>
       </div>
       {showItems && (
-        <div className={orderItemContent}>
-          {" "}
-          {items.map((item, indx) => (
-            <OrderItem key={indx} {...item} />
-          ))}
-          {/* // TODO modal */}
-          <div className={style.orderItemButtons}>
-            <div className={style.orderItemBtn} onClick={handlerCantComplete}>
-              {
-                buttonsNameByStatus.find(
-                  (obj) => obj.key === OrderStatus.can_not_complete
-                )?.btnName
-              }
-            </div>
-            <div className={style.orderItemBtn} onClick={handlerRemove}>
-              Remove order
+        <>
+          <div className={orderItemContent}>
+            {" "}
+            {items.map((item, indx) => (
+              <OrderItem key={indx} {...item} />
+            ))}
+            <div className={style.orderItemButtons}>
+              <div className={style.orderItemBtn} onClick={handlerCantComplete}>
+                {TEXT_DATA.ENGLISH[modalData.CAN_NOT_COMPLETED].btnName}
+              </div>
+              <div className={style.orderItemBtn} onClick={handlerRemove}>
+                {TEXT_DATA.ENGLISH[modalData.REMOVE_ORDER].btnName}
+              </div>
             </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );
