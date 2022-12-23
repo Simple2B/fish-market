@@ -42,7 +42,7 @@ services:
     build: backend/pg-backup/
     restart: always
     volumes:
-      - backend/backup:/backup
+      - ./backend/backup:/backup
     links:
       - db
     environment:
