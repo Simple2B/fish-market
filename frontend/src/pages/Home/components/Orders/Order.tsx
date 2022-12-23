@@ -36,8 +36,22 @@ const buttonsNameByStatus = [
   { key: OrderStatus.can_not_complete, btnName: "Can’t complete" },
 ];
 
-const textDataCanNotCompleted = TEXT_DATA.ENGLISH[modalData.CAN_NOT_COMPLETED];
-const textDataRemoved = TEXT_DATA.ENGLISH[modalData.REMOVE_ORDER];
+const connectorStyle = {
+  size: "3px",
+  completedColor: "#C1E1FF",
+  activeColor: "#C1E1FF",
+} as ConnectorStyleProps;
+
+const stepperStyle = {
+  activeTextColor: "#5099dd",
+  activeBgColor: "#5099dd",
+  completedBgColor: "#C1E1FF",
+  completedTextColor: "#C1E1FF",
+  inactiveTextColor: "#D1D1D1",
+} as StepStyleDTO;
+
+const textDataCanNotCompleted = TEXT_DATA[modalData.CAN_NOT_COMPLETED];
+const textDataRemoved = TEXT_DATA[modalData.REMOVE_ORDER];
 
 const Order = ({
   id,
@@ -180,22 +194,8 @@ const Order = ({
             )}
             style={{ padding: "0" }}
             connectorStateColors={true}
-            connectorStyleConfig={
-              {
-                size: "3px",
-                completedColor: "#C1E1FF",
-                activeColor: "#C1E1FF",
-              } as ConnectorStyleProps
-            }
-            styleConfig={
-              {
-                activeTextColor: "#5099dd",
-                activeBgColor: "#5099dd",
-                completedBgColor: "#C1E1FF",
-                completedTextColor: "#C1E1FF",
-                inactiveTextColor: "#D1D1D1",
-              } as StepStyleDTO
-            }
+            connectorStyleConfig={connectorStyle}
+            styleConfig={stepperStyle}
           >
             {buttonsNameByStatus.slice(0, -1).map((obj) => (
               <Step

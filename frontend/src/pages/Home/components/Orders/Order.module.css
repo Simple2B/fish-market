@@ -110,6 +110,7 @@
 
 .btnActive {
     background: #C1E1FF;
+    cursor: pointer;
 }
 
 .orderContentStatusIconBtn {
