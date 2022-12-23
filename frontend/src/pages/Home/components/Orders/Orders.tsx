@@ -6,9 +6,9 @@ import { API_BASE_URL } from "../../../../constants";
 import {
   FilteringFunctions,
   GET_ORDERS,
-  setFilterCreated,
-  setFilterInProgress,
-  setFilterPending,
+  isFilterCreated,
+  isFilterInProgress,
+  isFilterPending,
   TOKEN_KEY,
 } from "../../../../services";
 import { Order } from "./Order";
@@ -23,9 +23,9 @@ enum FilterBtnName {
 }
 
 const FILTER_OPTIONS = [
-  { name: FilterBtnName.FUTURE_ORDERS, filterFn: setFilterCreated },
-  { name: FilterBtnName.PENDING, filterFn: setFilterPending },
-  { name: FilterBtnName.IN_PROGRESS, filterFn: setFilterInProgress },
+  { name: FilterBtnName.FUTURE_ORDERS, filterFn: isFilterCreated },
+  { name: FilterBtnName.PENDING, filterFn: isFilterPending },
+  { name: FilterBtnName.IN_PROGRESS, filterFn: isFilterInProgress },
 ];
 
 const Orders = () => {
@@ -68,10 +68,11 @@ const Orders = () => {
     filterFn: FilteringFunctions;
     name: string;
   }) => {
-    if (data) {
-      setOrdersData([...data].filter(filterFn));
-      setActiveBtn(name);
+    if (!data) {
+      return;
     }
+    setOrdersData([...data].filter(filterFn));
+    setActiveBtn(name);
   };
 
   return isLoading ? (

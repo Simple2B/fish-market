@@ -8,18 +8,14 @@ type MenuButtonProps = {
 };
 
 const MenuButton = ({ btnName }: MenuButtonProps) => {
-  const styleBtnActive = classNames(
-    style.menuButtonContent,
-    style.menuButtonContentActive
-  );
+  const getNavLinkStyle = ({ isActive }: { isActive: boolean }) =>
+    classNames([
+      style.menuButtonContent,
+      { [style.menuButtonContentActive]: isActive },
+    ]);
 
   return (
-    <NavLink
-      className={({ isActive }) =>
-        isActive ? styleBtnActive : style.menuButtonContent
-      }
-      to={`${rebuildUrl(btnName)}`}
-    >
+    <NavLink className={getNavLinkStyle} to={`${rebuildUrl(btnName)}`}>
       {btnName}
     </NavLink>
   );

@@ -18,7 +18,12 @@ import {
 } from "../../../../main.type";
 import { ConnectorStyleProps } from "react-form-stepper/dist/components/Connector/ConnectorTypes";
 import { useMutation } from "@tanstack/react-query";
-import { changeOrder, GET_ORDERS, removeOrder } from "../../../../services";
+import {
+  changeOrder,
+  GET_ORDERS,
+  notify,
+  removeOrder,
+} from "../../../../services";
 import { queryClient } from "../../../../queryClient";
 import { modalData, TEXT_DATA } from "../../../../constants";
 
@@ -47,18 +52,6 @@ const Order = ({
   const [showItems, setShowItems] = useState<boolean>(false);
 
   const { openModal } = useOutletContext<ManagerOutletContext>();
-
-  const notify = (message: string) =>
-    toast(message, {
-      position: "top-center",
-      autoClose: 10000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: "light",
-    });
 
   const changeStatusOrder = useMutation({
     mutationFn: changeOrder,

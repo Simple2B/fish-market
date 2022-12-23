@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { API_BASE_URL } from "../constants";
 import { OrderData, OrderStatus } from "../main.type";
 import { TOKEN_KEY } from "./queryKeys";
@@ -54,27 +55,39 @@ export const rebuildUrl = (url: string) => {
   return url.toLocaleLowerCase().replace(/\s+/g, "-");
 };
 
-export const setFilterInProgress = (order: OrderData) => {
+export const isFilterInProgress = (order: OrderData) => {
   return (
     order.status === OrderStatus.in_progress ||
     order.status === OrderStatus.ready
   );
 };
 
-export const setFilterCreated = (order: OrderData) => {
+export const isFilterCreated = (order: OrderData) => {
   return order.status === OrderStatus.created;
 };
 
-export const setFilterPending = (order: OrderData) => {
+export const isFilterPending = (order: OrderData) => {
   return order.status === OrderStatus.pending;
 };
 
 export type FilteringFunctions =
-  | typeof setFilterInProgress
-  | typeof setFilterCreated
-  | typeof setFilterPending;
+  | typeof isFilterInProgress
+  | typeof isFilterCreated
+  | typeof isFilterPending;
 
 export type FilterBtnItem = {
   filterFn: FilteringFunctions;
   name: string;
 };
+
+export const notify = (message: string) =>
+  toast(message, {
+    position: "top-center",
+    autoClose: 10000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: false,
+    draggable: false,
+    progress: undefined,
+    theme: "light",
+  });
