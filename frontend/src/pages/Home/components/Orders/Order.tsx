@@ -141,7 +141,7 @@ const Order = ({
           <div className={style.orderContentData}>
             <div className={style.orderContentDataRow}>
               <span>Order no: </span>
-              data here
+              {id}
             </div>
             <div className={style.orderContentDataRow}>
               <span>Due date:</span>
