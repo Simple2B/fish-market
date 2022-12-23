@@ -32,12 +32,8 @@ def create_check_phone_number(data: s.CreatePhoneNumber, db: Session = Depends(g
     if not phone_number.is_number_verified:
         phone_number.confirm_code = m.gen_confirm_code()
         db.commit()
-        try:
-            send_sms(
-                confirm_code=phone_number.confirm_code,
-                phone_number=phone_number.number,
-            )
-        except TwilioRestException:
+        is_sent = send_sms(phone_number.confirm_code, phone_number.number)
+        if not is_sent:
             log(
                 log.ERROR,
                 "Exception when send sms,  number: [%s]",
