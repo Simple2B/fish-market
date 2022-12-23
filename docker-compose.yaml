@@ -38,5 +38,21 @@ services:
     ports:
       - 127.0.0.1:${FORWARD_FRONT_PORT}:80
 
+  backup:
+    build: backend/pg-backup/
+    restart: always
+    volumes:
+      - backend/backup:/backup
+    links:
+      - db
+    environment:
+      SCHEDULE: "@daily"
+      POSTGRES_DATABASE: ${DATABASE_NAME:-db}
+      POSTGRES_HOST: db
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_EXTRA_OPTS: "--schema=public --blobs"
+      DAYS_HISTORY: ${BACKUP_DAYS_HISTORY:-7}
+
 volumes:
   db_data:
