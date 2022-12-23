@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     ACCOUNT_SID_TWILIO: str = ""
     MESSAGE_SERVICE_SID: str = ""
     COUNTRY_CODE: str = "IL"
+    API_TOKEN_UP_SENDER: str = ""
+    USERNAME_UP_SENDER: str = ""
 
     class Config:
         env_file = ".env"
