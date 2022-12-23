@@ -9,6 +9,7 @@ import {
   isFilterCreated,
   isFilterInProgress,
   isFilterPending,
+  sortByData,
   TOKEN_KEY,
 } from "../../../../services";
 import { Order } from "./Order";
@@ -49,7 +50,7 @@ const Orders = () => {
 
       const data = await res.json();
 
-      return data.orders;
+      return data.orders.sort(sortByData);
     },
     onSuccess: (data) => {
       const filterFn = FILTER_OPTIONS.find(

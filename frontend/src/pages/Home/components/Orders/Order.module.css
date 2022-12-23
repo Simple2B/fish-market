@@ -159,8 +159,6 @@
 .orderItemContent {
 
     display: flex;
-    height: 100%;
-    width: 100%;
 
     align-content: flex-start;
     flex-wrap: wrap;
@@ -181,6 +179,7 @@
     border-left: 1px solid #000000;
     border-right: 1px solid #000000;
     border-bottom: 1px solid #000000;
+    margin-bottom: 0.5rem;
 }
 
 .orderItemBtn {

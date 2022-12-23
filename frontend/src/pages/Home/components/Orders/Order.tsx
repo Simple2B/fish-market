@@ -126,10 +126,6 @@ const Order = ({
     [style.orderContentButton]: !showItems,
   });
 
-  const orderItemContent = classNames(style.orderItemContent, {
-    [style.orderContentButton]: showItems,
-  });
-
   const orderContentStatusBtn = classNames(style.orderContentStatusBtn, {
     [style.btnActive]: showItems,
   });
@@ -230,7 +226,7 @@ const Order = ({
       </div>
       {showItems && (
         <>
-          <div className={orderItemContent}>
+          <div className={style.orderItemContent}>
             {" "}
             {items.map((item, indx) => (
               <OrderItem key={indx} {...item} />

@@ -70,6 +70,13 @@ export const isFilterPending = (order: OrderData) => {
   return order.status === OrderStatus.pending;
 };
 
+export const sortByData = (orderA: OrderData, orderB: OrderData): number => {
+  if (orderA.status == OrderStatus.created) {
+    return Date.parse(orderB.pick_up_data!) - Date.parse(orderA.pick_up_data!);
+  }
+  return Date.parse(orderB.created_at) - Date.parse(orderA.created_at);
+};
+
 export type FilteringFunctions =
   | typeof isFilterInProgress
   | typeof isFilterCreated

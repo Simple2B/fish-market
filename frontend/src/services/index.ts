@@ -10,5 +10,6 @@ export {
   changeOrder,
   removeOrder,
   notify,
+  sortByData,
 } from "./homeService";
 export type { FilteringFunctions, FilterBtnItem } from "./homeService";
