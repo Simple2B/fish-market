@@ -1,0 +1,38 @@
+.ordersPage {
+    height: 80%;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 5px;
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 33px;
+
+
+    color: #000000;
+
+
+}
+
+.buttonsFilter {
+    height: 100%;
+    width: 4rem;
+    margin-left: 1rem;
+    margin-right: 2.5rem;
+    display: flex;
+    justify-content: space-evenly;
+    transform: rotate(180deg);
+    writing-mode: vertical-lr;
+
+}
+
+.ordersContent {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    margin-right: 3.75rem;
+    margin-left: 0;
+}

@@ -3,6 +3,7 @@ import { Spinner } from "../../components";
 import { API_BASE_URL } from "../../constants";
 import { CHECK_TOKEN, TOKEN_KEY } from "../../services";
 import { LoginUser } from "./components/LoginUser";
+import { Manager } from "./components/Manager";
 
 export function Home() {
   const { data, isLoading } = useQuery({
@@ -26,5 +27,5 @@ export function Home() {
     },
   });
 
-  return isLoading ? <Spinner /> : <>{data ? <h1>hello</h1> : <LoginUser />}</>;
+  return isLoading ? <Spinner /> : <>{data ? <Manager /> : <LoginUser />}</>;
 }

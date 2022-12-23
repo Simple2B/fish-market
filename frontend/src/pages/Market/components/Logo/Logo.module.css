@@ -25,7 +25,6 @@
 
 .businessLogoWrap {
     height: 320px;
-    /* width: 132px; */
 }
 
 .businessLogo {
@@ -38,4 +37,5 @@
 .businessLogoImg {
     height: 100%;
     width: 100%;
+    object-fit: cover;
 }

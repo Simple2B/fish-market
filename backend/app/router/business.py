@@ -118,11 +118,16 @@ def create_order_for_business(
         )
 
     log(log.INFO, "create order")
+    order_status = (
+        m.OrderStatus.pending if not data.pick_up_data else m.OrderStatus.created
+    )
     order = m.Order(
         phone_number_id=db_phone_number.id,
         business_id=business.id,
         customer_name=data.customer_name,
         note=data.note,
+        pick_up_data=data.pick_up_data,
+        status=order_status,
     )
     db.add(order)
     db.commit()
