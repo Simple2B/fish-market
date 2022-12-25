@@ -15,7 +15,7 @@ const ResetBtn = () => {
 
   const mutateResetOutOfStock = useMutation({
     mutationFn: resetOutOfStock,
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       queryClient.invalidateQueries([GET_USER_PRODUCTS]);
     },
     onError: async (err) => {

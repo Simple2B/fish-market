@@ -1,13 +1,8 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Spinner } from "../../../../components";
 import { API_BASE_URL } from "../../../../constants";
 import { UserProductsOut } from "../../../../main.type";
-import { queryClient } from "../../../../queryClient";
-import {
-  GET_USER_PRODUCTS,
-  resetOutOfStock,
-  TOKEN_KEY,
-} from "../../../../services";
+import { GET_USER_PRODUCTS, TOKEN_KEY } from "../../../../services";
 import style from "./OutOfStock.module.css";
 import { Product } from "./Product";
 import { ResetBtn } from "./ResetBtn";
@@ -34,7 +29,6 @@ const OutOfStock = () => {
 
       return data.products.sort((a: ProductId, b: ProductId) => a.id - b.id);
     },
-    onSuccess: (data) => {},
   });
 
   return isLoading ? (
