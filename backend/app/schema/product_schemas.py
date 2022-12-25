@@ -11,7 +11,7 @@ class ProductOut(BaseModel):
     price: float
     sold_by: m.SoldBy
     image: Optional[str]
-    is_out_of_stoke: bool
+    is_out_of_stock: bool
 
     class Config:
         orm_mode = True
@@ -37,7 +37,7 @@ class UpdateProduct(BaseModel):
     price: Optional[float]
     sold_by: Optional[m.SoldBy]
     image: Optional[str]
-    is_out_of_stoke: Optional[bool]
+    is_out_of_stock: Optional[bool]
 
     @root_validator
     def any_of(cls, v):

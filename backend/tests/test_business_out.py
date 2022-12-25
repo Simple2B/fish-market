@@ -44,7 +44,7 @@ def test_get_business_product_out(
     assert len(first_product.preps) == len(first_product_res.preps)
     assert len(user_business.products) == len(res_data.products)
 
-    user_business.products[0].is_out_of_stoke = True
+    user_business.products[0].is_out_of_stock = True
     user_business.products[1].price = 100
     for prep in user_business.products[2].preps:
         prep.is_deleted = True
