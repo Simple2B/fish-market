@@ -44,3 +44,19 @@ export type ManagerOutletContext = {
   activeBtn: string;
   setActiveBtn: (n: string) => void;
 };
+
+// this enum already exists and in future will replace in the project
+enum ItemUnit {
+  by_kilogram = "Kg",
+  by_unit = "Unit",
+  by_both = "by_both",
+}
+
+export type UserProductsOut = {
+  id: number;
+  name: string;
+  price: number;
+  sold_by: typeof ItemUnit;
+  image: string;
+  is_out_of_stock?: boolean;
+};
