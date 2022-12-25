@@ -4,12 +4,11 @@ export { createCheckPhoneNumber, validatePhoneNumber } from "./marketService";
 
 export {
   rebuildUrl,
-  isFilterInProgress,
-  isFilterCreated,
-  isFilterPending,
   changeOrder,
   removeOrder,
   notify,
   sortByData,
+  filterOptionsOrder,
+  filterOptionsArchive,
 } from "./homeService";
 export type { FilteringFunctions, FilterBtnItem } from "./homeService";

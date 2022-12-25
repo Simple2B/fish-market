@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { API_BASE_URL } from "../constants";
+import { API_BASE_URL, filterBtnNameKeys, TEXT_DATA } from "../constants";
 import { OrderData, OrderStatus } from "../main.type";
 import { TOKEN_KEY } from "./queryKeys";
 
@@ -70,6 +70,14 @@ export const isFilterPending = (order: OrderData) => {
   return order.status === OrderStatus.pending;
 };
 
+export const isFilterCompleted = (order: OrderData) => {
+  return order.status === OrderStatus.picked_up;
+};
+
+export const isFilterCancelled = (order: OrderData) => {
+  return order.status === OrderStatus.can_not_complete;
+};
+
 export const sortByData = (orderA: OrderData, orderB: OrderData): number => {
   if (orderA.status == OrderStatus.created) {
     return Date.parse(orderB.pick_up_data!) - Date.parse(orderA.pick_up_data!);
@@ -80,7 +88,9 @@ export const sortByData = (orderA: OrderData, orderB: OrderData): number => {
 export type FilteringFunctions =
   | typeof isFilterInProgress
   | typeof isFilterCreated
-  | typeof isFilterPending;
+  | typeof isFilterPending
+  | typeof isFilterCompleted
+  | typeof isFilterCancelled;
 
 export type FilterBtnItem = {
   filterFn: FilteringFunctions;
@@ -98,3 +108,29 @@ export const notify = (message: string) =>
     progress: undefined,
     theme: "light",
   });
+
+export const filterOptionsOrder = [
+  {
+    name: TEXT_DATA[filterBtnNameKeys.FUTURE_ORDERS].name!,
+    filterFn: isFilterCreated,
+  },
+  {
+    name: TEXT_DATA[filterBtnNameKeys.PENDING].name!,
+    filterFn: isFilterPending,
+  },
+  {
+    name: TEXT_DATA[filterBtnNameKeys.IN_PROGRESS].name!,
+    filterFn: isFilterInProgress,
+  },
+];
+
+export const filterOptionsArchive = [
+  {
+    name: TEXT_DATA[filterBtnNameKeys.CANCELLED].name!,
+    filterFn: isFilterCancelled,
+  },
+  {
+    name: TEXT_DATA[filterBtnNameKeys.COMPLETED].name!,
+    filterFn: isFilterCompleted,
+  },
+];
