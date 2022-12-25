@@ -9,7 +9,7 @@ PRODUCT_NAME = "fish"
 PRODUCT_PRICE = 2
 PRODUCT_SOLD_BY = m.SoldBy.by_kilogram
 PRODUCT_IMAGE = "/dir/imag/logo_product.png"
-is_out_of_stock = True
+IS_OUT_OF_STOCK = True
 
 data_create_product = s.CreateProduct(
     name=PRODUCT_NAME,
@@ -23,7 +23,7 @@ data_update_product = s.UpdateProduct(
     price=PRODUCT_PRICE,
     sold_by=PRODUCT_SOLD_BY,
     image=PRODUCT_IMAGE,
-    is_out_of_stock=is_out_of_stock,
+    is_out_of_stock=IS_OUT_OF_STOCK,
 )
 
 
@@ -171,3 +171,17 @@ def test_update_product(marketer_client: TestClient, db: Session):
     marketer_client.delete(f"/product/{product.id}")
     res = marketer_client.patch(f"/product/{product.id}", json=prod_data)
     assert res.status_code == status.HTTP_404_NOT_FOUND
+
+
+def test_reset_product_out_of_stock(marketer_client: TestClient, db: Session):
+    business: m.Business = db.query(m.Business).first()
+
+    for product in business.active_products:
+        product.is_out_of_stock = True
+    db.commit()
+
+    res = marketer_client.patch(f"/product/")
+    assert res.status_code == status.HTTP_200_OK
+    assert "ok" in res.json()
+
+    assert all([not product.is_out_of_stock for product in business.active_products])
