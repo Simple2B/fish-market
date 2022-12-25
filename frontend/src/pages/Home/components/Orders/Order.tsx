@@ -81,7 +81,7 @@ const Order = ({
     mutationFn: removeOrder,
     onSuccess: async () => {
       queryClient.invalidateQueries([GET_ORDERS]);
-      notify(textDataRemoved.toastMessage);
+      notify(textDataRemoved.toastMessage!);
     },
     onError: async (err) => {
       console.log(`removeOrderData error ${err}`);
@@ -89,6 +89,13 @@ const Order = ({
   });
 
   const handelBtnStatus = () => {
+    if (
+      status == OrderStatus.picked_up ||
+      status == OrderStatus.can_not_complete
+    ) {
+      return;
+    }
+
     if (showItems) {
       const currentStatusIndex = buttonsNameByStatus.findIndex(
         (obj) => obj.key === status
@@ -108,7 +115,7 @@ const Order = ({
       body: { new_status: OrderStatus.can_not_complete },
     };
     changeStatusOrder.mutate(reqData);
-    notify(textDataCanNotCompleted.toastMessage);
+    notify(textDataCanNotCompleted.toastMessage!);
   };
 
   const confirmRemoveOrder = () => {
@@ -119,9 +126,16 @@ const Order = ({
   };
 
   const handlerCantComplete = () => {
+    if (
+      status == OrderStatus.picked_up ||
+      status == OrderStatus.can_not_complete
+    ) {
+      return;
+    }
+
     const openModalData: IOpenModalData = {
-      modalTitle: textDataCanNotCompleted.title,
-      modalConfirmLabel: textDataCanNotCompleted.btnName,
+      modalTitle: textDataCanNotCompleted.title!,
+      modalConfirmLabel: textDataCanNotCompleted.btnName!,
       confirmCallback: confirmCanNotCompleted,
     };
     openModal(openModalData);
@@ -129,8 +143,8 @@ const Order = ({
 
   const handlerRemove = () => {
     const openModalData: IOpenModalData = {
-      modalTitle: textDataRemoved.title,
-      modalConfirmLabel: textDataRemoved.btnName,
+      modalTitle: textDataRemoved.title!,
+      modalConfirmLabel: textDataRemoved.btnName!,
       confirmCallback: confirmRemoveOrder,
     };
     openModal(openModalData);
@@ -142,6 +156,13 @@ const Order = ({
 
   const orderContentStatusBtn = classNames(style.orderContentStatusBtn, {
     [style.btnActive]: showItems,
+    [style.btnInActive]:
+      status == OrderStatus.picked_up || status == OrderStatus.can_not_complete,
+  });
+
+  const orderItemBtn = classNames(style.orderItemBtn, {
+    [style.btnInActive]:
+      status == OrderStatus.picked_up || status == OrderStatus.can_not_complete,
   });
 
   return (
@@ -232,10 +253,7 @@ const Order = ({
               <OrderItem key={indx} {...item} />
             ))}
             <div className={style.orderItemButtons}>
-              <button
-                className={style.orderItemBtn}
-                onClick={handlerCantComplete}
-              >
+              <button className={orderItemBtn} onClick={handlerCantComplete}>
                 {textDataCanNotCompleted.btnName}
               </button>
               <button className={style.orderItemBtn} onClick={handlerRemove}>
