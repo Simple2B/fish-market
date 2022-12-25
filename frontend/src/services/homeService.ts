@@ -51,6 +51,30 @@ export const removeOrder = async (data: { order_id: number }) => {
   });
 };
 
+export const isOutOfStock = async (data: {
+  product_id: number;
+  body: { is_out_of_stock: boolean };
+}) => {
+  const res = await fetch(`${API_BASE_URL}/product/${data.product_id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+    },
+    body: JSON.stringify(data.body),
+  });
+};
+
+export const resetOutOfStock = async () => {
+  const res = await fetch(`${API_BASE_URL}/product/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+    },
+  });
+};
+
 export const rebuildUrl = (url: string) => {
   return url.toLocaleLowerCase().replace(/\s+/g, "-");
 };
