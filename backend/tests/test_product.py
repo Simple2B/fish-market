@@ -9,6 +9,7 @@ PRODUCT_NAME = "fish"
 PRODUCT_PRICE = 2
 PRODUCT_SOLD_BY = m.SoldBy.by_kilogram
 PRODUCT_IMAGE = "/dir/imag/logo_product.png"
+IS_OUT_OF_STOKE = True
 
 data_create_product = s.CreateProduct(
     name=PRODUCT_NAME,
@@ -22,6 +23,7 @@ data_update_product = s.UpdateProduct(
     price=PRODUCT_PRICE,
     sold_by=PRODUCT_SOLD_BY,
     image=PRODUCT_IMAGE,
+    is_out_of_stoke=IS_OUT_OF_STOKE,
 )
 
 
