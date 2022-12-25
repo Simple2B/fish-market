@@ -15,6 +15,11 @@ const Manager = () => {
     return <Navigate to={"/orders"} replace={true} />;
   }
 
+  const [activeBtn, setActiveBtn] = useState<string>("");
+  //  TODO we have a small bug here it needs advice
+
+  // queryClient.invalidateQueries([GET_ORDERS]);
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>("");
   const [modalConfirmLabel, setModalConfirmLabel] = useState<string>("");
@@ -47,10 +52,16 @@ const Manager = () => {
       <ToastContainer />
       <div className={style.navBar}>
         {contentManager.map((obj, idex) => {
-          return <MenuButton key={idex} btnName={obj.nameBtn} />;
+          return (
+            <MenuButton
+              key={idex}
+              btnName={obj.nameBtn}
+              setActiveBtn={setActiveBtn}
+            />
+          );
         })}
       </div>
-      <Outlet context={{ openModal }} />
+      <Outlet context={{ openModal, activeBtn, setActiveBtn }} />
       <CustomModal
         isOpen={isModalOpen}
         title={modalTitle}
