@@ -1,0 +1,23 @@
+.pageContent {
+    height: 80%;
+    display: flex;
+    justify-content: center;
+
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 1.1rem;
+    line-height: 1.5rem;
+
+    color: #000000;
+}
+
+
+.pageContentWrap {
+    width: 63rem;
+
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
