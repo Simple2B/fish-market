@@ -3,6 +3,7 @@ export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const modalData = {
   CAN_NOT_COMPLETED: "canNotCompletedKey",
   REMOVE_ORDER: "removeOrderKey",
+  REPLENISH_ALL: "replenishAllKey",
 };
 
 export const filterBtnNameKeys = {
@@ -30,6 +31,11 @@ export const TEXT_DATA = {
     title: "Are you sure you want to remove *order number*?",
     btnName: "Remove order",
     toastMessage: "*order number* was successfully removed",
+  },
+  [modalData.REPLENISH_ALL]: {
+    title: "Are you sure you want to replenish all items?",
+    btnName: "Replenish All",
+    toastMessage: "All items are successfully replenished!",
   },
   [filterBtnNameKeys.PENDING]: {
     name: "Pending",
