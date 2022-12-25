@@ -37,8 +37,6 @@ const OutOfStock = () => {
     onSuccess: (data) => {},
   });
 
-  console.log(data);
-
   return isLoading ? (
     <Spinner />
   ) : (

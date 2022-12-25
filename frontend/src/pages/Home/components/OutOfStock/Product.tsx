@@ -31,7 +31,6 @@ const Product = ({
       product_id: id,
       body: { is_out_of_stock: !is_out_of_stock },
     };
-    console.log(id, res_data.body);
     mutationIsOutOfStock.mutate(res_data);
   };
 
