@@ -14,10 +14,17 @@
 
 
 .pageContentWrap {
-    width: 63rem;
+    width: 64rem;
 
     display: flex;
-    gap: 0.5rem;
+    gap: 0.5em;
     flex-wrap: wrap;
     align-content: flex-start;
+    overflow-y: scroll;
+}
+
+@media (max-width:1024px) {
+    .pageContent {
+        padding: 0.5rem;
+    }
 }
