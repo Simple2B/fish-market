@@ -41,7 +41,7 @@ class UpdateProduct(BaseModel):
 
     @root_validator
     def any_of(cls, v):
-        if not any(v.values()):
+        if len(v.values()) == sum([1 for value in v.values() if value is None]):
             raise ValueError(f"At least one of fields: {v.keys()} must have a value")
         return v
 
