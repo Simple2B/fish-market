@@ -19,3 +19,12 @@
     position: fixed;
     bottom: 0;
 }
+
+@media screen and (max-width: 700px) {
+    .businessBtn {
+        height: 11vh;
+        font-weight: 800;
+        font-size: 20px;
+        line-height: 27px;
+    }
+}

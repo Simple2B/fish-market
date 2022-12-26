@@ -63,10 +63,20 @@
     color: #000000;
 }
 
-/* @media screen and (max-width: 700px) {
+@media screen and (max-width: 700px) {
     .itemsWrap {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
+        border-right: 1px solid #000000;
     }
-} */
+
+    .blockQty {
+        margin: 5px;
+    }
+
+}
+
+@media screen and (max-width: 280px) {
+    .textQty {
+        display: none;
+    }
+
+}

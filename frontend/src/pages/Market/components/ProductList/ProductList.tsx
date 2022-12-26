@@ -33,7 +33,9 @@ export function ProductList({ marketId, cartState, dispatchCart }: Props) {
         <div className={style.pageContent}>
           <div className={style.productListContent}>
             <div className={style.contentBlockTitle}>
-              <div className={style.blockTitle}>Choose your items</div>
+              <div className={style.blockTitle}>
+                Choose your items <div className={style.iconCart}>icon</div>
+              </div>
               <div className={style.blockSubTitle}>
                 *The weight is roughly estimated, the order might arrive with up
                 to 35% margin of difference

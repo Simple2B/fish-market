@@ -44,6 +44,10 @@
     text-align: center;
 }
 
+.iconCart {
+    display: none;
+}
+
 .blockTitleCart {
     font-family: 'Avenir';
     font-style: normal;
@@ -89,4 +93,16 @@
         width: 100%;
     }
 
+    .iconCart {
+        display: contents;
+    }
+
+}
+
+@media screen and (max-width: 700px) {
+    .blockItems {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 }

@@ -136,6 +136,7 @@
 @media screen and (max-width: 700px) {
     .cardWrap {
         height: 254px;
+        width: 335px;
 
         display: grid;
         grid-template-columns: 80% 20%;
@@ -147,20 +148,31 @@
 
 
     .cardBlock {
+        height: 84px;
         width: 100%;
         grid-column: 1;
         grid-row: 1;
         border-bottom: 1px solid black;
     }
 
+    .cardBlockContent {
+        height: 71px;
+        width: 88px;
+        margin-left: 3px;
+    }
+
+
     .typeBlock {
         width: 100%;
         grid-column: 1;
         grid-row: 2;
         border-bottom: 1px solid black;
+        display: flex;
+        flex-direction: row;
     }
 
     .preparationBlock {
+        height: 80px;
         width: 100%;
         grid-column: 1;
         grid-row: 3;
@@ -175,6 +187,8 @@
         grid-row-end: 4;
         grid-column: 2;
         border-right: 1px solid black;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
     }
 
     .availableAddBtn {
@@ -182,5 +196,27 @@
 
     }
 
+    .cardProductName {
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 22px;
+    }
 
+    .cardProductPrice {
+        font-weight: 800;
+        font-size: 20px;
+        line-height: 27px;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .cardWrap {
+        width: 300px;
+    }
+}
+
+@media screen and (max-width: 280px) {
+    .cardWrap {
+        width: 235px;
+    }
 }
