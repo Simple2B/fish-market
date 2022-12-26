@@ -41,6 +41,6 @@ export interface IOpenModalData {
 
 export type ManagerOutletContext = {
   openModal: (OpenModalData: IOpenModalData) => void;
-  activeBtn: string;
-  setActiveBtn: (n: string) => void;
+  activeBtnFilterName: string;
+  setActiveBtnFilterName: (n: string) => void;
 };

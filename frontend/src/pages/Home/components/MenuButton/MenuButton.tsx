@@ -11,18 +11,18 @@ import {
 
 type MenuButtonProps = {
   btnName: string;
-  setActiveBtn: (n: string) => void;
+  setActiveBtnFilterName: (n: string) => void;
 };
 
-const MenuButton = ({ btnName, setActiveBtn }: MenuButtonProps) => {
+const MenuButton = ({ btnName, setActiveBtnFilterName }: MenuButtonProps) => {
   const handlerMenuButton = () => {
     if (btnName == TEXT_DATA[navMenuBtnNameKeys.ORDERS].name) {
-      setActiveBtn(TEXT_DATA[filterBtnNameKeys.PENDING].name!);
+      setActiveBtnFilterName(TEXT_DATA[filterBtnNameKeys.PENDING].name!);
       queryClient.invalidateQueries([GET_ORDERS]);
     }
 
     if (btnName == TEXT_DATA[navMenuBtnNameKeys.ARCHIVE].name) {
-      setActiveBtn(TEXT_DATA[filterBtnNameKeys.COMPLETED].name!);
+      setActiveBtnFilterName(TEXT_DATA[filterBtnNameKeys.COMPLETED].name!);
       queryClient.invalidateQueries([GET_ORDERS]);
     }
   };

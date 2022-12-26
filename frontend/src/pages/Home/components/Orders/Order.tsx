@@ -88,11 +88,11 @@ const Order = ({
     },
   });
 
+  const isOrderInArchive =
+    status == OrderStatus.picked_up || status == OrderStatus.can_not_complete;
+
   const handelBtnStatus = () => {
-    if (
-      status == OrderStatus.picked_up ||
-      status == OrderStatus.can_not_complete
-    ) {
+    if (isOrderInArchive) {
       return;
     }
 
@@ -126,10 +126,7 @@ const Order = ({
   };
 
   const handlerCantComplete = () => {
-    if (
-      status == OrderStatus.picked_up ||
-      status == OrderStatus.can_not_complete
-    ) {
+    if (isOrderInArchive) {
       return;
     }
 
@@ -156,13 +153,11 @@ const Order = ({
 
   const orderContentStatusBtn = classNames(style.orderContentStatusBtn, {
     [style.btnActive]: showItems,
-    [style.btnInActive]:
-      status == OrderStatus.picked_up || status == OrderStatus.can_not_complete,
+    [style.btnInActive]: isOrderInArchive,
   });
 
   const orderItemBtn = classNames(style.orderItemBtn, {
-    [style.btnInActive]:
-      status == OrderStatus.picked_up || status == OrderStatus.can_not_complete,
+    [style.btnInActive]: isOrderInArchive,
   });
 
   return (

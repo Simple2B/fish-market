@@ -15,7 +15,7 @@ const Manager = () => {
     return <Navigate to={"/orders"} replace={true} />;
   }
 
-  const [activeBtn, setActiveBtn] = useState<string>("");
+  const [activeBtnFilterName, setActiveBtnFilterName] = useState<string>("");
   //  TODO we have a small bug here it needs advice
 
   // queryClient.invalidateQueries([GET_ORDERS]);
@@ -56,12 +56,14 @@ const Manager = () => {
             <MenuButton
               key={idex}
               btnName={obj.nameBtn}
-              setActiveBtn={setActiveBtn}
+              setActiveBtnFilterName={setActiveBtnFilterName}
             />
           );
         })}
       </div>
-      <Outlet context={{ openModal, activeBtn, setActiveBtn }} />
+      <Outlet
+        context={{ openModal, activeBtnFilterName, setActiveBtnFilterName }}
+      />
       <CustomModal
         isOpen={isModalOpen}
         title={modalTitle}
