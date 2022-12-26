@@ -20,6 +20,10 @@
     bottom: 0;
 }
 
+.businessBtnInActive {
+    background: #D1D1D1;
+}
+
 @media screen and (max-width: 700px) {
     .businessBtn {
         height: 11vh;

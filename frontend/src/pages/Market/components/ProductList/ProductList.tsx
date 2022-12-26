@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { HiShoppingCart } from "react-icons/hi";
 import { ProductItemProps } from "./ProductList.type";
 
 import style from "./ProductList.module.css";
@@ -26,6 +27,8 @@ export function ProductList({ marketId, cartState, dispatchCart }: Props) {
     },
   });
 
+  console.log(cartState);
+
   return isLoading ? (
     <Spinner />
   ) : (
@@ -35,7 +38,15 @@ export function ProductList({ marketId, cartState, dispatchCart }: Props) {
           <div className={style.productListContent}>
             <div className={style.contentBlockTitle}>
               <div className={style.blockTitle}>
-                Choose your items <div className={style.iconCart}>icon</div>
+                Choose your items
+                <div className={style.iconCart}>
+                  <HiShoppingCart />
+                  {cartState.length >= 1 && (
+                    <div className={style.iconCartCount}>
+                      {cartState.length}
+                    </div>
+                  )}
+                </div>
               </div>
               <div className={style.blockSubTitle}>
                 *The weight is roughly estimated, the order might arrive with up

@@ -77,7 +77,11 @@ export function Market() {
   return orderState.isNumberVerified ? (
     <>
       <NextClient />
-      <BusinessBtn onClick={handlerStepNextClient} textBtn="Next client" />
+      <BusinessBtn
+        onClick={handlerStepNextClient}
+        textBtn="Next client"
+        cartState={cartState}
+      />
     </>
   ) : (
     <>
@@ -100,6 +104,7 @@ export function Market() {
           <BusinessBtn
             onClick={handleStepBusiness}
             textBtn={buttonTitle[step]}
+            cartState={cartState}
           />
         </>
       )}
@@ -116,6 +121,7 @@ export function Market() {
           <BusinessBtn
             onClick={handlerStepConfirm}
             textBtn={buttonTitle[step]}
+            cartState={cartState}
           />
         </>
       )}
