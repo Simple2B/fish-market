@@ -100,7 +100,7 @@ def test_create_product_order(client: TestClient, db: Session, customer_orders):
     assert res.status_code == status.HTTP_201_CREATED
     res_data = s.CreateOrderOut.parse_obj(res.json())
     assert res_data.phone_number == phone_number.number
-    assert res_data.order_status == m.OrderStatus.created.value
+    assert res_data.order_status == m.OrderStatus.pending.value
 
     # test order was created in db
     orders = db.query(m.Order).all()
@@ -109,7 +109,7 @@ def test_create_product_order(client: TestClient, db: Session, customer_orders):
     # test the customer has order
     assert len(phone_number.orders) == 2
     second_order = phone_number.orders[1]
-    assert second_order.status == m.OrderStatus.created
+    assert second_order.status == m.OrderStatus.pending
     assert len(second_order.items) == 2
 
     # test the order has correct customer
@@ -149,7 +149,7 @@ def test_delete_order(client: TestClient, db: Session, customer_orders):
     assert res.status_code == status.HTTP_200_OK
     assert "ok" in res.json()
     db.refresh(order)
-    assert order.status == m.OrderStatus.cancelled
+    assert order.is_deleted
 
     # test bad order uid
     res = client.delete(f"/business/{business.web_site_id}/order/{fake_uid}")

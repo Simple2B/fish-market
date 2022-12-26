@@ -6,7 +6,7 @@ import { IoIosAdd } from "react-icons/io";
 import { ProductType } from "./ProductType";
 import style from "./ProductItem.module.css";
 import { ProductItemProps, ItemUnit } from "../ProductList/ProductList.type";
-import { MarketActions, MarketActionTypes } from "../../Market.type";
+import { MarketActionTypes } from "../../Market.type";
 
 export function ProductItem({
   id,
@@ -65,7 +65,7 @@ export function ProductItem({
             <div className={style.cardProductName}>{name}</div>
             <div
               className={style.cardProductPrice}
-            >{`$${price} - ${ItemUnit.by_kilogram.toLocaleLowerCase()}`}</div>
+            >{`$${price} / ${ItemUnit.by_kilogram.toLocaleLowerCase()}`}</div>
           </div>
         </div>
         <div className={style.typeBlock}>

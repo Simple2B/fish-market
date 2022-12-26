@@ -1,4 +1,5 @@
 from typing import Optional
+from datetime import datetime
 
 from pydantic import BaseModel
 
@@ -31,6 +32,7 @@ class CreateOrder(BaseModel):
     phone_number: str
     customer_name: str
     note: Optional[str]
+    pick_up_data: Optional[datetime]
     items: list[CreateOrderItem]
 
 

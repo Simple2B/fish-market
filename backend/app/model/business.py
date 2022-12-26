@@ -20,5 +20,9 @@ class Business(Base):
     products = relationship("Product", viewonly=True)
     orders = relationship("Order")
 
+    @property
+    def active_products(self):
+        return [product for product in self.products if not product.is_deleted]
+
     def __repr__(self) -> str:
         return f"<id:{self.id}, name:{self.name},  user:{self.user}>"

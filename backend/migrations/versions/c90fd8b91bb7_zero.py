@@ -1,8 +1,8 @@
 """zero
 
-Revision ID: 359db3fcdae0
+Revision ID: c90fd8b91bb7
 Revises: 
-Create Date: 2022-12-08 13:18:11.292889
+Create Date: 2022-12-20 15:07:23.096839
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '359db3fcdae0'
+revision = 'c90fd8b91bb7'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -56,10 +56,12 @@ def upgrade() -> None:
     sa.Column('phone_number_id', sa.Integer(), nullable=True),
     sa.Column('business_id', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.Column('pick_up_data', sa.DateTime(), nullable=True),
     sa.Column('customer_name', sa.String(length=64), nullable=True),
     sa.Column('note', sa.String(length=512), nullable=True),
-    sa.Column('status', sa.Enum('created', 'was_seen', 'in_progress', 'completed', 'picked_up', 'cancelled', name='orderstatus'), nullable=True),
+    sa.Column('status', sa.Enum('created', 'pending', 'in_progress', 'ready', 'picked_up', 'can_not_complete', name='orderstatus'), nullable=True),
     sa.Column('order_uid', sa.String(length=36), nullable=True),
+    sa.Column('is_deleted', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['business_id'], ['businesses.id'], ),
     sa.ForeignKeyConstraint(['phone_number_id'], ['phone_numbers.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -80,8 +82,8 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('order_id', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.Column('prev_status', sa.Enum('created', 'was_seen', 'in_progress', 'completed', 'picked_up', 'cancelled', name='orderstatus'), nullable=True),
-    sa.Column('new_status', sa.Enum('created', 'was_seen', 'in_progress', 'completed', 'picked_up', 'cancelled', name='orderstatus'), nullable=True),
+    sa.Column('prev_status', sa.Enum('created', 'pending', 'in_progress', 'ready', 'picked_up', 'can_not_complete', name='orderstatus'), nullable=True),
+    sa.Column('new_status', sa.Enum('created', 'pending', 'in_progress', 'ready', 'picked_up', 'can_not_complete', name='orderstatus'), nullable=True),
     sa.ForeignKeyConstraint(['order_id'], ['orders.id'], ),
     sa.PrimaryKeyConstraint('id')
     )

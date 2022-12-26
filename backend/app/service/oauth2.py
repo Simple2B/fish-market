@@ -64,3 +64,20 @@ def get_current_admin(current_user=Depends(get_current_user)):
             detail="You don't have permissions to do it",
         )
     return current_user
+
+
+def get_business_from_cur_user(current_user=Depends(get_current_user)) -> m.Business:
+
+    business = None
+
+    if current_user.businesses and current_user.role == m.UserRole.Marketeer:
+        business = current_user.businesses[0]
+
+    if not business:
+        log(log.WARNING, "User [%s] does not have business", current_user)
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You don't  have permission to the business",
+        )
+
+    return business

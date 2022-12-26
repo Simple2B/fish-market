@@ -1,0 +1,26 @@
+.managerPage {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.navBar {
+    display: flex;
+    justify-content: center;
+    margin: 2.375rem 14.25rem 1.625rem 14.25rem;
+}
+
+.outLet {
+    height: 100%;
+}
+
+.navBar a:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.navBar a:first-child {
+    border-left: 1px solid #000000;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}

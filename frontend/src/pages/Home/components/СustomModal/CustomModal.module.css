@@ -1,0 +1,47 @@
+.modalContent {
+    height: 100%;
+    width: 100%;
+
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    font-family: 'Avenir';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 33px;
+
+    color: #000000;
+}
+
+.modalContentWrap {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 1.5rem;
+}
+
+.modalBtn {
+    height: 3.563rem;
+    width: 15.563rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    border: 2px solid #C1E1FF;
+    border-radius: 5px;
+    cursor: pointer;
+
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 25px;
+}
+
+.modalBtn:hover {
+    background: #C1E1FF;
+}

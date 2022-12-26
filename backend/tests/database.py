@@ -103,7 +103,7 @@ def add_prep_to_product(product_id: int, db: SessionLocal) -> None:
     db.commit()
 
 
-def create_test_customer_order(db: SessionLocal) -> tuple:
+def create_test_customer_order(db: SessionLocal) -> tuple[m.Business, m.Order]:
 
     phone_number = m.PhoneNumber(number="972545657514")
     db.add(phone_number)
