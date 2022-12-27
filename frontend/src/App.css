@@ -103,8 +103,8 @@ input[type='number'] {
 }
 
 .Toastify__toast {
-    width: 55rem;
-    height: 5.063rem;
+    width: 60rem;
+    height: 5.1rem;
 
     border: 1px solid #000000;
     border-radius: 5px;
@@ -113,7 +113,6 @@ input[type='number'] {
 
 .Toastify__toast-container--top-center {
     top: 2rem;
-    right: 59%;
+    right: 50%;
     left: auto;
-    transform: none;
 }
