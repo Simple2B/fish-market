@@ -116,3 +116,23 @@ input[type='number'] {
     right: 50%;
     left: auto;
 }
+
+.MuiStepLabel-labelContainer {
+    color: "black"
+}
+
+.MuiStepLabel-iconContainer .Mui-completed {
+    color: "#5099dd",
+}
+
+.MuiStepLabel-iconContainer .Mui-active {
+    color: "C1E1FF"
+}
+
+.MuiStepLabel-root .Mui-active .MuiStepIcon-text {
+    display: none;
+}
+
+.MuiStepLabel-root .Mui-disabled .MuiStepIcon-text {
+    display: none;
+}

@@ -1,22 +1,18 @@
 import { CiAlarmOn } from "react-icons/ci";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import classNames from "classnames";
-import { Step, Stepper } from "react-form-stepper";
 import { useOutletContext } from "react-router-dom";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import style from "./Order.module.css";
 import { useState } from "react";
 import { OrderItem } from "./OrderItem";
-import { StepStyleDTO } from "react-form-stepper/dist/components/Step/StepTypes";
 import {
   IOpenModalData,
   ManagerOutletContext,
   OrderData,
   OrderStatus,
 } from "../../../../main.type";
-import { ConnectorStyleProps } from "react-form-stepper/dist/components/Connector/ConnectorTypes";
 import { useMutation } from "@tanstack/react-query";
 import {
   changeOrder,
@@ -26,6 +22,7 @@ import {
 } from "../../../../services";
 import { queryClient } from "../../../../queryClient";
 import { modalDataKeys, MODAL_TEXT_DATA } from "../../../../constants";
+import { CustomStepper } from "../CustomStepper";
 
 const buttonsNameByStatus = [
   { key: OrderStatus.created, btnName: "Pending order" },
@@ -35,20 +32,6 @@ const buttonsNameByStatus = [
   { key: OrderStatus.picked_up, btnName: "Next step" },
   { key: OrderStatus.can_not_complete, btnName: "Can’t complete" },
 ];
-
-const connectorStyle = {
-  size: "3px",
-  completedColor: "#C1E1FF",
-  activeColor: "#C1E1FF",
-} as ConnectorStyleProps;
-
-const stepperStyle = {
-  activeTextColor: "#5099dd",
-  activeBgColor: "#5099dd",
-  completedBgColor: "#C1E1FF",
-  completedTextColor: "#C1E1FF",
-  inactiveTextColor: "#D1D1D1",
-} as StepStyleDTO;
 
 const textDataCanNotCompleted =
   MODAL_TEXT_DATA[modalDataKeys.CAN_NOT_COMPLETED];
@@ -150,6 +133,8 @@ const Order = ({
     openModal(openModalData);
   };
 
+  const activeStep = buttonsNameByStatus.findIndex((obj) => obj.key === status);
+
   const orderContent = classNames(style.orderContent, {
     [style.orderContentButton]: !showItems,
   });
@@ -205,25 +190,7 @@ const Order = ({
           </div>
         </div>
         <div className={style.orderContentStatus}>
-          <Stepper
-            activeStep={buttonsNameByStatus.findIndex(
-              (obj) => obj.key === status
-            )}
-            style={{ padding: "0" }}
-            connectorStateColors={true}
-            connectorStyleConfig={connectorStyle}
-            styleConfig={stepperStyle}
-          >
-            {buttonsNameByStatus.slice(0, -1).map((obj) => (
-              <Step
-                key={obj.key}
-                label={
-                  obj.key[0].toLocaleUpperCase() +
-                  obj.key.replace("_", " ").slice(1)
-                }
-              />
-            ))}
-          </Stepper>
+          <CustomStepper activeStep={activeStep} steps={buttonsNameByStatus} />
           <div className={style.orderContentStatusWrap}>
             <div className={orderContentStatusBtn} onClick={handelBtnStatus}>
               {buttonsNameByStatus.find((obj) => obj.key === status)?.btnName}
