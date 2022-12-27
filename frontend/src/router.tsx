@@ -1,23 +1,28 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
+import { navMenuBtnNameKeys, NAV_MENU_BUTTONS } from "./constants";
 import { Home, Market } from "./pages";
 import { Orders } from "./pages/Home";
-import { rebuildUrl } from "./services";
+import {
+  rebuildUrl,
+  filterOptionsOrder,
+  filterOptionsArchive,
+} from "./services";
 
 export const contentManager = [
   {
-    nameBtn: "Orders",
-    outLet: <Orders />,
+    nameBtn: NAV_MENU_BUTTONS[navMenuBtnNameKeys.ORDERS].name,
+    outLet: <Orders filterOptions={filterOptionsOrder} />,
   },
   {
-    nameBtn: "Out of stock",
+    nameBtn: NAV_MENU_BUTTONS[navMenuBtnNameKeys.ARCHIVE].name,
+    outLet: <Orders filterOptions={filterOptionsArchive} />,
+  },
+  {
+    nameBtn: NAV_MENU_BUTTONS[navMenuBtnNameKeys.OUT_OF_STOCK].name,
     outLet: <h1>out of stock</h1>,
   },
   {
-    nameBtn: "Archive",
-    outLet: <h1>archive</h1>,
-  },
-  {
-    nameBtn: "Settings",
+    nameBtn: NAV_MENU_BUTTONS[navMenuBtnNameKeys.SETTINGS].name,
     outLet: <h1>settings</h1>,
   },
 ];

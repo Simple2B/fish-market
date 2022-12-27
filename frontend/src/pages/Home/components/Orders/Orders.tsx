@@ -2,36 +2,24 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { Spinner } from "../../../../components";
-import { API_BASE_URL } from "../../../../constants";
+import { ACTIVE_BTN_FILTER_INDEX, API_BASE_URL } from "../../../../constants";
 import {
   FilteringFunctions,
   GET_ORDERS,
-  isFilterCreated,
-  isFilterInProgress,
-  isFilterPending,
   sortByData,
   TOKEN_KEY,
+  FilterBtnItem,
 } from "../../../../services";
 import { Order } from "./Order";
 import style from "./Orders.module.css";
 import { FilterButton } from "./FilterButton";
-import { OrderData } from "../../../../main.type";
+import { ManagerOutletContext, OrderData } from "../../../../main.type";
+import { useOutletContext } from "react-router-dom";
 
-enum FilterBtnName {
-  FUTURE_ORDERS = "Future orders",
-  PENDING = "Pending",
-  IN_PROGRESS = "In progress",
-}
-
-const FILTER_OPTIONS = [
-  { name: FilterBtnName.FUTURE_ORDERS, filterFn: isFilterCreated },
-  { name: FilterBtnName.PENDING, filterFn: isFilterPending },
-  { name: FilterBtnName.IN_PROGRESS, filterFn: isFilterInProgress },
-];
-
-const Orders = () => {
+const Orders = ({ filterOptions }: { filterOptions: FilterBtnItem[] }) => {
   const [ordersData, setOrdersData] = useState<OrderData[]>([]);
-  const [activeBtn, setActiveBtn] = useState<string>(FilterBtnName.PENDING);
+  const { activeBtnFilterName, setActiveBtnFilterName } =
+    useOutletContext<ManagerOutletContext>();
 
   const { data, isLoading } = useQuery({
     queryKey: [GET_ORDERS],
@@ -53,9 +41,14 @@ const Orders = () => {
       return data.orders.sort(sortByData);
     },
     onSuccess: (data) => {
-      const filterFn = FILTER_OPTIONS.find(
-        (option) => option.name === activeBtn
+      if (!activeBtnFilterName) {
+        setActiveBtnFilterName(filterOptions[ACTIVE_BTN_FILTER_INDEX].name);
+      }
+
+      const filterFn = filterOptions.find(
+        (option) => option.name === activeBtnFilterName
       )?.filterFn;
+
       if (filterFn) {
         setOrdersData(data.filter(filterFn));
       }
@@ -73,7 +66,7 @@ const Orders = () => {
       return;
     }
     setOrdersData([...data].filter(filterFn));
-    setActiveBtn(name);
+    setActiveBtnFilterName(name);
   };
 
   return isLoading ? (
@@ -81,12 +74,12 @@ const Orders = () => {
   ) : (
     <div className={style.ordersPage}>
       <div className={style.buttonsFilter}>
-        {FILTER_OPTIONS.map((item) => (
+        {filterOptions.map((item) => (
           <FilterButton
             key={item.name}
             item={item}
             handlerButtonsFilters={handlerButtonsFilters}
-            activeBtn={activeBtn}
+            activeBtnFilterName={activeBtnFilterName}
           />
         ))}
       </div>

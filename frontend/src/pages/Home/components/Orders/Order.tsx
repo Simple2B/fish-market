@@ -25,7 +25,7 @@ import {
   removeOrder,
 } from "../../../../services";
 import { queryClient } from "../../../../queryClient";
-import { modalData, TEXT_DATA } from "../../../../constants";
+import { modalDataKeys, MODAL_TEXT_DATA } from "../../../../constants";
 
 const buttonsNameByStatus = [
   { key: OrderStatus.created, btnName: "Pending order" },
@@ -50,8 +50,9 @@ const stepperStyle = {
   inactiveTextColor: "#D1D1D1",
 } as StepStyleDTO;
 
-const textDataCanNotCompleted = TEXT_DATA[modalData.CAN_NOT_COMPLETED];
-const textDataRemoved = TEXT_DATA[modalData.REMOVE_ORDER];
+const textDataCanNotCompleted =
+  MODAL_TEXT_DATA[modalDataKeys.CAN_NOT_COMPLETED];
+const textDataRemoved = MODAL_TEXT_DATA[modalDataKeys.REMOVE_ORDER];
 
 const Order = ({
   id,
@@ -88,7 +89,16 @@ const Order = ({
     },
   });
 
+  const isOrderInArchive =
+    status == OrderStatus.picked_up || status == OrderStatus.can_not_complete;
+
+  const orderDataTime = pick_up_data ? pick_up_data : created_at;
+
   const handelBtnStatus = () => {
+    if (isOrderInArchive) {
+      return;
+    }
+
     if (showItems) {
       const currentStatusIndex = buttonsNameByStatus.findIndex(
         (obj) => obj.key === status
@@ -119,6 +129,10 @@ const Order = ({
   };
 
   const handlerCantComplete = () => {
+    if (isOrderInArchive) {
+      return;
+    }
+
     const openModalData: IOpenModalData = {
       modalTitle: textDataCanNotCompleted.title,
       modalConfirmLabel: textDataCanNotCompleted.btnName,
@@ -142,6 +156,11 @@ const Order = ({
 
   const orderContentStatusBtn = classNames(style.orderContentStatusBtn, {
     [style.btnActive]: showItems,
+    [style.btnInActive]: isOrderInArchive,
+  });
+
+  const orderItemBtn = classNames(style.orderItemBtn, {
+    [style.btnInActive]: isOrderInArchive,
   });
 
   return (
@@ -155,9 +174,7 @@ const Order = ({
             </div>
             <div className={style.orderContentDataRow}>
               <span>Due date:</span>
-              {pick_up_data
-                ? pick_up_data
-                : new Date(created_at).toDateString()}
+              {new Date(orderDataTime).toDateString()}
             </div>
             <div className={style.orderContentDataRow}>
               <span>Name: </span> {customer_name}
@@ -232,10 +249,7 @@ const Order = ({
               <OrderItem key={indx} {...item} />
             ))}
             <div className={style.orderItemButtons}>
-              <button
-                className={style.orderItemBtn}
-                onClick={handlerCantComplete}
-              >
+              <button className={orderItemBtn} onClick={handlerCantComplete}>
                 {textDataCanNotCompleted.btnName}
               </button>
               <button className={style.orderItemBtn} onClick={handlerRemove}>
