@@ -37,7 +37,7 @@ const OutOfStock = () => {
   ) : (
     <div className={style.pageContent}>
       <div className={style.pageContentWrap}>
-        {data && <ResetBtn />}
+        {data && <ResetBtn products={data} />}
         {data &&
           data.map((product: TypeProductsOut) => (
             <Product key={product.id} {...product} />
