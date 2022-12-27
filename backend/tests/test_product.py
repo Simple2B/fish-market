@@ -180,7 +180,7 @@ def test_reset_product_out_of_stock(marketer_client: TestClient, db: Session):
         product.is_out_of_stock = True
     db.commit()
 
-    res = marketer_client.patch(f"/product/")
+    res = marketer_client.patch("/product/")
     assert res.status_code == status.HTTP_200_OK
     assert "ok" in res.json()
 
