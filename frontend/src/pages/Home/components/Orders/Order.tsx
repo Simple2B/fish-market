@@ -25,7 +25,7 @@ import {
   removeOrder,
 } from "../../../../services";
 import { queryClient } from "../../../../queryClient";
-import { modalData, TEXT_DATA } from "../../../../constants";
+import { modalDataKeys, MODAL_TEXT_DATA } from "../../../../constants";
 
 const buttonsNameByStatus = [
   { key: OrderStatus.created, btnName: "Pending order" },
@@ -50,8 +50,9 @@ const stepperStyle = {
   inactiveTextColor: "#D1D1D1",
 } as StepStyleDTO;
 
-const textDataCanNotCompleted = TEXT_DATA[modalData.CAN_NOT_COMPLETED];
-const textDataRemoved = TEXT_DATA[modalData.REMOVE_ORDER];
+const textDataCanNotCompleted =
+  MODAL_TEXT_DATA[modalDataKeys.CAN_NOT_COMPLETED];
+const textDataRemoved = MODAL_TEXT_DATA[modalDataKeys.REMOVE_ORDER];
 
 const Order = ({
   id,
@@ -81,7 +82,7 @@ const Order = ({
     mutationFn: removeOrder,
     onSuccess: async () => {
       queryClient.invalidateQueries([GET_ORDERS]);
-      notify(textDataRemoved.toastMessage!);
+      notify(textDataRemoved.toastMessage);
     },
     onError: async (err) => {
       console.log(`removeOrderData error ${err}`);
@@ -90,6 +91,8 @@ const Order = ({
 
   const isOrderInArchive =
     status == OrderStatus.picked_up || status == OrderStatus.can_not_complete;
+
+  const orderDataTime = pick_up_data ? pick_up_data : created_at;
 
   const handelBtnStatus = () => {
     if (isOrderInArchive) {
@@ -115,7 +118,7 @@ const Order = ({
       body: { new_status: OrderStatus.can_not_complete },
     };
     changeStatusOrder.mutate(reqData);
-    notify(textDataCanNotCompleted.toastMessage!);
+    notify(textDataCanNotCompleted.toastMessage);
   };
 
   const confirmRemoveOrder = () => {
@@ -131,8 +134,8 @@ const Order = ({
     }
 
     const openModalData: IOpenModalData = {
-      modalTitle: textDataCanNotCompleted.title!,
-      modalConfirmLabel: textDataCanNotCompleted.btnName!,
+      modalTitle: textDataCanNotCompleted.title,
+      modalConfirmLabel: textDataCanNotCompleted.btnName,
       confirmCallback: confirmCanNotCompleted,
     };
     openModal(openModalData);
@@ -140,8 +143,8 @@ const Order = ({
 
   const handlerRemove = () => {
     const openModalData: IOpenModalData = {
-      modalTitle: textDataRemoved.title!,
-      modalConfirmLabel: textDataRemoved.btnName!,
+      modalTitle: textDataRemoved.title,
+      modalConfirmLabel: textDataRemoved.btnName,
       confirmCallback: confirmRemoveOrder,
     };
     openModal(openModalData);
@@ -171,9 +174,7 @@ const Order = ({
             </div>
             <div className={style.orderContentDataRow}>
               <span>Due date:</span>
-              {pick_up_data
-                ? pick_up_data
-                : new Date(created_at).toDateString()}
+              {new Date(orderDataTime).toDateString()}
             </div>
             <div className={style.orderContentDataRow}>
               <span>Name: </span> {customer_name}

@@ -4,7 +4,7 @@ import { ToastContainer } from "react-toastify";
 import {
   ACTIVE_BTN_FILTER,
   filterBtnNameKeys,
-  TEXT_DATA,
+  FILTER_BUTTONS,
 } from "../../../../constants";
 
 import { ManagerOutletContext } from "../../../../main.type";
@@ -22,7 +22,7 @@ const Manager = () => {
 
   const [activeBtnFilterName, setActiveBtnFilterName] = useState<string>(
     localStorage.getItem(ACTIVE_BTN_FILTER) ??
-      TEXT_DATA[filterBtnNameKeys.PENDING].name!
+      FILTER_BUTTONS[filterBtnNameKeys.PENDING].name!
   );
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);

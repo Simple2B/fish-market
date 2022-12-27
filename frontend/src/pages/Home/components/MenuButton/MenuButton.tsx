@@ -7,7 +7,8 @@ import {
   ACTIVE_BTN_FILTER,
   filterBtnNameKeys,
   navMenuBtnNameKeys,
-  TEXT_DATA,
+  NAV_MENU_BUTTONS,
+  FILTER_BUTTONS,
 } from "../../../../constants";
 
 type MenuButtonProps = {
@@ -17,17 +18,18 @@ type MenuButtonProps = {
 
 const MenuButton = ({ btnName, setActiveBtnFilterName }: MenuButtonProps) => {
   const handlerMenuButton = () => {
-    if (btnName == TEXT_DATA[navMenuBtnNameKeys.ORDERS].name) {
-      const activeBtnNameOrders = TEXT_DATA[filterBtnNameKeys.PENDING].name!;
+    if (btnName == NAV_MENU_BUTTONS[navMenuBtnNameKeys.ORDERS].name) {
+      const activeBtnNameOrders =
+        FILTER_BUTTONS[filterBtnNameKeys.PENDING].name;
 
       localStorage.setItem(ACTIVE_BTN_FILTER, activeBtnNameOrders);
       setActiveBtnFilterName(activeBtnNameOrders);
       queryClient.invalidateQueries([GET_ORDERS]);
     }
 
-    if (btnName == TEXT_DATA[navMenuBtnNameKeys.ARCHIVE].name) {
+    if (btnName == NAV_MENU_BUTTONS[navMenuBtnNameKeys.ARCHIVE].name) {
       const activeBtnNameCompleted =
-        TEXT_DATA[filterBtnNameKeys.COMPLETED].name!;
+        FILTER_BUTTONS[filterBtnNameKeys.COMPLETED].name;
 
       localStorage.setItem(ACTIVE_BTN_FILTER, activeBtnNameCompleted);
       setActiveBtnFilterName(activeBtnNameCompleted);

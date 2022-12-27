@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { API_BASE_URL, filterBtnNameKeys, TEXT_DATA } from "../constants";
+import { API_BASE_URL, filterBtnNameKeys, FILTER_BUTTONS } from "../constants";
 import { OrderData, OrderStatus } from "../main.type";
 import { TOKEN_KEY } from "./queryKeys";
 
@@ -106,26 +106,26 @@ export const notify = (message: string) =>
 
 export const filterOptionsOrder = [
   {
-    name: TEXT_DATA[filterBtnNameKeys.FUTURE_ORDERS].name!,
+    name: FILTER_BUTTONS[filterBtnNameKeys.FUTURE_ORDERS].name!,
     filterFn: isFilterCreated,
   },
   {
-    name: TEXT_DATA[filterBtnNameKeys.PENDING].name!,
+    name: FILTER_BUTTONS[filterBtnNameKeys.PENDING].name!,
     filterFn: isFilterPending,
   },
   {
-    name: TEXT_DATA[filterBtnNameKeys.IN_PROGRESS].name!,
+    name: FILTER_BUTTONS[filterBtnNameKeys.IN_PROGRESS].name!,
     filterFn: isFilterInProgress,
   },
 ];
 
 export const filterOptionsArchive = [
   {
-    name: TEXT_DATA[filterBtnNameKeys.CANCELLED].name!,
+    name: FILTER_BUTTONS[filterBtnNameKeys.CANCELLED].name!,
     filterFn: isFilterCancelled,
   },
   {
-    name: TEXT_DATA[filterBtnNameKeys.COMPLETED].name!,
+    name: FILTER_BUTTONS[filterBtnNameKeys.COMPLETED].name!,
     filterFn: isFilterCompleted,
   },
 ];
