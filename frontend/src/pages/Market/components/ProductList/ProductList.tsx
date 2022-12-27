@@ -9,14 +9,21 @@ import { CartItems } from "../CartItems";
 
 import { API_BASE_URL } from "../../../../constants";
 import { Spinner } from "../../../../components";
+import { useState } from "react";
 
 type Props = {
   marketId: string;
   cartState: IProduct[];
   dispatchCart: (action: MarketActions) => void;
+  isCartPhoneView: boolean;
 };
 
-export function ProductList({ marketId, cartState, dispatchCart }: Props) {
+export function ProductList({
+  marketId,
+  cartState,
+  dispatchCart,
+  isCartPhoneView,
+}: Props) {
   const { data, isLoading } = useQuery({
     queryKey: [`marketProductList-${marketId}`],
     queryFn: async () => {
@@ -65,12 +72,14 @@ export function ProductList({ marketId, cartState, dispatchCart }: Props) {
               )}
             </div>
           </div>
-          <div className={style.productCardContent}>
-            <div className={style.contentBlockTitle}>
-              <div className={style.blockTitleCart}>Cart</div>
+          {isCartPhoneView && (
+            <div className={style.productCardContent}>
+              <div className={style.contentBlockTitle}>
+                <div className={style.blockTitleCart}>Cart</div>
+              </div>
+              <CartItems cartState={cartState} dispatchCart={dispatchCart} />
             </div>
-            <CartItems cartState={cartState} dispatchCart={dispatchCart} />
-          </div>
+          )}
         </div>
       </div>
     </>

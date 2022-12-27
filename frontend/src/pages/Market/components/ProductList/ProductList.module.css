@@ -78,10 +78,10 @@
 }
 
 @media screen and (max-width: 1000px) {
-    .productCardContent {
+    /* .productCardContent {
         display: none;
         visibility: hidden;
-    }
+    } */
 
     .pageContent {
         display: flex;

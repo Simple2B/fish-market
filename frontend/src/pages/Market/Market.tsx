@@ -15,6 +15,7 @@ import { BusinessBtn } from "./components/BusinessBtn/BusinessBtn";
 import { NextClient } from "./components/NextClient/NextClient";
 import { MarketActionTypes } from "./Market.type";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
+import { PHONE_WIDTH } from "./constants";
 
 enum BusinessStep {
   START_ORDER,
@@ -43,6 +44,7 @@ export function Market() {
   );
 
   const [step, setStep] = useState<BusinessStep>(BusinessStep.START_ORDER);
+  const [isCartPhoneView, setIsCartPhoneView] = useState<boolean>(false);
 
   const customerConfirmRef = useRef<HTMLButtonElement>(null);
 
@@ -54,6 +56,11 @@ export function Market() {
     if (step === BusinessStep.CONFIRM && cartState.length < 1) {
       setStep((value) => value - 1);
     } else {
+      if (step === BusinessStep.ORDER && width <= PHONE_WIDTH) {
+        setIsCartPhoneView(true);
+        return;
+      }
+
       setStep((value) => value + 1);
     }
     console.log(buttonTitle[step]);
