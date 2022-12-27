@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { Spinner } from "../../../../components";
-import { API_BASE_URL } from "../../../../constants";
+import { ACTIVE_BTN_FILTER_INDEX, API_BASE_URL } from "../../../../constants";
 import {
   FilteringFunctions,
   GET_ORDERS,
@@ -18,7 +18,8 @@ import { useOutletContext } from "react-router-dom";
 
 const Orders = ({ filterOptions }: { filterOptions: FilterBtnItem[] }) => {
   const [ordersData, setOrdersData] = useState<OrderData[]>([]);
-  const { activeBtn, setActiveBtn } = useOutletContext<ManagerOutletContext>();
+  const { activeBtnFilterName, setActiveBtnFilterName } =
+    useOutletContext<ManagerOutletContext>();
 
   const { data, isLoading } = useQuery({
     queryKey: [GET_ORDERS],
@@ -40,12 +41,12 @@ const Orders = ({ filterOptions }: { filterOptions: FilterBtnItem[] }) => {
       return data.orders.sort(sortByData);
     },
     onSuccess: (data) => {
-      if (!activeBtn) {
-        setActiveBtn(filterOptions[1].name);
+      if (!activeBtnFilterName) {
+        setActiveBtnFilterName(filterOptions[ACTIVE_BTN_FILTER_INDEX].name);
       }
 
       const filterFn = filterOptions.find(
-        (option) => option.name === activeBtn
+        (option) => option.name === activeBtnFilterName
       )?.filterFn;
 
       if (filterFn) {
@@ -65,7 +66,7 @@ const Orders = ({ filterOptions }: { filterOptions: FilterBtnItem[] }) => {
       return;
     }
     setOrdersData([...data].filter(filterFn));
-    setActiveBtn(name);
+    setActiveBtnFilterName(name);
   };
 
   return isLoading ? (
@@ -78,7 +79,7 @@ const Orders = ({ filterOptions }: { filterOptions: FilterBtnItem[] }) => {
             key={item.name}
             item={item}
             handlerButtonsFilters={handlerButtonsFilters}
-            activeBtn={activeBtn}
+            activeBtnFilterName={activeBtnFilterName}
           />
         ))}
       </div>

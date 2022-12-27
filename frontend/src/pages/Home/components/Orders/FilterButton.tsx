@@ -6,16 +6,16 @@ import style from "./FilterButton.module.css";
 type FilterButtonProps = {
   item: FilterBtnItem;
   handlerButtonsFilters: (item: FilterBtnItem) => void;
-  activeBtn: string;
+  activeBtnFilterName: string;
 };
 
 const FilterButton = ({
   item,
   handlerButtonsFilters,
-  activeBtn,
+  activeBtnFilterName,
 }: FilterButtonProps) => {
   const btnFilterActive = classNames(style.buttonFilter, {
-    [style.buttonFilterActive]: activeBtn === item.name,
+    [style.buttonFilterActive]: activeBtnFilterName === item.name,
   });
   return (
     <div

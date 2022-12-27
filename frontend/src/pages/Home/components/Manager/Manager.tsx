@@ -1,6 +1,11 @@
 import { useRef, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import {
+  ACTIVE_BTN_FILTER,
+  filterBtnNameKeys,
+  FILTER_BUTTONS,
+} from "../../../../constants";
 
 import { ManagerOutletContext } from "../../../../main.type";
 import { contentManager } from "../../../../router";
@@ -15,10 +20,10 @@ const Manager = () => {
     return <Navigate to={"/orders"} replace={true} />;
   }
 
-  const [activeBtn, setActiveBtn] = useState<string>("");
-  //  TODO we have a small bug here it needs advice
-
-  // queryClient.invalidateQueries([GET_ORDERS]);
+  const [activeBtnFilterName, setActiveBtnFilterName] = useState<string>(
+    localStorage.getItem(ACTIVE_BTN_FILTER) ??
+      FILTER_BUTTONS[filterBtnNameKeys.PENDING].name!
+  );
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>("");
@@ -56,12 +61,14 @@ const Manager = () => {
             <MenuButton
               key={idex}
               btnName={obj.nameBtn}
-              setActiveBtn={setActiveBtn}
+              setActiveBtnFilterName={setActiveBtnFilterName}
             />
           );
         })}
       </div>
-      <Outlet context={{ openModal, activeBtn, setActiveBtn }} />
+      <Outlet
+        context={{ openModal, activeBtnFilterName, setActiveBtnFilterName }}
+      />
       <CustomModal
         isOpen={isModalOpen}
         title={modalTitle}

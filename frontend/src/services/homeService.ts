@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { API_BASE_URL, filterBtnNameKeys, TEXT_DATA } from "../constants";
+import { API_BASE_URL, filterBtnNameKeys, FILTER_BUTTONS } from "../constants";
 import { OrderData, OrderStatus } from "../main.type";
 import { TOKEN_KEY } from "./queryKeys";
 
@@ -79,26 +79,26 @@ export const rebuildUrl = (url: string) => {
   return url.toLocaleLowerCase().replace(/\s+/g, "-");
 };
 
-export const isFilterInProgress = (order: OrderData) => {
+export const isFilterInProgress = (order: OrderData): boolean => {
   return (
     order.status === OrderStatus.in_progress ||
     order.status === OrderStatus.ready
   );
 };
 
-export const isFilterCreated = (order: OrderData) => {
+export const isFilterCreated = (order: OrderData): boolean => {
   return order.status === OrderStatus.created;
 };
 
-export const isFilterPending = (order: OrderData) => {
+export const isFilterPending = (order: OrderData): boolean => {
   return order.status === OrderStatus.pending;
 };
 
-export const isFilterCompleted = (order: OrderData) => {
+export const isFilterCompleted = (order: OrderData): boolean => {
   return order.status === OrderStatus.picked_up;
 };
 
-export const isFilterCancelled = (order: OrderData) => {
+export const isFilterCancelled = (order: OrderData): boolean => {
   return order.status === OrderStatus.can_not_complete;
 };
 
@@ -109,12 +109,7 @@ export const sortByData = (orderA: OrderData, orderB: OrderData): number => {
   return Date.parse(orderB.created_at) - Date.parse(orderA.created_at);
 };
 
-export type FilteringFunctions =
-  | typeof isFilterInProgress
-  | typeof isFilterCreated
-  | typeof isFilterPending
-  | typeof isFilterCompleted
-  | typeof isFilterCancelled;
+export type FilteringFunctions = (order: OrderData) => boolean;
 
 export type FilterBtnItem = {
   filterFn: FilteringFunctions;
@@ -135,26 +130,26 @@ export const notify = (message: string) =>
 
 export const filterOptionsOrder = [
   {
-    name: TEXT_DATA[filterBtnNameKeys.FUTURE_ORDERS].name!,
+    name: FILTER_BUTTONS[filterBtnNameKeys.FUTURE_ORDERS].name!,
     filterFn: isFilterCreated,
   },
   {
-    name: TEXT_DATA[filterBtnNameKeys.PENDING].name!,
+    name: FILTER_BUTTONS[filterBtnNameKeys.PENDING].name!,
     filterFn: isFilterPending,
   },
   {
-    name: TEXT_DATA[filterBtnNameKeys.IN_PROGRESS].name!,
+    name: FILTER_BUTTONS[filterBtnNameKeys.IN_PROGRESS].name!,
     filterFn: isFilterInProgress,
   },
 ];
 
 export const filterOptionsArchive = [
   {
-    name: TEXT_DATA[filterBtnNameKeys.CANCELLED].name!,
+    name: FILTER_BUTTONS[filterBtnNameKeys.CANCELLED].name!,
     filterFn: isFilterCancelled,
   },
   {
-    name: TEXT_DATA[filterBtnNameKeys.COMPLETED].name!,
+    name: FILTER_BUTTONS[filterBtnNameKeys.COMPLETED].name!,
     filterFn: isFilterCompleted,
   },
 ];
