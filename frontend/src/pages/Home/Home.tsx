@@ -18,7 +18,8 @@ export function Home() {
 
       if (!res.ok) {
         localStorage.removeItem(TOKEN_KEY);
-        return false;
+        console.error("Bad login");
+        return [];
       }
 
       const data = await res.json();

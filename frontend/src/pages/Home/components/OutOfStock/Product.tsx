@@ -18,7 +18,7 @@ const Product = ({
       queryClient.invalidateQueries([GET_USER_PRODUCTS]);
     },
     onError: async (err) => {
-      console.log(err, "mutationIsOutOfStock");
+      console.error(err, "mutationIsOutOfStock");
     },
   });
 

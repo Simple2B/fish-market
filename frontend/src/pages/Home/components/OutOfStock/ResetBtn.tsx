@@ -19,7 +19,7 @@ const ResetBtn = () => {
       queryClient.invalidateQueries([GET_USER_PRODUCTS]);
     },
     onError: async (err) => {
-      console.log(err, "mutateResetOutOfStock");
+      console.error(err, "mutateResetOutOfStock");
     },
   });
 
