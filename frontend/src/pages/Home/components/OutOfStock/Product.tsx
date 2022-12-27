@@ -2,7 +2,7 @@ import style from "./Product.module.css";
 import { useMutation } from "@tanstack/react-query";
 import { GET_USER_PRODUCTS, isOutOfStock } from "../../../../services";
 import classNames from "classnames";
-import { UserProductsOut } from "../../../../main.type";
+import { TypeProductsOut } from "../../../../main.type";
 import { queryClient } from "../../../../queryClient";
 
 const Product = ({
@@ -11,7 +11,7 @@ const Product = ({
   image,
   price,
   is_out_of_stock,
-}: Omit<UserProductsOut, "sold_by">) => {
+}: Omit<TypeProductsOut, "sold_by">) => {
   const mutationIsOutOfStock = useMutation({
     mutationFn: isOutOfStock,
     onSuccess: async (data) => {

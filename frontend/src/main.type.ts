@@ -52,7 +52,7 @@ enum ItemUnit {
   by_both = "by_both",
 }
 
-export type UserProductsOut = {
+export type TypeProductsOut = {
   id: number;
   name: string;
   price: number;

@@ -99,7 +99,7 @@ def reset_product_out_of_stock(
     db: Session = Depends(get_db),
 ):
 
-    log(log.INFO, "reset_product_out_of_stock")
+    log(log.INFO, "reset_product_out_of_stock, [%d]", business.id)
     products = business.active_products
 
     for product in products:

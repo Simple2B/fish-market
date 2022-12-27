@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { Spinner } from "../../../../components";
 import { API_BASE_URL } from "../../../../constants";
-import { UserProductsOut } from "../../../../main.type";
+import { TypeProductsOut } from "../../../../main.type";
 import { GET_USER_PRODUCTS, TOKEN_KEY } from "../../../../services";
 import style from "./OutOfStock.module.css";
 import { Product } from "./Product";
 import { ResetBtn } from "./ResetBtn";
 
-type ProductId = Pick<UserProductsOut, "id">;
+type ProductId = Pick<TypeProductsOut, "id">;
 
 const OutOfStock = () => {
   const { data, isLoading } = useQuery({
@@ -38,7 +38,7 @@ const OutOfStock = () => {
       <div className={style.pageContentWrap}>
         {data && <ResetBtn />}
         {data &&
-          data.map((product: UserProductsOut) => (
+          data.map((product: TypeProductsOut) => (
             <Product key={product.id} {...product} />
           ))}
       </div>

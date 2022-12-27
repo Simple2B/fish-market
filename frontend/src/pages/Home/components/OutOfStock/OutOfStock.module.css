@@ -14,7 +14,7 @@
 
 
 .pageContentWrap {
-    width: 64rem;
+    width: 65rem;
 
     display: flex;
     gap: 0.5em;
@@ -26,5 +26,11 @@
 @media (max-width:1024px) {
     .pageContent {
         padding: 0.5rem;
+    }
+}
+
+@media (min-width:2800px) {
+    .pageContentWrap {
+        width: 67rem;
     }
 }
