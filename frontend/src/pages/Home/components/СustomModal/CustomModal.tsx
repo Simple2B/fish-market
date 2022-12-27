@@ -7,7 +7,7 @@ const customStyles = {
   content: {
     width: "50rem",
     height: "17.125rem",
-    top: "50%",
+    top: "20rem",
     left: "50%",
     right: "auto",
     bottom: "auto",

@@ -74,7 +74,7 @@ const Order = ({
       queryClient.invalidateQueries([GET_ORDERS]);
     },
     onError: async (err) => {
-      console.log(`changeStatusOrder error ${err}`);
+      console.error(`changeStatusOrder error ${err}`);
     },
   });
 
@@ -85,7 +85,7 @@ const Order = ({
       notify(textDataRemoved.toastMessage);
     },
     onError: async (err) => {
-      console.log(`removeOrderData error ${err}`);
+      console.error(`removeOrderData error ${err}`);
     },
   });
 

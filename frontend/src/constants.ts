@@ -6,6 +6,7 @@ export const ACTIVE_BTN_FILTER_INDEX = 1;
 export const modalDataKeys = {
   CAN_NOT_COMPLETED: "canNotCompletedKey",
   REMOVE_ORDER: "removeOrderKey",
+  REPLENISH_ALL: "replenishAllKey",
 };
 
 export const filterBtnNameKeys = {
@@ -33,6 +34,11 @@ export const MODAL_TEXT_DATA = {
     title: "Are you sure you want to remove *order number*?",
     btnName: "Remove order",
     toastMessage: "*order number* was successfully removed",
+  },
+  [modalDataKeys.REPLENISH_ALL]: {
+    title: "Are you sure you want to replenish all items?",
+    btnName: "Replenish All",
+    toastMessage: "All items are successfully replenished!",
   },
 };
 

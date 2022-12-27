@@ -82,7 +82,7 @@
 
 .orderContentStatus {
     height: 100%;
-    width: 34.188rem;
+    width: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -174,7 +174,7 @@
 
 .orderItemButtons {
     height: 6.688rem;
-    width: 49.88%;
+    width: 50%;
 
     display: flex;
     justify-content: space-evenly;
@@ -183,6 +183,7 @@
     border-right: 1px solid #000000;
     border-bottom: 1px solid #000000;
     margin-bottom: 0.5rem;
+    box-sizing: border-box;
 }
 
 .orderItemBtn {
@@ -212,12 +213,7 @@
 }
 
 
-
 @media (max-width:1300px) {
-    .orderItemButtons {
-        width: 49.79%
-    }
-
     .orderItemBtn {
         width: 12.5rem;
         height: 2.563rem;

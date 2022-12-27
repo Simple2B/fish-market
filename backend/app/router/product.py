@@ -93,6 +93,24 @@ def update_product(
     return product
 
 
+@router.patch("/", status_code=status.HTTP_200_OK)
+def reset_product_out_of_stock(
+    business: m.Business = Depends(get_business_from_cur_user),
+    db: Session = Depends(get_db),
+):
+
+    log(log.INFO, "reset_product_out_of_stock, [%d]", business.id)
+    products = business.active_products
+
+    for product in products:
+        if product.is_out_of_stock:
+            product.is_out_of_stock = False
+
+    db.commit()
+
+    return {"ok": True}
+
+
 @router.post(
     "/{id}/prep",
     response_model=s.ProductPrepOut,

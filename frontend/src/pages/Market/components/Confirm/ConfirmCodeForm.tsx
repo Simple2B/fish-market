@@ -45,7 +45,7 @@ const ConfirmCodeForm = ({
       console.log("Order is created");
     },
     onError: async (err) => {
-      console.log(`Create order error ${err}`);
+      console.error(`Create order error ${err}`);
     },
   });
 
