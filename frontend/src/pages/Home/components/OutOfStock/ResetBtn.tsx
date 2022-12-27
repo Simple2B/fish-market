@@ -1,14 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
 import classNames from "classnames";
 import { useOutletContext } from "react-router-dom";
-import { modalData, TEXT_DATA } from "../../../../constants";
+import { modalDataKeys, MODAL_TEXT_DATA } from "../../../../constants";
 import { IOpenModalData, ManagerOutletContext } from "../../../../main.type";
 
 import { queryClient } from "../../../../queryClient";
 import { GET_USER_PRODUCTS, resetOutOfStock } from "../../../../services";
 import style from "./Product.module.css";
 
-const textDataResetBtn = TEXT_DATA[modalData.REPLENISH_ALL];
+const textDataResetBtn = MODAL_TEXT_DATA[modalDataKeys.REPLENISH_ALL];
 
 const ResetBtn = () => {
   const { openModal } = useOutletContext<ManagerOutletContext>();
