@@ -25,8 +25,8 @@ const ResetBtn = () => {
 
   const handlerResetBtn = () => {
     const openModalData: IOpenModalData = {
-      modalTitle: textDataResetBtn.title!,
-      modalConfirmLabel: textDataResetBtn.btnName!,
+      modalTitle: textDataResetBtn.title,
+      modalConfirmLabel: textDataResetBtn.btnName,
       confirmCallback: () => mutateResetOutOfStock.mutate(),
     };
     openModal(openModalData);
