@@ -190,7 +190,12 @@ const Order = ({
           </div>
         </div>
         <div className={style.orderContentStatus}>
-          <CustomStepper activeStep={activeStep} steps={buttonsNameByStatus} />
+          {status != OrderStatus.can_not_complete && (
+            <CustomStepper
+              activeStep={activeStep}
+              steps={buttonsNameByStatus}
+            />
+          )}
           <div className={style.orderContentStatusWrap}>
             <div className={orderContentStatusBtn} onClick={handelBtnStatus}>
               {buttonsNameByStatus.find((obj) => obj.key === status)?.btnName}
