@@ -1,5 +1,8 @@
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+export const ACTIVE_BTN_FILTER = "activeBtnFilterKey";
+export const ACTIVE_BTN_FILTER_INDEX = 1;
+
 export const modalData = {
   CAN_NOT_COMPLETED: "canNotCompletedKey",
   REMOVE_ORDER: "removeOrderKey",

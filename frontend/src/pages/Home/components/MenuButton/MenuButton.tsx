@@ -4,6 +4,7 @@ import classNames from "classnames";
 import style from "./MenuButton.module.css";
 import { queryClient } from "../../../../queryClient";
 import {
+  ACTIVE_BTN_FILTER,
   filterBtnNameKeys,
   navMenuBtnNameKeys,
   TEXT_DATA,
@@ -17,12 +18,19 @@ type MenuButtonProps = {
 const MenuButton = ({ btnName, setActiveBtnFilterName }: MenuButtonProps) => {
   const handlerMenuButton = () => {
     if (btnName == TEXT_DATA[navMenuBtnNameKeys.ORDERS].name) {
-      setActiveBtnFilterName(TEXT_DATA[filterBtnNameKeys.PENDING].name!);
+      const activeBtnNameOrders = TEXT_DATA[filterBtnNameKeys.PENDING].name!;
+
+      localStorage.setItem(ACTIVE_BTN_FILTER, activeBtnNameOrders);
+      setActiveBtnFilterName(activeBtnNameOrders);
       queryClient.invalidateQueries([GET_ORDERS]);
     }
 
     if (btnName == TEXT_DATA[navMenuBtnNameKeys.ARCHIVE].name) {
-      setActiveBtnFilterName(TEXT_DATA[filterBtnNameKeys.COMPLETED].name!);
+      const activeBtnNameCompleted =
+        TEXT_DATA[filterBtnNameKeys.COMPLETED].name!;
+
+      localStorage.setItem(ACTIVE_BTN_FILTER, activeBtnNameCompleted);
+      setActiveBtnFilterName(activeBtnNameCompleted);
       queryClient.invalidateQueries([GET_ORDERS]);
     }
   };

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { Spinner } from "../../../../components";
-import { API_BASE_URL } from "../../../../constants";
+import { ACTIVE_BTN_FILTER_INDEX, API_BASE_URL } from "../../../../constants";
 import {
   FilteringFunctions,
   GET_ORDERS,
@@ -42,7 +42,7 @@ const Orders = ({ filterOptions }: { filterOptions: FilterBtnItem[] }) => {
     },
     onSuccess: (data) => {
       if (!activeBtnFilterName) {
-        setActiveBtnFilterName(filterOptions[1].name);
+        setActiveBtnFilterName(filterOptions[ACTIVE_BTN_FILTER_INDEX].name);
       }
 
       const filterFn = filterOptions.find(
