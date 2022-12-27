@@ -1,12 +1,13 @@
 .orderItemContent {
     height: 6.688rem;
-    width: 49.88%;
+    width: 50%;
 
     display: flex;
     justify-content: space-evenly;
     border-left: 1px solid #000000;
     border-right: 1px solid #000000;
     border-bottom: 1px solid #000000;
+    box-sizing: border-box;
 }
 
 .orderItemContentRow {
@@ -37,11 +38,4 @@
     height: 100%;
     width: 100%;
     object-fit: cover;
-}
-
-
-@media (max-width:1300px) {
-    .orderItemContent {
-        width: 49.79%
-    }
 }
