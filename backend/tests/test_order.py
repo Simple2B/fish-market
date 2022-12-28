@@ -22,15 +22,6 @@ def test_get_orders(
     assert order.id == first_order.id
     assert len(order.items) == len(first_order.items)
 
-    # test order is removed
-    order.is_deleted = True
-    db.commit()
-    db.refresh(order)
-    res = marketer_client.get("/order/")
-
-    assert res.status_code == status.HTTP_200_OK
-    assert res.json()["orders"] == []
-
 
 def test_change_order_by_id(marketer_client: TestClient, customer_orders, db: Session):
     business, order = customer_orders

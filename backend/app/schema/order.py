@@ -25,6 +25,7 @@ class OrderOut(BaseModel):
     pick_up_data: Optional[datetime]
     status: m.OrderStatus
     items: list[OrderItemOut]
+    is_deleted: bool
 
     class Config:
         orm_mode = True

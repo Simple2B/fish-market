@@ -21,7 +21,11 @@ import {
   removeOrder,
 } from "../../../../services";
 import { queryClient } from "../../../../queryClient";
-import { modalDataKeys, MODAL_TEXT_DATA } from "../../../../constants";
+import {
+  IS_REMOVED_BTN_NAME,
+  modalDataKeys,
+  MODAL_TEXT_DATA,
+} from "../../../../constants";
 import { CustomStepper } from "../CustomStepper";
 
 const buttonsNameByStatus = [
@@ -46,6 +50,7 @@ const Order = ({
   pick_up_data,
   items,
   status,
+  is_deleted,
 }: OrderData) => {
   const [showItems, setShowItems] = useState<boolean>(false);
 
@@ -73,9 +78,15 @@ const Order = ({
   });
 
   const isOrderInArchive =
-    status == OrderStatus.picked_up || status == OrderStatus.can_not_complete;
+    status == OrderStatus.picked_up ||
+    status == OrderStatus.can_not_complete ||
+    is_deleted;
 
   const orderDataTime = pick_up_data ? pick_up_data : created_at;
+
+  const statusBtnName = buttonsNameByStatus.find(
+    (obj) => obj.key === status
+  )?.btnName;
 
   const handelBtnStatus = () => {
     if (isOrderInArchive) {
@@ -123,6 +134,9 @@ const Order = ({
   };
 
   const handlerRemove = () => {
+    if (is_deleted) {
+      return;
+    }
     const openModalData: IOpenModalData = {
       modalTitle: textDataRemoved.title,
       modalConfirmLabel: textDataRemoved.btnName,
@@ -145,8 +159,12 @@ const Order = ({
     }
   );
 
-  const orderItemBtn = classNames(style.orderItemBtn, {
+  const styleBtnCantComplete = classNames(style.orderItemBtn, {
     [style.btnInActive]: isOrderInArchive,
+  });
+
+  const styleBtnRemove = classNames(style.orderItemBtn, {
+    [style.btnInActive]: is_deleted,
   });
 
   return (
@@ -191,7 +209,9 @@ const Order = ({
           </div>
         </div>
         <div className={style.orderContentStatus}>
-          {status != OrderStatus.can_not_complete && (
+          {status === OrderStatus.can_not_complete || is_deleted ? (
+            <></>
+          ) : (
             <CustomStepper
               activeStep={activeStep}
               steps={buttonsNameByStatus}
@@ -199,7 +219,7 @@ const Order = ({
           )}
           <div className={style.orderContentStatusWrap}>
             <div className={orderContentStatusBtn} onClick={handelBtnStatus}>
-              {buttonsNameByStatus.find((obj) => obj.key === status)?.btnName}
+              {is_deleted ? IS_REMOVED_BTN_NAME : statusBtnName}
             </div>
             <div
               className={style.orderContentStatusIconBtn}
@@ -222,10 +242,13 @@ const Order = ({
               <OrderItem key={indx} {...item} />
             ))}
             <div className={style.orderItemButtons}>
-              <button className={orderItemBtn} onClick={handlerCantComplete}>
+              <button
+                className={styleBtnCantComplete}
+                onClick={handlerCantComplete}
+              >
                 {textDataCanNotCompleted.btnName}
               </button>
-              <button className={style.orderItemBtn} onClick={handlerRemove}>
+              <button className={styleBtnRemove} onClick={handlerRemove}>
                 {textDataRemoved.btnName}
               </button>
             </div>
