@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { navMenuBtnNameKeys, NAV_MENU_BUTTONS } from "./constants";
 import { Home, Market } from "./pages";
-import { Orders, OutOfStock } from "./pages/Home";
+import { Orders, OutOfStock, SettingsView } from "./pages/Home";
 import {
   rebuildUrl,
   filterOptionsOrder,
@@ -23,7 +23,7 @@ export const contentManager = [
   },
   {
     nameBtn: NAV_MENU_BUTTONS[navMenuBtnNameKeys.SETTINGS].name,
-    outLet: <h1>settings</h1>,
+    outLet: <SettingsView />,
   },
 ];
 
