@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import classNames from "classnames";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { isValidPhoneNumber } from "react-phone-number-input";
 
 import style from "./PersonalInfo.module.css";
 import { useMutation } from "@tanstack/react-query";
 import { createCheckPhoneNumber } from "../../../../services";
 import { MarketActionTypes, ISetOrderData, IProduct } from "../../Market.type";
-import { createOrder } from "../../../../services/marketService";
+import {
+  createOrder,
+  phoneNumberAutoFormat,
+  replaceDash,
+} from "../../../../services/marketService";
 import { ErrorMessage } from "../../../../components";
+
+const inputPhoneNumber = "phone_number";
 
 type PersonalInfoProps = {
   onConfirm: () => void;
@@ -36,6 +41,7 @@ const PersonalInfo = ({
     handleSubmit,
     setError,
     getValues,
+    setValue,
     formState: { errors },
   } = useForm<PersonalInfoFormValues>();
 
@@ -86,7 +92,7 @@ const PersonalInfo = ({
       onConfirm();
     },
     onError: async () => {
-      setError("phone_number", {
+      setError(inputPhoneNumber, {
         type: "postNumber",
         message: "Please provide a valid phone number.",
       });
@@ -98,9 +104,7 @@ const PersonalInfo = ({
   const handleSubmitBtn: SubmitHandler<PersonalInfoFormValues> = (data) => {
     if (data) {
       const phoneNumber = {
-        phone_number: data.phone_number.startsWith("+")
-          ? data.phone_number.slice(1)
-          : data.phone_number,
+        phone_number: replaceDash(data.phone_number),
       };
       mutation.mutate(phoneNumber);
     }
@@ -114,17 +118,24 @@ const PersonalInfo = ({
       <div className={style.contentWrap}>
         <div className={style.contentWrapLabel}>Phone number</div>
         <input
-          {...register("phone_number", {
+          type="tel"
+          maxLength={14}
+          {...register(inputPhoneNumber, {
             required: true,
-            minLength: 12,
-            maxLength: 13,
+            maxLength: 14,
+            minLength: 10,
             validate: {
               isValidNumber: (v) => {
-                if (!v.startsWith("+")) {
-                  v = `+${v}`;
+                const number = replaceDash(v);
+                if (number.length === 10 || number.length == 12) {
+                  return true;
                 }
-                return isValidPhoneNumber(v);
+                return false;
               },
+            },
+            onChange: (e) => {
+              const targetValue = phoneNumberAutoFormat(e.target.value);
+              setValue(inputPhoneNumber, targetValue);
             },
           })}
           className={style.contentInput}
@@ -135,7 +146,7 @@ const PersonalInfo = ({
           <ErrorMessage
             text={
               errors.phone_number.type !== "postNumber"
-                ? "Phone number should consist from 12 characters. Please provide a valid phone number."
+                ? "Phone number should consist min from 10 characters. Please provide a valid phone number."
                 : errors.phone_number.message!
             }
           />
