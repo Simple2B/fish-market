@@ -26,7 +26,6 @@ ipython = "^8.3.0"
 sqladmin = "^0.6.1"
 anyio = "^3.6.1"
 setuptools = "^65.4.1"
-twilio = "^7.15.4"
 phonenumbers = "^8.13.1"
 
 [tool.poetry.group.dev.dependencies]

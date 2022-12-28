@@ -1,6 +1,5 @@
 from fastapi import Depends, APIRouter, status, HTTPException
 from sqlalchemy.orm import Session
-from twilio.base.exceptions import TwilioRestException
 
 from app.service import send_sms
 from app import schema as s
