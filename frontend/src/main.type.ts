@@ -60,3 +60,10 @@ export type TypeProductsOut = {
   image: string;
   is_out_of_stock?: boolean;
 };
+
+export interface IUserBusinessInfo {
+  user_id: number;
+  name: string | null;
+  logo: string | null;
+  web_site_id: string;
+}
