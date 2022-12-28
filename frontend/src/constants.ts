@@ -26,17 +26,20 @@ export const navMenuBtnNameKeys = {
 
 export const MODAL_TEXT_DATA = {
   [modalDataKeys.CAN_NOT_COMPLETED]: {
-    title: "Are you sure you can’t complete *order number*?",
+    // title: "Are you sure you can’t complete *order number*?",
+    title: "Are you sure?",
     btnName: "Can’t complete",
     toastMessage: "Order canceled",
   },
   [modalDataKeys.REMOVE_ORDER]: {
-    title: "Are you sure you want to remove *order number*?",
+    // title: "Are you sure you want to remove *order number*?",
+    title: "Do you confirm deletion?",
     btnName: "Remove order",
     toastMessage: "Confirm deletion",
   },
   [modalDataKeys.REPLENISH_ALL]: {
-    title: "Are you sure you want to replenish all items?",
+    // title: "Are you sure you want to replenish all items?",
+    title: "Do you confirm to replenish all items?",
     btnName: "Replenish All",
     toastMessage: "All items are successfully replenished!",
   },
