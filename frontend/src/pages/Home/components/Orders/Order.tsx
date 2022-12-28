@@ -82,17 +82,15 @@ const Order = ({
       return;
     }
 
-    if (showItems) {
-      const currentStatusIndex = buttonsNameByStatus.findIndex(
-        (obj) => obj.key === status
-      );
-      const reqData = {
-        order_id: id,
-        body: { new_status: buttonsNameByStatus[currentStatusIndex + 1].key },
-      };
+    const currentStatusIndex = buttonsNameByStatus.findIndex(
+      (obj) => obj.key === status
+    );
+    const reqData = {
+      order_id: id,
+      body: { new_status: buttonsNameByStatus[currentStatusIndex + 1].key },
+    };
 
-      changeStatusOrder.mutate(reqData);
-    }
+    changeStatusOrder.mutate(reqData);
   };
 
   const confirmCanNotCompleted = () => {
@@ -139,10 +137,13 @@ const Order = ({
     [style.orderContentButton]: !showItems,
   });
 
-  const orderContentStatusBtn = classNames(style.orderContentStatusBtn, {
-    [style.btnActive]: showItems,
-    [style.btnInActive]: isOrderInArchive,
-  });
+  const orderContentStatusBtn = classNames(
+    style.orderContentStatusBtn,
+    style.btnActive,
+    {
+      [style.btnInActive]: isOrderInArchive,
+    }
+  );
 
   const orderItemBtn = classNames(style.orderItemBtn, {
     [style.btnInActive]: isOrderInArchive,
