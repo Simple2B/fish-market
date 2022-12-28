@@ -28,12 +28,12 @@ export const MODAL_TEXT_DATA = {
   [modalDataKeys.CAN_NOT_COMPLETED]: {
     title: "Are you sure you can’t complete *order number*?",
     btnName: "Can’t complete",
-    toastMessage: "*order number* was successfully canceled",
+    toastMessage: "Order canceled",
   },
   [modalDataKeys.REMOVE_ORDER]: {
     title: "Are you sure you want to remove *order number*?",
     btnName: "Remove order",
-    toastMessage: "*order number* was successfully removed",
+    toastMessage: "Confirm deletion",
   },
   [modalDataKeys.REPLENISH_ALL]: {
     title: "Are you sure you want to replenish all items?",
