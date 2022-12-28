@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import { API_BASE_URL, filterBtnNameKeys, FILTER_BUTTONS } from "../constants";
 import { OrderData, OrderStatus } from "../main.type";
+import { setRequestHeaders } from "../utils";
 import { TOKEN_KEY } from "./queryKeys";
 
 export const loginUser = async (dataForm: {
@@ -33,10 +34,7 @@ export const changeOrder = async (data: {
 }) => {
   const res = await fetch(`${API_BASE_URL}/order/${data.order_id}`, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
-    },
+    headers: setRequestHeaders(TOKEN_KEY),
     body: JSON.stringify(data.body),
   });
 };
@@ -44,10 +42,7 @@ export const changeOrder = async (data: {
 export const removeOrder = async (data: { order_id: number }) => {
   const res = await fetch(`${API_BASE_URL}/order/${data.order_id}`, {
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
-    },
+    headers: setRequestHeaders(TOKEN_KEY),
   });
 };
 
@@ -57,10 +52,7 @@ export const isOutOfStock = async (data: {
 }) => {
   const res = await fetch(`${API_BASE_URL}/product/${data.product_id}`, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
-    },
+    headers: setRequestHeaders(TOKEN_KEY),
     body: JSON.stringify(data.body),
   });
 };
@@ -68,10 +60,7 @@ export const isOutOfStock = async (data: {
 export const resetOutOfStock = async () => {
   const res = await fetch(`${API_BASE_URL}/product/`, {
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
-    },
+    headers: setRequestHeaders(TOKEN_KEY),
   });
 };
 
