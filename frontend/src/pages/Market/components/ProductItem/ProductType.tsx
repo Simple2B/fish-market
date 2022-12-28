@@ -35,7 +35,7 @@ export function ProductType({
     const numVAlue = Number(value);
 
     if (isNaN(numVAlue)) {
-      console.log("not a number");
+      console.error("not a number");
       return;
     }
     if (numVAlue <= 0) {

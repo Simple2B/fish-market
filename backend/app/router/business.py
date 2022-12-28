@@ -62,7 +62,7 @@ def get_business_product_out(business_uid: str, db: Session = Depends(get_db)):
     products = [
         product
         for product in business.products
-        if not product.is_deleted and not product.is_out_of_stoke
+        if not product.is_deleted and not product.is_out_of_stock
     ]
 
     show_products = []
@@ -118,11 +118,16 @@ def create_order_for_business(
         )
 
     log(log.INFO, "create order")
+    order_status = (
+        m.OrderStatus.pending if not data.pick_up_data else m.OrderStatus.created
+    )
     order = m.Order(
         phone_number_id=db_phone_number.id,
         business_id=business.id,
         customer_name=data.customer_name,
         note=data.note,
+        pick_up_data=data.pick_up_data,
+        status=order_status,
     )
     db.add(order)
     db.commit()

@@ -44,7 +44,7 @@ def test_get_business_product_out(
     assert len(first_product.preps) == len(first_product_res.preps)
     assert len(user_business.products) == len(res_data.products)
 
-    user_business.products[0].is_out_of_stoke = True
+    user_business.products[0].is_out_of_stock = True
     user_business.products[1].price = 100
     for prep in user_business.products[2].preps:
         prep.is_deleted = True
@@ -100,7 +100,7 @@ def test_create_product_order(client: TestClient, db: Session, customer_orders):
     assert res.status_code == status.HTTP_201_CREATED
     res_data = s.CreateOrderOut.parse_obj(res.json())
     assert res_data.phone_number == phone_number.number
-    assert res_data.order_status == m.OrderStatus.created.value
+    assert res_data.order_status == m.OrderStatus.pending.value
 
     # test order was created in db
     orders = db.query(m.Order).all()
@@ -109,7 +109,7 @@ def test_create_product_order(client: TestClient, db: Session, customer_orders):
     # test the customer has order
     assert len(phone_number.orders) == 2
     second_order = phone_number.orders[1]
-    assert second_order.status == m.OrderStatus.created
+    assert second_order.status == m.OrderStatus.pending
     assert len(second_order.items) == 2
 
     # test the order has correct customer
