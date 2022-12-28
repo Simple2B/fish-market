@@ -35,7 +35,7 @@ export const MODAL_TEXT_DATA = {
     // title: "Are you sure you want to remove *order number*?",
     title: "Do you confirm deletion?",
     btnName: "Remove order",
-    toastMessage: "Confirm deletion",
+    toastMessage: "Order was removed",
   },
   [modalDataKeys.REPLENISH_ALL]: {
     // title: "Are you sure you want to replenish all items?",
