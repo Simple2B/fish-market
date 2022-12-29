@@ -6,7 +6,7 @@ import {
   API_BASE_URL,
   modalDataKeys,
   MODAL_TEXT_DATA,
-  settingsViewBtnNameKeys,
+  settingsViewKey,
   SETTINGS_VIEW_TEXT_DATA,
   TOKEN_KEY,
 } from "../../../../../../constants";
@@ -26,7 +26,7 @@ const RightPanel = ({
   const { openModal } = useOutletContext<ManagerOutletContext>();
   let navigate = useNavigate();
 
-  const shopLink = `${API_BASE_URL}/market/${web_site_id}`;
+  const shopLink = `${window.location.origin}/market/${web_site_id}`;
 
   const handlerIcon = () => {
     navigator.clipboard.writeText(shopLink);
@@ -51,22 +51,31 @@ const RightPanel = ({
     navigate("/settings/change-password");
   };
 
+  const handlerOnLink = () => {
+    window.open(shopLink);
+  };
+
   return (
     <div className={style.rightPanelContent}>
+      <div className={style.titleLink}>
+        {textData[settingsViewKey.TITLE_LINK]}
+      </div>
       <div className={style.shopLinkContent}>
-        <div className={style.shopLinkContentText}>{shopLink}</div>
+        <div className={style.shopLinkContentText} onClick={handlerOnLink}>
+          {shopLink}
+        </div>
         <div className={style.copyIcon} onClick={handlerIcon} title="Copy">
           <FiCopy className={style.copyIconContent} />
         </div>
       </div>
       <div className={style.buttonsContent}>
         <CustomBtn
-          btnName={textData[settingsViewBtnNameKeys.CHANGE_PASSWORD].btnName}
+          btnName={textData[settingsViewKey.CHANGE_PASSWORD]}
           handlerOnClick={handlerBtnChangePassword}
           additionalStyles={style.btnStyle}
         />
         <CustomBtn
-          btnName={textData[settingsViewBtnNameKeys.LOG_OUT].btnName}
+          btnName={textData[settingsViewKey.LOG_OUT]}
           handlerOnClick={handlerBtnLogOut}
           additionalStyles={style.btnStyle}
         />
