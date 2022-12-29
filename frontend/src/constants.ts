@@ -26,7 +26,7 @@ export const navMenuBtnNameKeys = {
   SETTINGS: "settingsKey",
 };
 
-export const settingsViewBtnNameKeys = {
+export const settingsViewKey = {
   CHANGE_PASSWORD: "changePasswordKey",
   LOG_OUT: "logOutKey",
   ADD_NEW_ITEM: "",
@@ -35,12 +35,16 @@ export const settingsViewBtnNameKeys = {
   CANCEL: "",
   DELETE_ITEM: "",
   CONFIRM: "Confirm",
+  TITLE_LINK: "titleLinkKey",
+  NOTIFY_MES: "notifyMessageKey",
 };
 
 export const SETTINGS_VIEW_TEXT_DATA = {
-  [settingsViewBtnNameKeys.CHANGE_PASSWORD]: { btnName: "Change password" },
-  [settingsViewBtnNameKeys.LOG_OUT]: { btnName: "Log Out" },
-  [settingsViewBtnNameKeys.CONFIRM]: { btnName: "Confirm" },
+  [settingsViewKey.CHANGE_PASSWORD]: "Change password",
+  [settingsViewKey.LOG_OUT]: "Log Out",
+  [settingsViewKey.CONFIRM]: "Confirm",
+  [settingsViewKey.TITLE_LINK]: "Link on your market",
+  [settingsViewKey.NOTIFY_MES]: "The password was successfully changed!",
 };
 
 export const changePasswordKeys = {
@@ -78,7 +82,7 @@ export const MODAL_TEXT_DATA = {
   },
   [modalDataKeys.LOG_OUT_MODAL]: {
     title: "Are you sure you want to log out?",
-    btnName: SETTINGS_VIEW_TEXT_DATA[settingsViewBtnNameKeys.LOG_OUT].btnName,
+    btnName: SETTINGS_VIEW_TEXT_DATA[settingsViewKey.LOG_OUT],
     toastMessage: "",
   },
 };

@@ -33,8 +33,10 @@ export const rootRouter = createBrowserRouter([
     path: "/",
     element: <Home />,
     children: contentManager.map((obj) => {
+      const path_url = rebuildUrl(obj.nameBtn);
+
       return {
-        path: rebuildUrl(obj.nameBtn),
+        path: path_url,
         element: obj.outLet,
       };
     }),
