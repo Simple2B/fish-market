@@ -2,12 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { Spinner } from "../../../../components";
-import { ACTIVE_BTN_FILTER_INDEX, API_BASE_URL } from "../../../../constants";
+import {
+  ACTIVE_BTN_FILTER_INDEX,
+  API_BASE_URL,
+  TOKEN_KEY,
+} from "../../../../constants";
 import {
   FilteringFunctions,
   GET_ORDERS,
   sortByData,
-  TOKEN_KEY,
   FilterBtnItem,
 } from "../../../../services";
 import { Order } from "./Order";

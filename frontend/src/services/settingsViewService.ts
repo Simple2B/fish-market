@@ -1,7 +1,6 @@
-import { API_BASE_URL } from "../constants";
+import { API_BASE_URL, TOKEN_KEY } from "../constants";
 import { IUserBusinessInfo } from "../main.type";
 import { setRequestHeaders } from "../utils";
-import { TOKEN_KEY } from "./queryKeys";
 
 export const getUserBusinessInfo = async (): Promise<IUserBusinessInfo> => {
   const res = await fetch(`${API_BASE_URL}/business/`, {

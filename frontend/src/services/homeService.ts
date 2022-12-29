@@ -1,8 +1,12 @@
 import { toast } from "react-toastify";
-import { API_BASE_URL, filterBtnNameKeys, FILTER_BUTTONS } from "../constants";
+import {
+  API_BASE_URL,
+  filterBtnNameKeys,
+  FILTER_BUTTONS,
+  TOKEN_KEY,
+} from "../constants";
 import { OrderData, OrderStatus } from "../main.type";
 import { setRequestHeaders } from "../utils";
-import { TOKEN_KEY } from "./queryKeys";
 
 export const loginUser = async (dataForm: {
   email: string;
