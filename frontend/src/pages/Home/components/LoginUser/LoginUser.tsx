@@ -6,7 +6,7 @@ import style from "./LoginUser.module.css";
 import { loginUser } from "../../../../services/homeService";
 import { queryClient } from "../../../../queryClient";
 import { ErrorMessage } from "../../../../components";
-import { CHECK_TOKEN } from "../../../../services";
+import { CHECK_TOKEN_LOGIN } from "../../../../services";
 import { TOKEN_KEY } from "../../../../constants";
 
 type Inputs = {
@@ -20,7 +20,7 @@ const LoginUser = () => {
     onSuccess: async (data: { access_token: string; token_type: string }) => {
       localStorage.setItem(TOKEN_KEY, data.access_token);
 
-      queryClient.invalidateQueries([CHECK_TOKEN]);
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
     },
     onError: async () => {
       setError("password", {
