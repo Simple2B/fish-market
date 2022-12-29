@@ -55,6 +55,10 @@
     justify-content: space-evenly;
 }
 
+.btnStyle:hover {
+    background: #C1E1FF;
+}
+
 
 
 @media (max-width:1024px) {

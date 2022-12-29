@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { navMenuBtnNameKeys, NAV_MENU_BUTTONS } from "./constants";
-import { Home, Market } from "./pages";
+import { ChangePassword, Home, Market } from "./pages";
 import { Orders, OutOfStock, SettingsView } from "./pages/Home";
 import {
   rebuildUrl,
@@ -42,5 +42,11 @@ export const rootRouter = createBrowserRouter([
   {
     path: "market/:marketId",
     element: <Market />,
+  },
+  {
+    path:
+      rebuildUrl(NAV_MENU_BUTTONS[navMenuBtnNameKeys.SETTINGS].name) +
+      "/change-password",
+    element: <ChangePassword />,
   },
 ]);
