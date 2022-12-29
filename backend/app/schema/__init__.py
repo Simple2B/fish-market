@@ -39,3 +39,5 @@ from .order import (
     ChangeOrderStatus,
     ChangeOrderStatusOut,
 )
+
+from .change_password import ChangePassword

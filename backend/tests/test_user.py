@@ -211,3 +211,39 @@ def test_user_market_update_by_admin(admin_client: TestClient, db: Session):
     data_to_update = {}
     res = admin_client.patch(f"/user/{user.id}", json=data_to_update)
     assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
+def test_change_password(marketer_client: TestClient, db: Session):
+    user = db.query(m.User).filter_by(role=m.UserRole.Marketeer).first()
+    old_password = "1234"
+    new_password = "new1234"
+    new_password_data = s.ChangePassword(
+        password=old_password, new_password=new_password
+    )
+
+    # test change password
+    res = marketer_client.patch("/change-password", json=new_password_data.dict())
+    assert res.status_code == status.HTTP_200_OK
+    assert "ok" in res.json()
+
+    # login old password
+    res = marketer_client.post(
+        "/login", data=dict(username=user.username, password=old_password)
+    )
+    assert res.status_code == status.HTTP_403_FORBIDDEN
+
+    # login new password
+    res = marketer_client.post(
+        "/login", data=dict(username=user.username, password=new_password)
+    )
+    assert res.status_code == status.HTTP_200_OK
+
+    # test if old password is not correct
+    res = marketer_client.patch("/change-password", json=new_password_data.dict())
+    assert res.status_code == status.HTTP_403_FORBIDDEN
+
+    # test user is not authorization
+    new_password_data.password = new_password
+    del marketer_client.headers["Authorization"]
+    res = marketer_client.patch("/change-password", json=new_password_data.dict())
+    assert res.status_code == status.HTTP_401_UNAUTHORIZED
