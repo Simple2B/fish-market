@@ -10,6 +10,7 @@ from app import schema as s
 from app.model import User
 from app.service.oauth2 import create_access_token
 from app.service import get_current_user
+from app.logger import log
 
 router = APIRouter(tags=["Authentication"])
 
@@ -48,6 +49,8 @@ def change_password(
     db: Session = Depends(get_db),
     current_user: m.User = Depends(get_current_user),
 ):
+
+    log(log.INFO, "change_password user_id:[%s]", current_user.id)
     password = data.password
     new_password = data.new_password
 
@@ -58,6 +61,7 @@ def change_password(
     )
 
     if not user:
+        log(log.ERROR, "change_password user_id:[%s] not found", current_user.id)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Invalid credentials"
         )
