@@ -110,6 +110,19 @@ const PersonalInfo = ({
     }
   };
 
+  const isValidNumber = (v: string): boolean => {
+    const number = replaceDash(v);
+    if (number.length === 10 || number.length == 12) {
+      return true;
+    }
+    return false;
+  };
+
+  const handlerOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const targetValue = phoneNumberAutoFormat(e.target.value);
+    setValue(inputPhoneNumber, targetValue);
+  };
+
   return (
     <form
       onSubmit={handleSubmit(handleSubmitBtn)}
@@ -124,19 +137,8 @@ const PersonalInfo = ({
             required: true,
             maxLength: 14,
             minLength: 10,
-            validate: {
-              isValidNumber: (v) => {
-                const number = replaceDash(v);
-                if (number.length === 10 || number.length == 12) {
-                  return true;
-                }
-                return false;
-              },
-            },
-            onChange: (e) => {
-              const targetValue = phoneNumberAutoFormat(e.target.value);
-              setValue(inputPhoneNumber, targetValue);
-            },
+            validate: isValidNumber,
+            onChange: handlerOnchange,
           })}
           className={style.contentInput}
           placeholder="+972 55 85 55 642"
