@@ -1,13 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Spinner } from "../../../../components";
-import { API_BASE_URL } from "../../../../constants";
-import { IUserBusinessInfo } from "../../../../main.type";
-import {
-  getUserBusinessInfo,
-  GET_USER_BUSINESS,
-  TOKEN_KEY,
-} from "../../../../services";
-import { setRequestHeaders } from "../../../../utils";
+import { getUserBusinessInfo, GET_USER_BUSINESS } from "../../../../services";
 import { LeftPanel, RightPanel } from "./components";
 import style from "./SettingsView.module.css";
 
