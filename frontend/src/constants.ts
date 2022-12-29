@@ -34,12 +34,30 @@ export const settingsViewBtnNameKeys = {
   ADD: "",
   CANCEL: "",
   DELETE_ITEM: "",
-  CONFIRM: "",
+  CONFIRM: "Confirm",
 };
 
 export const SETTINGS_VIEW_TEXT_DATA = {
   [settingsViewBtnNameKeys.CHANGE_PASSWORD]: { btnName: "Change password" },
   [settingsViewBtnNameKeys.LOG_OUT]: { btnName: "Log Out" },
+  [settingsViewBtnNameKeys.CONFIRM]: { btnName: "Confirm" },
+};
+
+export const changePasswordKeys = {
+  OLD_PASSWORD: "oldPasswordKey",
+  NEW_PASSWORD: "newPasswordKey",
+  REPEAT_NEW_PASSWORD: "repeatPasswordKey",
+  PLACEHOLDER: "placeholderKey",
+  NOT_REPEAT_ERR: "notRepeatErrKey",
+};
+
+export const CHANGE_PASSWORD_INPUT_DATA = {
+  [changePasswordKeys.OLD_PASSWORD]: "Old password",
+  [changePasswordKeys.NEW_PASSWORD]: "New Password",
+  [changePasswordKeys.REPEAT_NEW_PASSWORD]: "Please repeat New Password",
+  [changePasswordKeys.PLACEHOLDER]: "Type here",
+  [changePasswordKeys.NOT_REPEAT_ERR]:
+    "Your new password does not match your repeat password",
 };
 
 export const MODAL_TEXT_DATA = {
