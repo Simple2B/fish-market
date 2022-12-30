@@ -81,8 +81,9 @@ export const rebuildUrl = (url: string) => {
 
 export const isFilterInProgress = (order: OrderData): boolean => {
   return (
-    order.status === OrderStatus.in_progress ||
-    (order.status === OrderStatus.ready && !order.is_deleted)
+    (order.status === OrderStatus.in_progress ||
+      order.status === OrderStatus.ready) &&
+    !order.is_deleted
   );
 };
 
