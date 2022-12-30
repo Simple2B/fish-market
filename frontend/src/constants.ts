@@ -27,7 +27,7 @@ export const navMenuBtnNameKeys = {
   SETTINGS: "settingsKey",
 };
 
-export const settingsViewBtnNameKeys = {
+export const settingsViewKey = {
   CHANGE_PASSWORD: "changePasswordKey",
   LOG_OUT: "logOutKey",
   ADD_NEW_ITEM: "",
@@ -35,12 +35,34 @@ export const settingsViewBtnNameKeys = {
   ADD: "",
   CANCEL: "",
   DELETE_ITEM: "",
-  CONFIRM: "",
+  CONFIRM: "Confirm",
+  TITLE_LINK: "titleLinkKey",
+  NOTIFY_MES: "notifyMessageKey",
 };
 
 export const SETTINGS_VIEW_TEXT_DATA = {
-  [settingsViewBtnNameKeys.CHANGE_PASSWORD]: { btnName: "Change password" },
-  [settingsViewBtnNameKeys.LOG_OUT]: { btnName: "Log Out" },
+  [settingsViewKey.CHANGE_PASSWORD]: "Change password",
+  [settingsViewKey.LOG_OUT]: "Log Out",
+  [settingsViewKey.CONFIRM]: "Confirm",
+  [settingsViewKey.TITLE_LINK]: "Link on your market",
+  [settingsViewKey.NOTIFY_MES]: "The password was successfully changed!",
+};
+
+export const changePasswordKeys = {
+  OLD_PASSWORD: "oldPasswordKey",
+  NEW_PASSWORD: "newPasswordKey",
+  REPEAT_NEW_PASSWORD: "repeatPasswordKey",
+  PLACEHOLDER: "placeholderKey",
+  NOT_REPEAT_ERR: "notRepeatErrKey",
+};
+
+export const CHANGE_PASSWORD_INPUT_DATA = {
+  [changePasswordKeys.OLD_PASSWORD]: "Old password",
+  [changePasswordKeys.NEW_PASSWORD]: "New Password",
+  [changePasswordKeys.REPEAT_NEW_PASSWORD]: "Please repeat New Password",
+  [changePasswordKeys.PLACEHOLDER]: "Type here",
+  [changePasswordKeys.NOT_REPEAT_ERR]:
+    "Your new password does not match your repeat password",
 };
 
 export const MODAL_TEXT_DATA = {
@@ -61,7 +83,7 @@ export const MODAL_TEXT_DATA = {
   },
   [modalDataKeys.LOG_OUT_MODAL]: {
     title: "Are you sure you want to log out?",
-    btnName: SETTINGS_VIEW_TEXT_DATA[settingsViewBtnNameKeys.LOG_OUT].btnName,
+    btnName: SETTINGS_VIEW_TEXT_DATA[settingsViewKey.LOG_OUT],
     toastMessage: "",
   },
 };

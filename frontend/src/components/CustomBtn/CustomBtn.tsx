@@ -4,7 +4,7 @@ import style from "./CustomBtn.module.css";
 type CustomBtnProps = {
   btnName: string;
   additionalStyles?: string;
-  handlerOnClick: () => void;
+  handlerOnClick?: () => void;
 };
 
 const CustomBtn = ({

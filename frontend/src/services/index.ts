@@ -1,5 +1,5 @@
 export {
-  CHECK_TOKEN,
+  CHECK_TOKEN_LOGIN,
   GET_ORDERS,
   GET_USER_PRODUCTS,
   GET_USER_BUSINESS,
@@ -22,7 +22,11 @@ export {
   filterOptionsArchive,
   isOutOfStock,
   resetOutOfStock,
+  isTokenValid,
 } from "./homeService";
 export type { FilteringFunctions, FilterBtnItem } from "./homeService";
 
-export { getUserBusinessInfo } from "./settingsViewService";
+export {
+  getUserBusinessInfo,
+  changePasswordRequest,
+} from "./settingsViewService";

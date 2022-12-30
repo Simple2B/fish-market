@@ -32,6 +32,25 @@ export const loginUser = async (dataForm: {
   return await res.json();
 };
 
+export const isTokenValid = async () => {
+  const res = await fetch(`${API_BASE_URL}/me-info`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+    },
+  });
+
+  if (!res.ok) {
+    localStorage.removeItem(TOKEN_KEY);
+    console.error("Bad login");
+    return false;
+  }
+
+  const data = await res.json();
+
+  return data.is_valid;
+};
+
 export const changeOrder = async (data: {
   order_id: number;
   body: { new_status: string };
