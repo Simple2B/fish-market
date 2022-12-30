@@ -20,7 +20,7 @@ def get_orders(
     log(log.INFO, "get_orders, business_id: [%d]", business.id)
 
     return s.OrdersOut(
-        orders=db.query(m.Order).filter_by(business=business, is_deleted=False).all()
+        orders=db.query(m.Order).filter_by(business_id=business.id).all()
     )
 
 

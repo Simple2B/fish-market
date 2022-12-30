@@ -63,7 +63,7 @@ def change_password(
     if not user:
         log(log.ERROR, "change_password user_id:[%s] not found", current_user.id)
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail="Invalid credentials"
+            status_code=status.HTTP_403_FORBIDDEN, detail="Incorrect current password"
         )
 
     user.password = new_password

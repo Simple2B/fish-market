@@ -23,6 +23,7 @@ export type OrderData = {
   note: string | null;
   pick_up_data: string | null;
   items: IOrder[];
+  is_deleted: boolean;
 };
 
 export type CustomModalProps = {
