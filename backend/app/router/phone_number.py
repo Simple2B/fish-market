@@ -1,6 +1,5 @@
 from fastapi import Depends, APIRouter, status, HTTPException
 from sqlalchemy.orm import Session
-from twilio.base.exceptions import TwilioRestException
 
 from app.service import send_sms
 from app import schema as s
@@ -21,23 +20,29 @@ def create_check_phone_number(data: s.CreatePhoneNumber, db: Session = Depends(g
 
     log(log.INFO, "create_check_phone_number")
 
-    is_number_valid(data.phone_number)
+    number = data.phone_number
 
-    phone_number = db.query(m.PhoneNumber).filter_by(number=data.phone_number).first()
+    is_number_valid(number)
+
+    phone_number = (
+        db.query(m.PhoneNumber)
+        .filter(
+            m.PhoneNumber.number.ilike(
+                f"%{number if len(number) != 10 else number[1:]}%"
+            )
+        )
+        .first()
+    )
 
     if not phone_number:
-        phone_number = m.PhoneNumber(number=data.phone_number)
+        phone_number = m.PhoneNumber(number=number)
         db.add(phone_number)
         db.commit()
     if not phone_number.is_number_verified:
         phone_number.confirm_code = m.gen_confirm_code()
         db.commit()
-        try:
-            send_sms(
-                confirm_code=phone_number.confirm_code,
-                phone_number=phone_number.number,
-            )
-        except TwilioRestException:
+        is_sent = send_sms(phone_number.confirm_code, phone_number.number)
+        if not is_sent:
             log(
                 log.ERROR,
                 "Exception when send sms,  number: [%s]",

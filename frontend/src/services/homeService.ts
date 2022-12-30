@@ -93,25 +93,26 @@ export const rebuildUrl = (url: string) => {
 
 export const isFilterInProgress = (order: OrderData): boolean => {
   return (
-    order.status === OrderStatus.in_progress ||
-    order.status === OrderStatus.ready
+    (order.status === OrderStatus.in_progress ||
+      order.status === OrderStatus.ready) &&
+    !order.is_deleted
   );
 };
 
 export const isFilterCreated = (order: OrderData): boolean => {
-  return order.status === OrderStatus.created;
+  return order.status === OrderStatus.created && !order.is_deleted;
 };
 
 export const isFilterPending = (order: OrderData): boolean => {
-  return order.status === OrderStatus.pending;
+  return order.status === OrderStatus.pending && !order.is_deleted;
 };
 
 export const isFilterCompleted = (order: OrderData): boolean => {
-  return order.status === OrderStatus.picked_up;
+  return order.status === OrderStatus.picked_up && !order.is_deleted;
 };
 
 export const isFilterCancelled = (order: OrderData): boolean => {
-  return order.status === OrderStatus.can_not_complete;
+  return order.status === OrderStatus.can_not_complete || order.is_deleted;
 };
 
 export const sortByData = (orderA: OrderData, orderB: OrderData): number => {

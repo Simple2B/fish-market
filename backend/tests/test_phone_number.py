@@ -11,7 +11,7 @@ NOTE = "Do it quickly"
 
 
 def test_create_check_phone_number(client: TestClient, db: Session, mocker):
-    mocker.patch("app.router.phone_number.send_sms")
+    mocker.patch("app.router.phone_number.send_sms", return_value=True)
     req_data = s.CreatePhoneNumber(phone_number=PHONE_NUMBER)
     # test create phone number
     res = client.post("/phone-number/", json=req_data.dict())
@@ -38,6 +38,13 @@ def test_create_check_phone_number(client: TestClient, db: Session, mocker):
     phone_number.is_number_verified = True
     db.commit()
 
+    res = client.post("/phone-number/", json=req_data.dict())
+    assert res.status_code == status.HTTP_201_CREATED
+    res_data = s.CreatePhoneNumberOut.parse_obj(res.json())
+    assert res_data.is_number_verified
+
+    # test is number has 10 digit
+    req_data.phone_number = "0" + PHONE_NUMBER[3:]
     res = client.post("/phone-number/", json=req_data.dict())
     assert res.status_code == status.HTTP_201_CREATED
     res_data = s.CreatePhoneNumberOut.parse_obj(res.json())

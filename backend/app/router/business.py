@@ -16,7 +16,7 @@ router = APIRouter(prefix="/business", tags=["business"])
 def get_business_cur_user(
     business: m.User = Depends(get_business_from_cur_user),
 ):
-    log(log.INFO, "get_business_cur_user business_id:[%s]", business.id)
+    log(log.INFO, "get_business_cur_user business_id:[%d]", business.id)
 
     return business
 
@@ -222,7 +222,7 @@ def get_order(business_uid: str, order_uid: str, db: Session = Depends(get_db)):
     status_code=status.HTTP_200_OK,
 )
 def get_business_out_by_uid(business_uid: str, db: Session = Depends(get_db)):
-    log(log.INFO, "get_business_out_by_uid")
+    log(log.INFO, "get_business_out_by_uid [%s]", business_uid)
 
     business: m.Business = (
         db.query(m.Business).filter_by(web_site_id=business_uid).first()
