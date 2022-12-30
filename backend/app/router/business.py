@@ -25,14 +25,9 @@ def get_business_cur_user(
 def update_business_cur_user(
     data: s.BusinessUpdate,
     db: Session = Depends(get_db),
-    current_user: m.User = Depends(get_current_user),
+    business: m.User = Depends(get_business_from_cur_user),
 ):
-    log(log.INFO, "update_business_cur_user")
-    business: m.Business = (
-        db.query(m.Business).filter_by(user_id=current_user.id).first()
-    )
-
-    check_access_to_business(business=business, data_mes=current_user)
+    log(log.INFO, "update_business_cur_user, business_id: [%d]", business.id)
 
     data: dict = data.dict()
     for key, value in data.items():
@@ -42,7 +37,9 @@ def update_business_cur_user(
     db.commit()
     db.refresh(business)
 
-    return s.BusinessUpdateOut(name=business.name, logo=business.logo)
+    return s.BusinessUpdateOut(
+        name=business.name, logo=business.logo, email=business.user_email
+    )
 
 
 @router.get("/{business_uid}/product", status_code=status.HTTP_200_OK)
