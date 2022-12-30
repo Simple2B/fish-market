@@ -52,7 +52,7 @@ const RightPanel = ({
   };
 
   const handlerOnLink = () => {
-    window.open(shopLink);
+    window.location.href = shopLink;
   };
 
   return (
