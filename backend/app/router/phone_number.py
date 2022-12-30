@@ -20,12 +20,18 @@ def create_check_phone_number(data: s.CreatePhoneNumber, db: Session = Depends(g
 
     log(log.INFO, "create_check_phone_number")
 
-    is_number_valid(data.phone_number)
+    number = data.phone_number
 
-    phone_number = db.query(m.PhoneNumber).filter_by(number=data.phone_number).first()
+    is_number_valid(number)
+
+    phone_number = (
+        db.query(m.PhoneNumber)
+        .filter(m.PhoneNumber.number.ilike(f"%{number}%"))
+        .first()
+    )
 
     if not phone_number:
-        phone_number = m.PhoneNumber(number=data.phone_number)
+        phone_number = m.PhoneNumber(number=number)
         db.add(phone_number)
         db.commit()
     if not phone_number.is_number_verified:

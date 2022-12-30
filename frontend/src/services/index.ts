@@ -5,7 +5,12 @@ export {
   GET_USER_PRODUCTS,
 } from "./queryKeys";
 
-export { createCheckPhoneNumber, validatePhoneNumber } from "./marketService";
+export {
+  createCheckPhoneNumber,
+  validatePhoneNumber,
+  replaceDash,
+  phoneNumberAutoFormat,
+} from "./marketService";
 
 export {
   rebuildUrl,

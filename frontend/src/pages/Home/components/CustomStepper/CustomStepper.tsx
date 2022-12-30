@@ -4,7 +4,6 @@ import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
 import { styled } from "@mui/material/styles";
-
 const CustomConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.active}`]: {
     [`& .${stepConnectorClasses.line}`]: {
@@ -36,8 +35,21 @@ const CustomStepper = ({ activeStep, steps }: CustomStepperProps) => {
       connector={<CustomConnector />}
     >
       {steps.slice(1, -1).map((obj) => (
-        <Step key={obj.key}>
-          <StepLabel icon="">
+        <Step
+          key={obj.key}
+          sx={{
+            "& .MuiStepLabel-labelContainer": {
+              color: "black",
+            },
+            "& .MuiStepLabel-root .Mui-active": {
+              color: "rgba(0, 0, 0, 0.38)",
+            },
+            "& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel": {
+              color: "black",
+            },
+          }}
+        >
+          <StepLabel>
             {obj.key[0].toLocaleUpperCase() +
               obj.key.replace("_", " ").slice(1)}
           </StepLabel>
