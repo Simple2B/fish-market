@@ -53,7 +53,6 @@ export function Market() {
     } else {
       setStep((value) => value + 1);
     }
-    console.log(buttonTitle[step]);
   };
 
   const handlerStepConfirm = () => {

@@ -54,19 +54,15 @@ const ChangePassword = () => {
         type: "bad password",
         message: "Please provide a valid password.",
       });
-      console.log(err);
 
       mutationChangePassword.reset();
     },
   });
 
   const handlerSubmitBtn: SubmitHandler<Inputs> = (data) => {
-    console.log("here1");
-
     if (!data) {
       return;
     }
-    console.log("here2");
 
     const reqData = {
       password: data.password,
