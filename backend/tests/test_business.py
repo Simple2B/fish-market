@@ -16,9 +16,9 @@ def test_get_user_marketeer_business(marketer_client: TestClient, db: Session):
     user: m.User = db.query(m.User).filter_by(role=m.UserRole.Marketeer).first()
     user_business: m.Business = user.businesses[0]
 
-    res = marketer_client.get(f"/business/{user_business.web_site_id}")
+    res = marketer_client.get(f"/business/")
     assert res.status_code == status.HTTP_200_OK
-    res_data = s.BusinessOut.parse_obj(res.json())
+    res_data = s.UserBusinessOut.parse_obj(res.json())
     assert user_business.logo == res_data.logo
     assert user_business.name == res_data.name
     assert user_business.user_id == user.id
@@ -33,7 +33,7 @@ def test_get_user_admin_business(admin_client: TestClient, db: Session):
     admin: m.User = db.query(m.User).filter_by(role=m.UserRole.Admin).first()
 
     res = admin_client.get("/business/")
-    assert res.status_code == status.HTTP_404_NOT_FOUND
+    assert res.status_code == status.HTTP_403_FORBIDDEN
     assert admin.businesses == []
 
     # test admin can not change business

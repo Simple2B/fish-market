@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Spinner } from "../../components";
-import { API_BASE_URL } from "../../constants";
-import { CHECK_TOKEN, TOKEN_KEY } from "../../services";
+import { API_BASE_URL, TOKEN_KEY } from "../../constants";
+import { CHECK_TOKEN } from "../../services";
 import { LoginUser } from "./components/LoginUser";
 import { Manager } from "./components/Manager";
 

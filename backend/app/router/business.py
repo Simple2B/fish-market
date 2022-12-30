@@ -1,7 +1,7 @@
 from fastapi import Depends, APIRouter, status, HTTPException
 from sqlalchemy.orm import Session
 
-from app.service import get_current_user
+from app.service import get_current_user, get_business_from_cur_user
 from app import schema as s
 from app import model as m
 from app.database import get_db
@@ -12,16 +12,11 @@ from .utils import check_access_to_business, check_access_to_order
 router = APIRouter(prefix="/business", tags=["business"])
 
 
-@router.get("/", response_model=s.BusinessOut)
+@router.get("/", response_model=s.UserBusinessOut, status_code=status.HTTP_200_OK)
 def get_business_cur_user(
-    db: Session = Depends(get_db), current_user: m.User = Depends(get_current_user)
+    business: m.User = Depends(get_business_from_cur_user),
 ):
-    log(log.INFO, "get_business_cur_user [%s]", current_user)
-    business: m.Business = (
-        db.query(m.Business).filter_by(user_id=current_user.id).first()
-    )
-
-    check_access_to_business(business=business, data_mes=current_user)
+    log(log.INFO, "get_business_cur_user business_id:[%d]", business.id)
 
     return business
 
@@ -222,10 +217,12 @@ def get_order(business_uid: str, order_uid: str, db: Session = Depends(get_db)):
 
 
 @router.get(
-    "/{business_uid}", response_model=s.BusinessOut, status_code=status.HTTP_200_OK
+    "/{business_uid}",
+    response_model=s.BusinessOut,
+    status_code=status.HTTP_200_OK,
 )
 def get_business_out_by_uid(business_uid: str, db: Session = Depends(get_db)):
-    log(log.INFO, "get_business_out_by_uid")
+    log(log.INFO, "get_business_out_by_uid [%s]", business_uid)
 
     business: m.Business = (
         db.query(m.Business).filter_by(web_site_id=business_uid).first()

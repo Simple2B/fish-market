@@ -3,10 +3,10 @@ from typing import Optional
 from pydantic import BaseModel, root_validator
 
 
-class BusinessOut(BaseModel):
+class UserBusinessOut(BaseModel):
     user_id: int
     name: Optional[str]
-    log: Optional[str]
+    logo: Optional[str]
     web_site_id: str
 
     class Config:
