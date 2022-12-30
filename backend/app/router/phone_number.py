@@ -26,7 +26,11 @@ def create_check_phone_number(data: s.CreatePhoneNumber, db: Session = Depends(g
 
     phone_number = (
         db.query(m.PhoneNumber)
-        .filter(m.PhoneNumber.number.ilike(f"%{number}%"))
+        .filter(
+            m.PhoneNumber.number.ilike(
+                f"%{number if len(number) != 10 else number[1:]}%"
+            )
+        )
         .first()
     )
 

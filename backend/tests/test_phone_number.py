@@ -43,6 +43,13 @@ def test_create_check_phone_number(client: TestClient, db: Session, mocker):
     res_data = s.CreatePhoneNumberOut.parse_obj(res.json())
     assert res_data.is_number_verified
 
+    # test is number has 10 digit
+    req_data.phone_number = "0" + PHONE_NUMBER[3:]
+    res = client.post("/phone-number/", json=req_data.dict())
+    assert res.status_code == status.HTTP_201_CREATED
+    res_data = s.CreatePhoneNumberOut.parse_obj(res.json())
+    assert res_data.is_number_verified
+
     # test number is not valid
     req_data.phone_number = "123456789"
     res = client.post("/phone-number/", json=req_data.dict())
