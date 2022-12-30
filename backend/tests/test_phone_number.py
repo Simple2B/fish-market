@@ -11,7 +11,7 @@ NOTE = "Do it quickly"
 
 
 def test_create_check_phone_number(client: TestClient, db: Session, mocker):
-    mocker.patch("app.router.phone_number.send_sms")
+    mocker.patch("app.router.phone_number.send_sms", return_value=True)
     req_data = s.CreatePhoneNumber(phone_number=PHONE_NUMBER)
     # test create phone number
     res = client.post("/phone-number/", json=req_data.dict())
