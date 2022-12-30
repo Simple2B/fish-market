@@ -21,9 +21,19 @@
     justify-content: space-evenly;
 }
 
-.businessInfoContentWrap span {
-    font-weight: 800;
+
+.contentWrapText {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 22rem;
 }
+
+.contentWrapText>span {
+    font-weight: 800;
+
+}
+
 
 .btnEdit {
     width: 4.6rem;
@@ -33,9 +43,21 @@
     border: 2px solid #C1E1FF;
     border-radius: 5px;
     padding: 0.8rem;
+    cursor: pointer;
+}
+
+.btnEdit:hover {
+    background-color: #C1E1FF;
+
 }
 
 .btnEditContent {
     height: 100%;
     width: 100%;
+}
+
+@media (max-width: 1024px) {
+    .contentWrapText {
+        width: 18rem;
+    }
 }

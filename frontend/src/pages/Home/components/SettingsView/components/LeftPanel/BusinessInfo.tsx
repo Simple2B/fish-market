@@ -16,11 +16,11 @@ const BusinessInfo = ({
         <img className={style.imgContentWrap} src={logo} alt="logo" />
       </div>
       <div className={style.businessInfoContentWrap}>
-        <div>
+        <div className={style.contentWrapText}>
           <span>Business name: </span>
           {name}
         </div>
-        <div>
+        <div className={style.contentWrapText}>
           <span> Email: </span>
           {user_email}
         </div>

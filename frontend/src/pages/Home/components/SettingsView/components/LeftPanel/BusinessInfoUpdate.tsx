@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { BiCheck } from "react-icons/bi";
 import { LeftPanelType } from "../../../../../../main.type";
 import style from "./BusinessInfoUpdate.module.css";
 
@@ -29,6 +30,8 @@ const BusinessInfoUpdate = ({
     },
   });
 
+  console.log(user_email);
+
   return (
     <form onSubmit={handleSubmit(handlerEditBtn)} className={style.formContent}>
       <div className={style.fileInputRow}>
@@ -41,14 +44,26 @@ const BusinessInfoUpdate = ({
         />
       </div>
       <div className={style.textInputContent}>
-        <input className={style.textInput} type="text" {...register("name")} />
-        <input
-          className={style.textInput}
-          type="email"
-          {...register("user_email")}
-        />
+        <div className={style.textInputContentWrap}>
+          <span>Business name</span>
+          <input
+            className={style.textInput}
+            type="text"
+            {...register("name")}
+          />
+        </div>
+        <div className={style.textInputContentWrap}>
+          <span>Email</span>
+          <input
+            className={style.textInput}
+            type="email"
+            {...register("user_email")}
+          />
+        </div>
       </div>
-      <button>+</button>
+      <button className={style.acceptBtn}>
+        <BiCheck className={style.acceptBtnWrap} />
+      </button>
     </form>
   );
 };
