@@ -18,7 +18,7 @@ const SettingsView = () => {
       {data && (
         <div className={style.settingsViewContent}>
           <div className={style.contentPanel}>
-            <LeftPanel />
+            <LeftPanel {...data} />
             <RightPanel web_site_id={data.web_site_id} />
           </div>
         </div>
