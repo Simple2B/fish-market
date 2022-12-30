@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { LeftPanelType } from "../../../../../../main.type";
 import { BusinessInfo } from "./BusinessInfo";
+import { BusinessInfoUpdate } from "./BusinessInfoUpdate";
 import style from "./LeftPanel.module.css";
 
 const LeftPanel = (props: LeftPanelType) => {
@@ -18,11 +19,9 @@ const LeftPanel = (props: LeftPanelType) => {
       </div>
       <div className={style.contentWrap}>
         {isEdit ? (
-          <h1>hi</h1>
+          <BusinessInfoUpdate handlerEditBtn={handlerEditBtn} {...props} />
         ) : (
-          <>
-            <BusinessInfo handlerEditBtn={handlerEditBtn} {...props} />
-          </>
+          <BusinessInfo handlerEditBtn={handlerEditBtn} {...props} />
         )}
       </div>
     </div>

@@ -102,6 +102,15 @@ input[type='number'] {
     width: 36px;
 }
 
+input[type=file]::file-selector-button {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+
+
 .Toastify__toast {
     width: 60rem;
     height: 5.1rem;
