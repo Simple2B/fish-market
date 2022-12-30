@@ -38,3 +38,25 @@ export const changePasswordRequest = async (data: {
 
   return resData;
 };
+
+export const updateBusinessInfo = async (data: {
+  name?: string;
+  user_email?: string;
+}) => {
+  const res = await fetch(`${API_BASE_URL}/business/`, {
+    method: "PATCH",
+    headers: setRequestHeaders(TOKEN_KEY),
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    console.error("Bad login");
+    throw new Error("Can't change business data");
+  }
+
+  const resData = await res.json();
+
+  console.log(resData, "resData");
+
+  return resData;
+};

@@ -29,4 +29,5 @@ export type { FilteringFunctions, FilterBtnItem } from "./homeService";
 export {
   getUserBusinessInfo,
   changePasswordRequest,
+  updateBusinessInfo,
 } from "./settingsViewService";

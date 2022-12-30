@@ -8,8 +8,6 @@ const BusinessInfo = ({
   user_email,
   handlerEditBtn,
 }: LeftPanelType & { handlerEditBtn: () => void }) => {
-  console.log(user_email);
-
   return (
     <div className={style.businessInfoContent}>
       <div className={style.imgContent}>
