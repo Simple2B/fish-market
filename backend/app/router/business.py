@@ -31,6 +31,11 @@ def update_business_cur_user(
 
     data: dict = data.dict()
     for key, value in data.items():
+        if key == "user_email" and value is not None:
+            email = db.query(m.User).filter_by(email=value).first()
+            if email:
+                continue
+
         if value is not None:
             setattr(business, key, value)
 
