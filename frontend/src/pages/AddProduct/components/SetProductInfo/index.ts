@@ -1,0 +1,1 @@
+export { SetProductInfo } from "./SetProductInfo";
