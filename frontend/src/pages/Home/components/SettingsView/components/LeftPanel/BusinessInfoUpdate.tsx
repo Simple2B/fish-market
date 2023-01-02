@@ -23,6 +23,7 @@ type Inputs = {
 };
 
 const BusinessInfoUpdate = ({
+  id,
   logo,
   name,
   user_email,
@@ -47,6 +48,8 @@ const BusinessInfoUpdate = ({
       userEmail: user_email,
     },
   });
+
+  console.log(id, "id");
 
   const handlerOnSubmit: SubmitHandler<Inputs> = (data) => {
     if (!data) return;

@@ -23,7 +23,7 @@ def test_get_user_marketeer_business(marketer_client: TestClient, db: Session):
     assert user_business.logo == res_data.logo
     assert user_business.name == res_data.name
     assert user.email == res_data.email
-    assert user_business.user_id == user.id
+    assert user_business.id == res_data.id
 
 
 def test_get_user_admin_business(admin_client: TestClient, db: Session):

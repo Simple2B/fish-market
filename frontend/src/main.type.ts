@@ -63,11 +63,11 @@ export type TypeProductsOut = {
 };
 
 export interface IUserBusinessInfo {
-  user_id: number;
+  id: number;
   name: string;
   logo: string;
   web_site_id: string;
   user_email: string;
 }
 
-export type LeftPanelType = Omit<IUserBusinessInfo, "user_id" | "web_site_id">;
+export type LeftPanelType = Omit<IUserBusinessInfo, "web_site_id">;

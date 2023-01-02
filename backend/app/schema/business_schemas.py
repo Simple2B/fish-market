@@ -4,7 +4,7 @@ from pydantic import BaseModel, root_validator, Field
 
 
 class UserBusinessOut(BaseModel):
-    user_id: int
+    id: int
     name: Optional[str]
     logo: Optional[str]
     web_site_id: str
