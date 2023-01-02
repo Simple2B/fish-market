@@ -71,3 +71,8 @@ export interface IUserBusinessInfo {
 }
 
 export type LeftPanelType = Omit<IUserBusinessInfo, "web_site_id">;
+
+export enum ImageType {
+  logo = "logo",
+  product = "product",
+}

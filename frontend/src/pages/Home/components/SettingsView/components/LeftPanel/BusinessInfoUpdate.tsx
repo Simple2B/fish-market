@@ -2,22 +2,26 @@ import { useMutation } from "@tanstack/react-query";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { BiCheck } from "react-icons/bi";
 import {
+  changePasswordKeys,
+  CHANGE_PASSWORD_INPUT_DATA,
   settingsViewKey,
   SETTINGS_VIEW_TEXT_DATA,
 } from "../../../../../../constants";
-import { LeftPanelType } from "../../../../../../main.type";
+import { ImageType, LeftPanelType } from "../../../../../../main.type";
 import { queryClient } from "../../../../../../queryClient";
 import {
   GET_USER_BUSINESS,
   updateBusinessInfo,
+  uploadImage,
 } from "../../../../../../services";
 import { UploadImage } from "../UploadImage";
 import style from "./BusinessInfoUpdate.module.css";
 
 const textData = SETTINGS_VIEW_TEXT_DATA;
+const placeholder = CHANGE_PASSWORD_INPUT_DATA[changePasswordKeys.PLACEHOLDER];
 
 type Inputs = {
-  businessLogo: string;
+  businessLogo: string | FileList;
   businessName: string;
   userEmail: string;
 };
@@ -37,11 +41,11 @@ const BusinessInfoUpdate = ({
     },
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<Inputs>({
+  const mutationUploadImage = useMutation({
+    mutationFn: uploadImage,
+  });
+
+  const { register, handleSubmit } = useForm<Inputs>({
     defaultValues: {
       businessLogo: logo,
       businessName: name,
@@ -49,16 +53,24 @@ const BusinessInfoUpdate = ({
     },
   });
 
-  console.log(id, "id");
-
-  const handlerOnSubmit: SubmitHandler<Inputs> = (data) => {
+  const handlerOnSubmit: SubmitHandler<Inputs> = async (data) => {
     if (!data) return;
 
-    const reqData: { name?: string; user_email?: string } = {};
+    const reqData: { logo?: string; name?: string; user_email?: string } = {};
 
-    if (typeof data.businessLogo !== "string") {
-      console.log("upload img", data.businessLogo);
-      // TODO this mast be logic upload image
+    if (typeof data.businessLogo !== "string" && data.businessLogo.length > 0) {
+      const uploadImageData = {
+        business_id: id,
+        imageType: ImageType.logo,
+        file: data.businessLogo[0],
+      };
+      const mutateData = await mutationUploadImage.mutateAsync(uploadImageData);
+
+      if (mutateData !== undefined) {
+        console.log(mutateData, "mutateData", mutateData !== undefined);
+
+        reqData.logo = mutateData.img_url;
+      }
     }
 
     if (data.businessName !== name) {
@@ -72,6 +84,7 @@ const BusinessInfoUpdate = ({
       handlerEditBtn();
       return;
     }
+
     mutationUpdateBusinessInfo.mutate(reqData);
   };
 
@@ -94,6 +107,7 @@ const BusinessInfoUpdate = ({
           <input
             className={style.textInput}
             type="text"
+            placeholder={placeholder}
             {...register("businessName", { required: true })}
           />
         </div>
@@ -102,6 +116,7 @@ const BusinessInfoUpdate = ({
           <input
             className={style.textInput}
             type="email"
+            placeholder={placeholder}
             {...register("userEmail", { required: true })}
           />
         </div>
