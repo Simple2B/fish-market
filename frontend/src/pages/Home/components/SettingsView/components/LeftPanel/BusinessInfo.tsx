@@ -1,6 +1,12 @@
 import style from "./BusinessInfo.module.css";
 import { LeftPanelType } from "../../../../../../main.type";
 import { AiTwotoneEdit } from "react-icons/ai";
+import {
+  settingsViewKey,
+  SETTINGS_VIEW_TEXT_DATA,
+} from "../../../../../../constants";
+
+const textData = SETTINGS_VIEW_TEXT_DATA;
 
 const BusinessInfo = ({
   logo,
@@ -15,11 +21,11 @@ const BusinessInfo = ({
       </div>
       <div className={style.businessInfoContentWrap}>
         <div className={style.contentWrapText}>
-          <span>Business name: </span>
+          <span>{textData[settingsViewKey.BUSINESS_NAME]}: </span>
           {name}
         </div>
         <div className={style.contentWrapText}>
-          <span> Email: </span>
+          <span> {textData[settingsViewKey.EMAIL_NAME]}: </span>
           {user_email}
         </div>
       </div>

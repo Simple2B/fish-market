@@ -1,6 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { BiCheck } from "react-icons/bi";
+import {
+  settingsViewKey,
+  SETTINGS_VIEW_TEXT_DATA,
+} from "../../../../../../constants";
 import { LeftPanelType } from "../../../../../../main.type";
 import { queryClient } from "../../../../../../queryClient";
 import {
@@ -9,6 +13,8 @@ import {
 } from "../../../../../../services";
 import { UploadImage } from "../UploadImage";
 import style from "./BusinessInfoUpdate.module.css";
+
+const textData = SETTINGS_VIEW_TEXT_DATA;
 
 type Inputs = {
   businessLogo: string;
@@ -81,7 +87,7 @@ const BusinessInfoUpdate = ({
       </UploadImage>
       <div className={style.textInputContent}>
         <div className={style.textInputContentWrap}>
-          <span>Business name</span>
+          <span>{textData[settingsViewKey.BUSINESS_NAME]}</span>
           <input
             className={style.textInput}
             type="text"
@@ -89,7 +95,7 @@ const BusinessInfoUpdate = ({
           />
         </div>
         <div className={style.textInputContentWrap}>
-          <span>Email</span>
+          <span>{textData[settingsViewKey.EMAIL_NAME]}</span>
           <input
             className={style.textInput}
             type="email"

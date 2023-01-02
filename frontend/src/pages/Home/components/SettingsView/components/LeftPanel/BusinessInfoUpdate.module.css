@@ -25,6 +25,10 @@
 
 }
 
+.textInputContentWrap>span {
+    font-weight: 800;
+}
+
 .fileInput {
     height: 100%;
     width: 100%;

@@ -30,6 +30,9 @@ export const navMenuBtnNameKeys = {
 export const settingsViewKey = {
   CHANGE_PASSWORD: "changePasswordKey",
   LOG_OUT: "logOutKey",
+  BUSINESS_NAME: "businessNameKey",
+  EMAIL_NAME: "emailNameKey",
+  UPLOAD_IMAGE: "uploadImage",
   ADD_NEW_ITEM: "",
   ADD_ITEM: "",
   ADD: "",
@@ -41,6 +44,9 @@ export const settingsViewKey = {
 };
 
 export const SETTINGS_VIEW_TEXT_DATA = {
+  [settingsViewKey.BUSINESS_NAME]: "Business name",
+  [settingsViewKey.EMAIL_NAME]: "Email",
+  [settingsViewKey.UPLOAD_IMAGE]: "upload image",
   [settingsViewKey.CHANGE_PASSWORD]: "Change password",
   [settingsViewKey.LOG_OUT]: "Log Out",
   [settingsViewKey.CONFIRM]: "Confirm",
