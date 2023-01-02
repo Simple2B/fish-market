@@ -43,7 +43,7 @@ services:
     restart: always
     volumes:
       - ./backend/backup:/backup
-      - ./:/app
+      - ./backend/:/app
     links:
       - db
     environment:
