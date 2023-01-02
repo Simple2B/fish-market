@@ -241,7 +241,7 @@ def get_business_out_by_uid(business_uid: str, db: Session = Depends(get_db)):
 
 
 @router.post("/img/{business_id}/{img_type}", response_model=s.BusinessImage)
-def upload_business_image(
+async def upload_business_image(
     business_id: int,
     img_type: s.BusinessImageType,
     request: Request,
@@ -277,6 +277,7 @@ def upload_business_image(
 
     with open(file_path, "wb") as f:
         log(log.INFO, "File :[%s] created", f.name)
+        f.write(await img_file.read())
 
     img_url = urljoin(
         str(request.base_url),
