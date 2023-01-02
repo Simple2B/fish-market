@@ -1,4 +1,9 @@
-from fastapi import Depends, APIRouter, status, HTTPException
+import os
+import uuid
+from pathlib import Path
+from urllib.parse import urljoin
+
+from fastapi import Depends, APIRouter, status, HTTPException, UploadFile, File, Request
 from sqlalchemy.orm import Session
 
 from app.service import get_current_user, get_business_from_cur_user
@@ -7,9 +12,10 @@ from app import model as m
 from app.database import get_db
 from app.logger import log
 from .utils import check_access_to_business, check_access_to_order
+from app.config import settings
 
 
-router = APIRouter(prefix="/business", tags=["business"])
+router = APIRouter(prefix="/business", tags=["Business"])
 
 
 @router.get("/", response_model=s.UserBusinessOut, status_code=status.HTTP_200_OK)
@@ -232,3 +238,49 @@ def get_business_out_by_uid(business_uid: str, db: Session = Depends(get_db)):
     check_access_to_business(business=business, data_mes=business_uid)
 
     return business
+
+
+@router.post("/img/{business_id}/{img_type}", response_model=s.BusinessImage)
+def upload_business_image(
+    business_id: int,
+    img_type: s.BusinessImageType,
+    request: Request,
+    current_user: m.User = Depends(get_current_user),
+    img_file: UploadFile = File(),
+):
+
+    if business_id not in [b.id for b in current_user.businesses]:
+        log(
+            log.WARNING,
+            "Wrong business id:[%d] for user: [%s]",
+            business_id,
+            current_user,
+        )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Business was not found",
+        )
+
+    file_name = str(uuid.uuid4()) + "." + img_file.filename.split(".")[-1]
+
+    dir_path = (
+        Path(settings.STATIC_FOLDER)
+        / "market"
+        / "img"
+        / f"{business_id}"
+        / f"{img_type.value}"
+    )
+
+    os.makedirs(dir_path, exist_ok=True)
+
+    file_path = Path(dir_path) / file_name
+
+    with open(file_path, "wb") as f:
+        log(log.INFO, "File :[%s] created", f.name)
+
+    img_url = urljoin(
+        str(request.base_url),
+        f"static/market/img/{business_id}/{img_type.value}/{file_name}",
+    )
+
+    return s.BusinessImage(business_id=business_id, img_url=img_url)

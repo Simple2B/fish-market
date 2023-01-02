@@ -81,3 +81,53 @@ def test_user_business_update(marketer_client: TestClient, db: Session):
     # test any business filed
     res = marketer_client.patch("/business/", json={})
     assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
+def test_upload_image(marketer_client: TestClient, db: Session):
+    TEST_JPG_FILE = "tests/img/jumeirah-fish-market.jpg"
+    TEST_WEBP_FILE = "tests/img/lobster.webp"
+    client = marketer_client
+    user: m.User = client.user
+    assert user
+    assert user.businesses
+    business: m.Business = user.businesses[0]
+    res = None
+    with open(TEST_JPG_FILE, "br") as f:
+        res = client.post(
+            f"/business/img/{business.id}/logo",
+            files={"img_file": (TEST_JPG_FILE, f, "image/jpeg")},
+        )
+    assert res
+    img: s.BusinessImage = s.BusinessImage.parse_obj(res.json())
+    assert img
+    res = client.get(img.img_url)
+    assert res
+
+    with open(TEST_WEBP_FILE, "br") as f:
+        res = client.post(
+            f"/business/img/{business.id}/product",
+            files={"img_file": (TEST_WEBP_FILE, f, "image/webp")},
+        )
+    assert res
+    img: s.BusinessImage = s.BusinessImage.parse_obj(res.json())
+    assert img
+    res = client.get(img.img_url)
+    assert res
+
+    # Try to use wrong business id
+    with open(TEST_WEBP_FILE, "br") as f:
+        res = client.post(
+            f"/business/img/56/product",
+            files={"img_file": (TEST_WEBP_FILE, f, "image/webp")},
+        )
+    assert not res
+    assert res.status_code == status.HTTP_403_FORBIDDEN
+
+    # Try to use wrong image type name
+    with open(TEST_WEBP_FILE, "br") as f:
+        res = client.post(
+            f"/business/img/{business.id}/wrong_image_type_name",
+            files={"img_file": (TEST_WEBP_FILE, f, "image/webp")},
+        )
+    assert not res
+    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
