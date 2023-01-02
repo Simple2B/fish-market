@@ -33,10 +33,10 @@ export const settingsViewKey = {
   BUSINESS_NAME: "businessNameKey",
   EMAIL_NAME: "emailNameKey",
   UPLOAD_IMAGE: "uploadImage",
-  ADD_NEW_ITEM: "",
-  ADD_ITEM: "",
+  ADD_NEW_ITEM: "addNewProductKey",
+  ADD_ITEM: "addProductKey",
   ADD: "",
-  CANCEL: "",
+  CANCEL: "cancelKey",
   DELETE_ITEM: "",
   CONFIRM: "Confirm",
   TITLE_LINK: "titleLinkKey",
@@ -44,6 +44,9 @@ export const settingsViewKey = {
 };
 
 export const SETTINGS_VIEW_TEXT_DATA = {
+  [settingsViewKey.ADD_NEW_ITEM]: "Add new item",
+  [settingsViewKey.CANCEL]: "Cancel",
+  [settingsViewKey.ADD_ITEM]: "Add Item",
   [settingsViewKey.BUSINESS_NAME]: "Business name",
   [settingsViewKey.EMAIL_NAME]: "Email",
   [settingsViewKey.UPLOAD_IMAGE]: "upload image",
