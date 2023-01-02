@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     COUNTRY_CODE: str = "IL"
     API_TOKEN_UP_SENDER: str = ""
     USERNAME_UP_SENDER: str = ""
+    STATIC_FOLDER: str = "static"
 
     class Config:
         env_file = ".env"
