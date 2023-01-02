@@ -7,6 +7,7 @@ import {
   GET_USER_BUSINESS,
   updateBusinessInfo,
 } from "../../../../../../services";
+import { UploadImage } from "../UploadImage";
 import style from "./BusinessInfoUpdate.module.css";
 
 type Inputs = {
@@ -23,7 +24,7 @@ const BusinessInfoUpdate = ({
 }: LeftPanelType & { handlerEditBtn: () => void }) => {
   const mutationUpdateBusinessInfo = useMutation({
     mutationFn: updateBusinessInfo,
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries([GET_USER_BUSINESS]);
       handlerEditBtn();
     },
@@ -48,6 +49,7 @@ const BusinessInfoUpdate = ({
 
     if (typeof data.businessLogo !== "string") {
       console.log("upload img", data.businessLogo);
+      // TODO this mast be logic upload image
     }
 
     if (data.businessName !== name) {
@@ -56,7 +58,6 @@ const BusinessInfoUpdate = ({
     if (data.userEmail !== user_email) {
       reqData.user_email = data.userEmail;
     }
-    console.log(Object.keys(reqData).length === 0, "reqData", reqData);
 
     if (Object.keys(reqData).length === 0) {
       handlerEditBtn();
@@ -70,15 +71,14 @@ const BusinessInfoUpdate = ({
       onSubmit={handleSubmit(handlerOnSubmit)}
       className={style.formContent}
     >
-      <div className={style.fileInputRow}>
-        <div className={style.fileInputText}>upload image</div>
+      <UploadImage>
         <input
           className={style.fileInput}
           type="file"
           accept="image/*"
-          {...register("businessName")}
+          {...register("businessLogo")}
         />
-      </div>
+      </UploadImage>
       <div className={style.textInputContent}>
         <div className={style.textInputContentWrap}>
           <span>Business name</span>
