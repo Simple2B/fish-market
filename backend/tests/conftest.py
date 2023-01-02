@@ -45,12 +45,13 @@ def db() -> Generator:
 
 
 def authorized_client(client: TestClient, db: Session, role: m.UserRole) -> Generator:
-    admin: m.User = db.query(m.User).filter_by(role=role).first()
-    assert admin
-    res = client.post("/login", data=dict(username=admin.username, password="1234"))
+    user: m.User = db.query(m.User).filter_by(role=role).first()
+    assert user
+    res = client.post("/login", data=dict(username=user.username, password="1234"))
     assert res.status_code == status.HTTP_200_OK
     token = s.Token.parse_obj(res.json())
     assert token.access_token
+    client.user = user
     client.headers.update(
         {
             "Authorization": f"Bearer {token.access_token}",
