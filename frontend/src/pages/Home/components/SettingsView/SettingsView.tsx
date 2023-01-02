@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Spinner } from "../../../../components";
 import { getUserBusinessInfo, GET_USER_BUSINESS } from "../../../../services";
 import { LeftPanel, RightPanel } from "./components";
+import { ProductsView } from "./components/ProductsView/ProductsView";
 import style from "./SettingsView.module.css";
 
 const SettingsView = () => {
@@ -21,6 +22,7 @@ const SettingsView = () => {
             <LeftPanel {...data} />
             <RightPanel web_site_id={data.web_site_id} />
           </div>
+          <ProductsView />
         </div>
       )}
     </>
