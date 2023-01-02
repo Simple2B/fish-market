@@ -98,7 +98,7 @@ def test_upload_image(marketer_client: TestClient, db: Session):
 
     with open(TEST_WEBP_FILE, "br") as f:
         res = client.post(
-            f"/business/img/{business.id}/logo",
+            f"/business/img/{business.id}/product",
             files={"img_file": (TEST_WEBP_FILE, f, "image/webp")},
         )
     assert res
@@ -106,3 +106,21 @@ def test_upload_image(marketer_client: TestClient, db: Session):
     assert img
     res = client.get(img.img_url)
     assert res
+
+    # Try to use wrong business id
+    with open(TEST_WEBP_FILE, "br") as f:
+        res = client.post(
+            f"/business/img/56/product",
+            files={"img_file": (TEST_WEBP_FILE, f, "image/webp")},
+        )
+    assert not res
+    assert res.status_code == status.HTTP_403_FORBIDDEN
+
+    # Try to use wrong image type name
+    with open(TEST_WEBP_FILE, "br") as f:
+        res = client.post(
+            f"/business/img/{business.id}/wrong_image_type_name",
+            files={"img_file": (TEST_WEBP_FILE, f, "image/webp")},
+        )
+    assert not res
+    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
