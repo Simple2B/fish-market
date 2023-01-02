@@ -22,11 +22,17 @@ class ProductsOut(BaseModel):
     products: list[ProductOut]
 
 
+class CreatePrep(BaseModel):
+    name: str
+    is_active: bool
+
+
 class CreateProduct(BaseModel):
     name: str
     price: Union[int, float]
     sold_by: m.SoldBy
     image: str
+    preps: list[CreatePrep]
 
     class Config:
         use_enum_values = True

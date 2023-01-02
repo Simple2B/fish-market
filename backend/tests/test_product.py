@@ -10,12 +10,17 @@ PRODUCT_PRICE = 2
 PRODUCT_SOLD_BY = m.SoldBy.by_kilogram
 PRODUCT_IMAGE = "/dir/imag/logo_product.png"
 IS_OUT_OF_STOCK = True
+TEST_PREPS = [
+    {"name": "red", "is_active": True},
+    {"name": "fillet", "is_active": False},
+]
 
 data_create_product = s.CreateProduct(
     name=PRODUCT_NAME,
     price=PRODUCT_PRICE,
     sold_by=PRODUCT_SOLD_BY,
     image=PRODUCT_IMAGE,
+    preps=[s.CreatePrep(**prep) for prep in TEST_PREPS],
 )
 
 data_update_product = s.UpdateProduct(
@@ -104,6 +109,8 @@ def test_cur_user_create_product(marketer_client: TestClient, db: Session):
     assert product
     assert product.price == PRODUCT_PRICE
     assert product.sold_by == PRODUCT_SOLD_BY
+    assert len(product.preps) == 2
+    assert product.preps[0].name == TEST_PREPS[0]["name"]
 
     # test business has new product
     business = db.query(m.Business).get(product.business_id)
