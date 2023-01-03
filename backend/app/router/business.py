@@ -31,24 +31,26 @@ def get_business_cur_user(
 def update_business_cur_user(
     data: s.BusinessUpdate,
     db: Session = Depends(get_db),
-    current_user: m.User = Depends(get_current_user),
+    business: m.User = Depends(get_business_from_cur_user),
 ):
-    log(log.INFO, "update_business_cur_user")
-    business: m.Business = (
-        db.query(m.Business).filter_by(user_id=current_user.id).first()
-    )
-
-    check_access_to_business(business=business, data_mes=current_user)
+    log(log.INFO, "update_business_cur_user, business_id: [%d]", business.id)
 
     data: dict = data.dict()
     for key, value in data.items():
+        if key == "user_email" and value is not None:
+            email = db.query(m.User).filter_by(email=value).first()
+            if email:
+                continue
+
         if value is not None:
             setattr(business, key, value)
 
     db.commit()
     db.refresh(business)
 
-    return s.BusinessUpdateOut(name=business.name, logo=business.logo)
+    return s.BusinessUpdateOut(
+        name=business.name, logo=business.logo, email=business.user_email
+    )
 
 
 @router.get("/{business_uid}/product", status_code=status.HTTP_200_OK)
@@ -239,7 +241,7 @@ def get_business_out_by_uid(business_uid: str, db: Session = Depends(get_db)):
 
 
 @router.post("/img/{business_id}/{img_type}", response_model=s.BusinessImage)
-def upload_business_image(
+async def upload_business_image(
     business_id: int,
     img_type: s.BusinessImageType,
     request: Request,
@@ -275,6 +277,7 @@ def upload_business_image(
 
     with open(file_path, "wb") as f:
         log(log.INFO, "File :[%s] created", f.name)
+        f.write(await img_file.read())
 
     img_url = urljoin(
         str(request.base_url),
