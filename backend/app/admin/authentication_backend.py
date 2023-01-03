@@ -38,11 +38,11 @@ class BaseAuthenticationBackend(AuthenticationBackend):
         user_id = request.session.get("user_id")
 
         if not user_id:
-            return RedirectResponse("/admin/login")
+            return False
 
         superuser: User = db.query(User).get(user_id)
         if not superuser:
-            return RedirectResponse("/admin/login")
+            return False
         return True
 
 
