@@ -1,0 +1,71 @@
+.formContent {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+}
+
+
+.textInputContent {
+    height: 100%;
+    width: 22.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+}
+
+.textInputContentWrap {
+    display: flex;
+    justify-content: space-between;
+    text-align: start;
+
+}
+
+.textInputContentWrap>span {
+    font-weight: 800;
+}
+
+.fileInput {
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.textInput {
+    width: 14rem;
+    height: 2.5rem;
+
+    box-sizing: border-box;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    padding: 0.3rem;
+}
+
+.acceptBtn {
+    height: 3.5rem;
+    width: 4.6rem;
+    background: #C1E1FF;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.acceptBtnWrap {
+    height: 100%;
+    width: 100%;
+}
+
+@media (max-width: 1024px) {
+    .textInputContent {
+        width: 18rem;
+    }
+
+    .textInput {
+        width: 10rem;
+    }
+}

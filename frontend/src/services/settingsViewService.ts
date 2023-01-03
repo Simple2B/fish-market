@@ -1,3 +1,4 @@
+import { ImageType } from "./../main.type";
 import { API_BASE_URL, TOKEN_KEY } from "../constants";
 import { IUserBusinessInfo } from "../main.type";
 import { setRequestHeaders } from "../utils";
@@ -32,6 +33,64 @@ export const changePasswordRequest = async (data: {
   if (!res.ok) {
     console.error("Bad login");
     throw new Error("Can't change password");
+  }
+
+  const resData = await res.json();
+
+  return resData;
+};
+
+export const updateBusinessInfo = async (data: {
+  name?: string;
+  user_email?: string;
+}) => {
+  const res = await fetch(`${API_BASE_URL}/business/`, {
+    method: "PATCH",
+    headers: setRequestHeaders(TOKEN_KEY),
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    console.error("Bad login");
+    throw new Error("Can't change business data");
+  }
+
+  const resData = await res.json();
+
+  return resData;
+};
+
+export type uploadImageDatatype = {
+  business_id: number;
+  imageType: ImageType;
+  file: File;
+};
+
+export const uploadImage = async ({
+  business_id,
+  imageType,
+  file,
+}: uploadImageDatatype) => {
+  const formData = new FormData();
+  formData.append("img_file", file);
+
+  const headers = {
+    Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+  };
+
+  const res = await fetch(
+    `${API_BASE_URL}/business/img/${business_id}/${imageType}`,
+    {
+      method: "POST",
+      headers: headers,
+      body: formData,
+    }
+  );
+
+  if (!res.ok) {
+    console.error("Bad login");
+    console.error("Can't change business logo");
+    return;
   }
 
   const resData = await res.json();

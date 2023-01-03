@@ -63,8 +63,16 @@ export type TypeProductsOut = {
 };
 
 export interface IUserBusinessInfo {
-  user_id: number;
-  name: string | null;
-  logo: string | null;
+  id: number;
+  name: string;
+  logo: string;
   web_site_id: string;
+  user_email: string;
+}
+
+export type LeftPanelType = Omit<IUserBusinessInfo, "web_site_id">;
+
+export enum ImageType {
+  logo = "logo",
+  product = "product",
 }

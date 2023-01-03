@@ -24,5 +24,13 @@ class Business(Base):
     def active_products(self):
         return [product for product in self.products if not product.is_deleted]
 
+    @property
+    def user_email(self) -> str:
+        return self.user.email
+
+    @user_email.setter
+    def user_email(self, value):
+        self.user.email = value
+
     def __repr__(self) -> str:
         return f"<id:{self.id}, name:{self.name},  user:{self.user}>"

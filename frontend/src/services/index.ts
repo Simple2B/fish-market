@@ -29,4 +29,7 @@ export type { FilteringFunctions, FilterBtnItem } from "./homeService";
 export {
   getUserBusinessInfo,
   changePasswordRequest,
+  updateBusinessInfo,
+  uploadImage,
 } from "./settingsViewService";
+export type { uploadImageDatatype } from "./settingsViewService";
