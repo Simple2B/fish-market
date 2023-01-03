@@ -19,11 +19,16 @@ const placeholder = CHANGE_PASSWORD_INPUT_DATA[changePasswordKeys.PLACEHOLDER];
 const textData = SETTINGS_VIEW_TEXT_DATA;
 
 const AddPrepForm = ({ handlerAddPreps }: AddPrepFormProps) => {
-  const { register, handleSubmit } = useForm<FormInputs>();
+  const { register, handleSubmit, setValue } = useForm<FormInputs>();
+
+  const handlerOnSubmit = (data: FormInputs) => {
+    handlerAddPreps(data);
+    setValue("prep", "");
+  };
 
   return (
     <form
-      onSubmit={handleSubmit(handlerAddPreps)}
+      onSubmit={handleSubmit(handlerOnSubmit)}
       className={style.addPrepFormContent}
     >
       <div>{textData[settingsViewKey.ADD_PREP_TITLE]}</div>
