@@ -42,12 +42,20 @@ export const settingsViewKey = {
   TITLE_LINK: "titleLinkKey",
   NOTIFY_MES: "notifyMessageKey",
   SOLD_BY_TEXT: "soldByTextKey",
+  SOLD_BY_KG: "soldByKgKey",
+  SOLD_BY_UNIT: "soldByUnitKey",
   NO_PREPS_TEXT: "noPrepTextKey",
   PREPS_TITLE: "prepsTitleKey",
   ADD_PREP_TITLE: "addPrepTitleKey",
+  MES_PRODUCT_WAS_CREATED: "mesProductWasCreatedKey",
+  MES_PRODUCT_WAS_NOT_CREATED: "mesProductWasNotCreatedKey",
 };
 
 export const SETTINGS_VIEW_TEXT_DATA = {
+  [settingsViewKey.SOLD_BY_KG]: "By kg",
+  [settingsViewKey.SOLD_BY_UNIT]: "By unit",
+  [settingsViewKey.MES_PRODUCT_WAS_CREATED]: "A new item was created",
+  [settingsViewKey.MES_PRODUCT_WAS_NOT_CREATED]: "A new item was not created",
   [settingsViewKey.ADD]: "Add",
   [settingsViewKey.ADD_PREP_TITLE]: "Add new prep",
   [settingsViewKey.PREPS_TITLE]: "Preps possible:",

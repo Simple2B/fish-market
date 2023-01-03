@@ -15,7 +15,7 @@ type SetProductSoldByProps = {
   productState: CreateProductType;
 };
 
-const textDataSoldBy = SETTINGS_VIEW_TEXT_DATA[settingsViewKey.SOLD_BY_TEXT];
+const textDataSoldBy = SETTINGS_VIEW_TEXT_DATA;
 
 const SetProductSoldBy = ({
   productDispatch,
@@ -78,18 +78,18 @@ const SetProductSoldBy = ({
 
   return (
     <div className={style.setProductSoldByContent}>
-      <div>{textDataSoldBy}</div>
+      <div>{textDataSoldBy[settingsViewKey.SOLD_BY_TEXT]}</div>
       <div
         className={contentBtnByKg}
         onClick={() => setStatusSoldBy(ItemUnit.by_kilogram)}
       >
-        {ItemUnit.by_kilogram}
+        {textDataSoldBy[settingsViewKey.SOLD_BY_KG]}
       </div>
       <div
         className={contentBtnByUnit}
         onClick={() => setStatusSoldBy(ItemUnit.by_unit)}
       >
-        {ItemUnit.by_unit}
+        {textDataSoldBy[settingsViewKey.SOLD_BY_UNIT]}
       </div>
     </div>
   );

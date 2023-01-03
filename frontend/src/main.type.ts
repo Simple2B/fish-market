@@ -48,8 +48,8 @@ export type ManagerOutletContext = {
 
 // this enum already exists and in future will replace in the project
 export enum ItemUnit {
-  by_kilogram = "By kg",
-  by_unit = "By unit",
+  by_kilogram = "by_kilogram",
+  by_unit = "by_unit",
   by_both = "by_both",
   unknown = "unknown",
 }
