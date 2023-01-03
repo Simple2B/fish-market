@@ -32,5 +32,6 @@ export {
   changePasswordRequest,
   updateBusinessInfo,
   uploadImage,
+  createProduct,
 } from "./settingsViewService";
 export type { uploadImageDatatype } from "./settingsViewService";

@@ -21,15 +21,11 @@ const CreateProduct = ({
   const handlerAddPreps = (data: { prep: string }) => {
     if (!data) return;
 
-    console.log(data);
-
     productDispatch({
       type: CreateProductActionKeys.ADDED_PREP,
       payload: { name: data.prep },
     });
   };
-
-  console.log(productState);
 
   const handlerOnClickPrep = (prepId: number) => {
     productDispatch({

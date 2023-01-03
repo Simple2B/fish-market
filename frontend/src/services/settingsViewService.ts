@@ -1,4 +1,4 @@
-import { ImageType } from "./../main.type";
+import { CreateProductType, ImageType } from "./../main.type";
 import { API_BASE_URL, TOKEN_KEY } from "../constants";
 import { IUserBusinessInfo } from "../main.type";
 import { setRequestHeaders } from "../utils";
@@ -91,6 +91,23 @@ export const uploadImage = async ({
     console.error("Bad login");
     console.error("Can't change business logo");
     return;
+  }
+
+  const resData = await res.json();
+
+  return resData;
+};
+
+export const createProduct = async (data: CreateProductType) => {
+  const res = await fetch(`${API_BASE_URL}/product/`, {
+    method: "POST",
+    headers: setRequestHeaders(TOKEN_KEY),
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    console.error("Can't create product");
+    throw new Error("Can't create product");
   }
 
   const resData = await res.json();

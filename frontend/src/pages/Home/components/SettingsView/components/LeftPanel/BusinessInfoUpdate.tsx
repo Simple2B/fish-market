@@ -67,8 +67,6 @@ const BusinessInfoUpdate = ({
       const mutateData = await mutationUploadImage.mutateAsync(uploadImageData);
 
       if (mutateData !== undefined) {
-        console.log(mutateData, "mutateData", mutateData !== undefined);
-
         reqData.logo = mutateData.img_url;
       }
     }
