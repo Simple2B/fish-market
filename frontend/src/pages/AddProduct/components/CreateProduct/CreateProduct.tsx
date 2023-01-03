@@ -1,5 +1,7 @@
+import { AddPrepForm } from "../../../../components";
 import { CreateProductType } from "../../../../main.type";
 import { CreateProductAction } from "../../AddProduct.type";
+import { PrepsView } from "../PrepsView";
 import { SetProductInfo } from "../SetProductInfo";
 import { SetProductSoldBy } from "../SetProductSoldBy";
 import style from "./CreateProduct.module.css";
@@ -20,6 +22,8 @@ const CreateProduct = ({
         productState={productState}
         productDispatch={productDispatch}
       />
+      <PrepsView preps={productState.preps} />
+      <AddPrepForm handlerAddPreps={(data) => console.log(data)} />
     </div>
   );
 };
