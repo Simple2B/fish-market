@@ -1,14 +1,10 @@
 from sqladmin.authentication import AuthenticationBackend
 from starlette.requests import Request
-from fastapi import HTTPException
-from fastapi.responses import RedirectResponse
 
 from app.database import get_db
 from app.config import settings
 from app.model import User, UserRole
 
-from app.oauth2 import create_access_token, verify_access_token
-from app.schema import TokenData
 
 db = get_db().__next__()
 
