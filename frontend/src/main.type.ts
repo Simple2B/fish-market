@@ -83,16 +83,10 @@ export interface IPrep {
   is_active: boolean;
 }
 
-export interface IProduct {
+export type CreateProduct = {
   name: string;
   price: number;
   sold_by: ItemUnit;
-  image: string;
+  image: File | string;
   preps: IPrep[];
-}
-
-export interface IProductInfo {
-  name: string;
-  price: boolean;
-  image: string;
-}
+};

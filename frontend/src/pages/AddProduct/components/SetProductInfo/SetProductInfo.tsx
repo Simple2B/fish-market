@@ -1,8 +1,11 @@
 import { useForm } from "react-hook-form";
 import { UploadImage } from "../../../Home";
+import { CreateProductTypes, ISetAddProductInfo } from "../../AddProduct.type";
 import style from "./SetProductInfo.module.css";
 
-type Props = {};
+type SetProductInfoProps = {
+  productDispatch: (action: ISetAddProductInfo) => void;
+};
 
 type SetProductInfoInputs = {
   name: string;
@@ -10,15 +13,39 @@ type SetProductInfoInputs = {
   image: string;
 };
 
-const SetProductInfo = (props: Props) => {
-  const { register, watch } = useForm<SetProductInfoInputs>();
+const SetProductInfo = ({ productDispatch }: SetProductInfoProps) => {
+  const { register } = useForm<SetProductInfoInputs>();
+
+  const handlerOnChangeInputs = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let payloadKey = e.target.name;
+    let payloadValue: string | number | File = e.target.value;
+
+    if (payloadKey === "price") {
+      if (isNaN(Number(payloadValue))) return;
+      payloadValue = Number(payloadValue);
+    }
+
+    if (payloadKey === "image") {
+      if (!e.target.files) return;
+      payloadValue = e.target.files[0];
+    }
+
+    productDispatch({
+      type: CreateProductTypes.ADD_PRODUCT_VALUE,
+      payload: { [payloadKey]: payloadValue },
+    });
+  };
 
   return (
     <div className={style.setProductInfoContent}>
       <UploadImage>
         <input
           type="file"
-          {...register("image", { required: true })}
+          accept="image/*"
+          {...register("image", {
+            required: true,
+            onChange: handlerOnChangeInputs,
+          })}
           className={style.inputFile}
         />
       </UploadImage>
@@ -27,7 +54,10 @@ const SetProductInfo = (props: Props) => {
           <div>Name</div>
           <input
             type="text"
-            {...register("name", { required: true })}
+            {...register("name", {
+              required: true,
+              onChange: handlerOnChangeInputs,
+            })}
             className={style.inputData}
           />
         </div>
@@ -35,8 +65,11 @@ const SetProductInfo = (props: Props) => {
         <div>
           <div>Price per kg</div>
           <input
-            type="text"
-            {...register("price", { required: true })}
+            type="number"
+            {...register("price", {
+              required: true,
+              onChange: handlerOnChangeInputs,
+            })}
             className={style.inputData}
           />
         </div>

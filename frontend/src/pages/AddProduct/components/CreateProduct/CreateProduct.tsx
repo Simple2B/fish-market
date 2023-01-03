@@ -1,12 +1,15 @@
+import { CreateProductAction } from "../../AddProduct.type";
 import { SetProductInfo } from "../SetProductInfo";
 import style from "./CreateProduct.module.css";
 
-type CreateProductProps = {};
+type CreateProductProps = {
+  productDispatch: (action: CreateProductAction) => void;
+};
 
-const CreateProduct = ({}: CreateProductProps) => {
+const CreateProduct = ({ productDispatch }: CreateProductProps) => {
   return (
     <div className={style.productViewContent}>
-      <SetProductInfo />
+      <SetProductInfo productDispatch={productDispatch} />
     </div>
   );
 };
