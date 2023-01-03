@@ -1,0 +1,31 @@
+.prepsViewContent {
+    height: 100%;
+    /* width: 41.25rem; */
+    font-weight: 400;
+    font-size: 1.1rem;
+    line-height: 1.6rem;
+}
+
+.prepsViewContentWrap {
+    height: 100%;
+    width: 28.8rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem 0;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    border-right: 1px solid black;
+}
+
+
+
+.prepsViewContentWrap div:first-child {
+    margin: 0;
+    font-weight: 800;
+}
+
+.noPrepsText {
+    font-weight: 500;
+    color: #D1D1D1;
+}
