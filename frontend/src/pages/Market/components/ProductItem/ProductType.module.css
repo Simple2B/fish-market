@@ -33,6 +33,10 @@
     width: 50%;
 }
 
+.blockQty>input[type='number'] {
+    width: 2.1rem;
+}
+
 .inputQty {
     font-family: 'Avenir';
     font-style: normal;
@@ -49,6 +53,7 @@
     border: 1px solid #000000;
     border-radius: 5px;
 }
+
 
 .textQty {
     font-family: 'Avenir';
