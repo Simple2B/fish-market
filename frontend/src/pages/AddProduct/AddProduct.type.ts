@@ -1,6 +1,6 @@
-import { CreateProduct } from "../../main.type";
+import { CreateProductType } from "../../main.type";
 
-export enum CreateProductTypes {
+export enum CreateProductActionKeys {
   ADD_PRODUCT_VALUE = "ADD_PRODUCT_VALUE",
   SET_SOLD_BY = "SET_SOLD_BY",
   ADDED_PREP = "ADDED_PREP",
@@ -8,12 +8,12 @@ export enum CreateProductTypes {
 }
 
 export interface ISetAddProductInfo {
-  type: CreateProductTypes.ADD_PRODUCT_VALUE;
-  payload: Partial<Omit<CreateProduct, "preps">>;
+  type: CreateProductActionKeys.ADD_PRODUCT_VALUE;
+  payload: Partial<Omit<CreateProductType, "preps">>;
 }
 
 export interface IResetData {
-  type: CreateProductTypes.RESET_DATA;
+  type: CreateProductActionKeys.RESET_DATA;
 }
 
 export type CreateProductAction = ISetAddProductInfo | IResetData;

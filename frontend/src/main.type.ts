@@ -48,8 +48,8 @@ export type ManagerOutletContext = {
 
 // this enum already exists and in future will replace in the project
 export enum ItemUnit {
-  by_kilogram = "Kg",
-  by_unit = "Unit",
+  by_kilogram = "By kg",
+  by_unit = "By unit",
   by_both = "by_both",
   unknown = "unknown",
 }
@@ -83,7 +83,7 @@ export interface IPrep {
   is_active: boolean;
 }
 
-export type CreateProduct = {
+export type CreateProductType = {
   name: string;
   price: number;
   sold_by: ItemUnit;

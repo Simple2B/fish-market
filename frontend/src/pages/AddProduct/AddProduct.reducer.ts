@@ -1,8 +1,11 @@
 import { Reducer } from "react";
-import { CreateProduct, ItemUnit } from "../../main.type";
-import { CreateProductAction, CreateProductTypes } from "./AddProduct.type";
+import { CreateProductType, ItemUnit } from "../../main.type";
+import {
+  CreateProductAction,
+  CreateProductActionKeys,
+} from "./AddProduct.type";
 
-export const initialStateProduct: CreateProduct = {
+export const initialStateProduct: CreateProductType = {
   name: "",
   price: 0,
   sold_by: ItemUnit.unknown,
@@ -11,13 +14,13 @@ export const initialStateProduct: CreateProduct = {
 };
 
 export const createProductReducer: Reducer<
-  CreateProduct,
+  CreateProductType,
   CreateProductAction
 > = (state, action) => {
   switch (action.type) {
-    case CreateProductTypes.ADD_PRODUCT_VALUE:
+    case CreateProductActionKeys.ADD_PRODUCT_VALUE:
       return { ...state, ...action.payload };
-    case CreateProductTypes.RESET_DATA:
+    case CreateProductActionKeys.RESET_DATA:
       return initialStateProduct;
     default:
       return state;

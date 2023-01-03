@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
 import { UploadImage } from "../../../Home";
-import { CreateProductTypes, ISetAddProductInfo } from "../../AddProduct.type";
+import {
+  CreateProductActionKeys,
+  ISetAddProductInfo,
+} from "../../AddProduct.type";
 import style from "./SetProductInfo.module.css";
 
 type SetProductInfoProps = {
@@ -31,7 +34,7 @@ const SetProductInfo = ({ productDispatch }: SetProductInfoProps) => {
     }
 
     productDispatch({
-      type: CreateProductTypes.ADD_PRODUCT_VALUE,
+      type: CreateProductActionKeys.ADD_PRODUCT_VALUE,
       payload: { [payloadKey]: payloadValue },
     });
   };
