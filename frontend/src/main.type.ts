@@ -89,5 +89,5 @@ export type CreateProductType = {
   price: number;
   sold_by: ItemUnit;
   image: File | string;
-  preps: Omit<IPrep[], "id">;
+  preps: IPrep[];
 };
