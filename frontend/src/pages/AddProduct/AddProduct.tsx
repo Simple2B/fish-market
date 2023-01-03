@@ -61,14 +61,15 @@ const AddProduct = () => {
     navigator("/settings");
   };
 
-  console.log(newProductState, "newProductState");
-
   return (
     <div className={style.addProductContent}>
       <div className={style.addProductContentTitle}>
         {textData[settingsViewKey.ADD_NEW_ITEM]}
       </div>
-      <CreateProduct productDispatch={newProductDispatch} />
+      <CreateProduct
+        productDispatch={newProductDispatch}
+        productState={newProductState}
+      />
       <div className={style.addProductContentButtons}>
         <CustomBtn
           btnName={textData[settingsViewKey.ADD_ITEM]}

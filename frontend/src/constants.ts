@@ -41,9 +41,11 @@ export const settingsViewKey = {
   CONFIRM: "Confirm",
   TITLE_LINK: "titleLinkKey",
   NOTIFY_MES: "notifyMessageKey",
+  SOLD_BY_TEXT: "soldByTextKey",
 };
 
 export const SETTINGS_VIEW_TEXT_DATA = {
+  [settingsViewKey.SOLD_BY_TEXT]: "Sold by",
   [settingsViewKey.ADD_NEW_ITEM]: "Add new item",
   [settingsViewKey.CANCEL]: "Cancel",
   [settingsViewKey.ADD_ITEM]: "Add Item",
