@@ -35,16 +35,24 @@ export const settingsViewKey = {
   UPLOAD_IMAGE: "uploadImage",
   ADD_NEW_ITEM: "addNewProductKey",
   ADD_ITEM: "addProductKey",
-  ADD: "",
+  ADD: "addKey",
   CANCEL: "cancelKey",
   DELETE_ITEM: "",
   CONFIRM: "Confirm",
   TITLE_LINK: "titleLinkKey",
   NOTIFY_MES: "notifyMessageKey",
   SOLD_BY_TEXT: "soldByTextKey",
+  NO_PREPS_TEXT: "noPrepTextKey",
+  PREPS_TITLE: "prepsTitleKey",
+  ADD_PREP_TITLE: "addPrepTitleKey",
 };
 
 export const SETTINGS_VIEW_TEXT_DATA = {
+  [settingsViewKey.ADD]: "Add",
+  [settingsViewKey.ADD_PREP_TITLE]: "Add new prep",
+  [settingsViewKey.PREPS_TITLE]: "Preps possible:",
+  [settingsViewKey.NO_PREPS_TEXT]:
+    "There are no preps possible right now. Please add new preps on the right.",
   [settingsViewKey.SOLD_BY_TEXT]: "Sold by",
   [settingsViewKey.ADD_NEW_ITEM]: "Add new item",
   [settingsViewKey.CANCEL]: "Cancel",

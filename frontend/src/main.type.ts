@@ -79,6 +79,7 @@ export enum ImageType {
 }
 
 export interface IPrep {
+  id: number;
   name: string;
   is_active: boolean;
 }
@@ -88,5 +89,5 @@ export type CreateProductType = {
   price: number;
   sold_by: ItemUnit;
   image: File | string;
-  preps: IPrep[];
+  preps: Omit<IPrep[], "id">;
 };
