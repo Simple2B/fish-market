@@ -34,11 +34,8 @@ const ContentPrep = ({ id }: ContentPrepProps) => {
     mutationFn: deleteProductPrepById,
     onSuccess: () => {
       queryClient.invalidateQueries([GET_BUSINESS_PRODUCTS_PREPS, id]);
-      console.log("success delete");
     },
-    onError: () => {
-      console.log("error");
-    },
+    onError: () => {},
   });
 
   const mutationCreateProductPrep = useMutation({

@@ -50,8 +50,6 @@ const CreateProduct = ({
     });
   };
 
-  console.log(productState, "productState");
-
   return (
     <div className={style.productViewContent}>
       <SetProductInfo productDispatch={productDispatch} />

@@ -158,7 +158,7 @@ export const updateBusinessProductById = async (data: {
   });
 
   if (!res.ok) {
-    console.log(`Can't update product soldBy product_id: ${data.product_id}`);
+    console.error(`Can't update product soldBy product_id: ${data.product_id}`);
     return;
   }
 };
@@ -170,7 +170,7 @@ export const getBusinessProductPreps = async (id: number) => {
   });
 
   if (!res.ok) {
-    console.log(`Can't get product preps: product_id${id}`);
+    console.error(`Can't get product preps: product_id${id}`);
     return;
   }
 
@@ -194,7 +194,7 @@ export const activateDeactivatePrep = async (data: {
   );
 
   if (!res.ok) {
-    console.log(
+    console.error(
       `Can't update product isActive product_id: ${data.product_id}, prep_id: ${data.prep_id}`
     );
     return;
@@ -214,7 +214,7 @@ export const deleteProductPrepById = async (data: {
   );
 
   if (!res.ok) {
-    console.log(
+    console.error(
       `Can't delete product prep product_id: ${data.product_id} prep_id:${data.prep_id}`
     );
     return;
@@ -232,7 +232,7 @@ export const createProductPrep = async (data: {
   });
 
   if (!res.ok) {
-    console.log(`Can't create product prep product_id: ${data.product_id}`);
+    console.error(`Can't create product prep product_id: ${data.product_id}`);
     return;
   }
 };
@@ -244,7 +244,7 @@ export const deleteProductById = async (id: number) => {
   });
 
   if (!res.ok) {
-    console.log(`Can't delete product  product_id: ${id}`);
+    console.error(`Can't delete product  product_id: ${id}`);
     return;
   }
 };
