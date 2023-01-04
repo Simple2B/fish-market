@@ -10,6 +10,7 @@ export const modalDataKeys = {
   REMOVE_ORDER: "removeOrderKey",
   REPLENISH_ALL: "replenishAllKey",
   LOG_OUT_MODAL: "logOutModalKey",
+  DELETE_PRODUCT: "deleteProductKey",
 };
 
 export const filterBtnNameKeys = {
@@ -97,6 +98,12 @@ export const CHANGE_PASSWORD_INPUT_DATA = {
 };
 
 export const MODAL_TEXT_DATA = {
+  [modalDataKeys.DELETE_PRODUCT]: {
+    title: "Are you sure you want to delete ",
+    btnName: "Delete item",
+    toastMessage: "The item was successfully deleted!",
+  },
+
   [modalDataKeys.CAN_NOT_COMPLETED]: {
     title: "Are you sure?",
     btnName: "Can’t complete",
