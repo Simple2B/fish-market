@@ -49,9 +49,13 @@ export const settingsViewKey = {
   ADD_PREP_TITLE: "addPrepTitleKey",
   MES_PRODUCT_WAS_CREATED: "mesProductWasCreatedKey",
   MES_PRODUCT_WAS_NOT_CREATED: "mesProductWasNotCreatedKey",
+  HIGHLIGHT_ALL_TEXT: "highlightAllTextKey",
+  UNHIGHLIGHT_ALL_TEXT: "unhighlightAllTextKey",
 };
 
 export const SETTINGS_VIEW_TEXT_DATA = {
+  [settingsViewKey.HIGHLIGHT_ALL_TEXT]: "Highlight all",
+  [settingsViewKey.UNHIGHLIGHT_ALL_TEXT]: "Unhighlight all",
   [settingsViewKey.SOLD_BY_KG]: "By kg",
   [settingsViewKey.SOLD_BY_UNIT]: "By unit",
   [settingsViewKey.MES_PRODUCT_WAS_CREATED]: "A new item was created",

@@ -2,6 +2,7 @@ import style from "./PrepsView.module.css";
 import { IPrep } from "../../main.type";
 import { settingsViewKey, SETTINGS_VIEW_TEXT_DATA } from "../../constants";
 import { Prep } from "./Prep";
+import classNames from "classnames";
 
 const textData = SETTINGS_VIEW_TEXT_DATA;
 
@@ -9,17 +10,26 @@ type PrepsViewProps = {
   preps: IPrep[];
   handlerOnClickPrep: (id: number) => void;
   handlerDeletePrep: (id: number) => void;
+  children?: React.ReactNode;
 };
 
 const PrepsView = ({
   preps,
   handlerOnClickPrep,
   handlerDeletePrep,
+  children,
 }: PrepsViewProps) => {
   return (
     <div className={style.prepsViewContent}>
-      <div className={style.prepsViewContentWrap}>
-        <div>{textData[settingsViewKey.PREPS_TITLE]}</div>
+      <div
+        className={`${style.prepsViewContentWrap} ${
+          !children ? style.prepsViewContentWrapWithOutChildren : ""
+        } `}
+      >
+        <div className={style.prepsViewContentChildren}>
+          <div>{textData[settingsViewKey.PREPS_TITLE]}</div>
+          <div>{children && <>{children}</>}</div>
+        </div>
         {preps.length >= 1 ? (
           <div className={style.prepsList}>
             {preps.map((p) => (

@@ -13,6 +13,11 @@
     line-height: 1.6rem;
 }
 
+.contentPrep {
+    display: flex;
+    width: 32.6;
+}
+
 
 .deleteProductBtn {
     height: 100%;
@@ -37,6 +42,29 @@
     color: red;
     font-size: 2rem;
 }
+
+
+.highlightButtonsContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.highlightBtn {
+    height: 2rem;
+    width: 9.3rem;
+
+    padding: 0.3rem auto;
+    text-align: center;
+
+    box-sizing: border-box;
+    border: 2px solid #C1E1FF;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 
 @media (max-width: 1024px) {
     .showUpdateProductContent {

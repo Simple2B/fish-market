@@ -11,6 +11,7 @@ import {
 } from "../../../../../../services";
 import { ContentPrep } from "./ContentPrep";
 import { DeleteProductBtn } from "./DeleteProductBtn";
+import { HighlightButtons } from "./HighlightButtons";
 import { ProductInfo } from "./ProductInfo";
 import style from "./ShowUpdateProduct.module.css";
 
@@ -56,7 +57,12 @@ const ShowUpdateProduct = ({ id }: ProductId) => {
             soldByStatus={data.sold_by}
             handlerSoldBy={handlerSoldByProduct}
           />
-          <ContentPrep id={id} />
+          <ContentPrep id={id}>
+            <HighlightButtons
+              handlerHighlightAll={() => {}}
+              handlerUnhighlightAll={() => {}}
+            />
+          </ContentPrep>
           <DeleteProductBtn handlerDeleteProduct={handlerDeleteProduct} />
         </>
       )}

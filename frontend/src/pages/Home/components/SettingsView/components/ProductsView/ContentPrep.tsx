@@ -10,11 +10,14 @@ import {
   GET_BUSINESS_PRODUCTS_PREPS,
 } from "../../../../../../services";
 
+import style from "./ShowUpdateProduct.module.css";
+
 type ContentPrepProps = {
   id: number;
+  children: React.ReactNode;
 };
 
-const ContentPrep = ({ id }: ContentPrepProps) => {
+const ContentPrep = ({ id, children }: ContentPrepProps) => {
   const { data } = useQuery({
     queryKey: [GET_BUSINESS_PRODUCTS_PREPS, id],
     queryFn: () => getBusinessProductPreps(id),
@@ -78,14 +81,16 @@ const ContentPrep = ({ id }: ContentPrepProps) => {
   return (
     <>
       {data && (
-        <>
+        <div className={style.contentPrep}>
           <PrepsView
             preps={data}
             handlerOnClickPrep={handlerOnClickPrep}
             handlerDeletePrep={handlerDeletePrep}
-          />
+          >
+            {children}
+          </PrepsView>
           <AddPrepForm handlerAddPreps={handlerAddPreps} />
-        </>
+        </div>
       )}
     </>
   );
