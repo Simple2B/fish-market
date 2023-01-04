@@ -15,7 +15,8 @@
     justify-content: space-between;
     align-items: center;
 
-    margin-top: 1.5rem;
+    margin: 1.5rem 0;
+
 }
 
 .productsViewContentBtn>div {
@@ -28,6 +29,13 @@
     background: #C1E1FF;
 }
 
+
+.productsViewContentWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem 0;
+}
 
 
 

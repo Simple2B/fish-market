@@ -1,11 +1,21 @@
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { CustomBtn } from "../../../../../../components";
+import { CustomBtn, Spinner } from "../../../../../../components";
+import {
+  getBusinessProduct,
+  GET_BUSINESS_PRODUCTS,
+} from "../../../../../../services";
 import style from "./ProductView.module.css";
+import { ProductId, ShowUpdateProduct } from "./ShowUpdateProduct";
 
-type Props = {};
-
-const ProductsView = (props: Props) => {
+const ProductsView = () => {
   const navigate = useNavigate();
+
+  const { data, isLoading } = useQuery({
+    queryKey: [GET_BUSINESS_PRODUCTS],
+    queryFn: getBusinessProduct,
+  });
+
   const handlerAddProduct = () => {
     navigate("/settings/add-product");
   };
@@ -20,7 +30,16 @@ const ProductsView = (props: Props) => {
           handlerOnClick={handlerAddProduct}
         />
       </div>
-      <div>products</div>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <div className={style.productsViewContentWrap}>
+          {data &&
+            data.map(({ id }: ProductId) => (
+              <ShowUpdateProduct key={id} id={id} />
+            ))}
+        </div>
+      )}
     </div>
   );
 };
