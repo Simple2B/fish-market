@@ -139,7 +139,7 @@ export const getBusinessProductById = async (id: number) => {
 
   if (!res.ok) {
     console.error("Can't get business product by id");
-    return undefined;
+    throw new Error("Can't get business product by id");
   }
 
   const resData = await res.json();
@@ -159,7 +159,7 @@ export const updateBusinessProductById = async (data: {
 
   if (!res.ok) {
     console.error(`Can't update product soldBy product_id: ${data.product_id}`);
-    return;
+    throw new Error("Can't update product soldBy");
   }
 };
 
@@ -171,7 +171,7 @@ export const getBusinessProductPreps = async (id: number) => {
 
   if (!res.ok) {
     console.error(`Can't get product preps: product_id${id}`);
-    return;
+    throw new Error("Can't get product preps");
   }
 
   const resData = await res.json();
@@ -197,7 +197,7 @@ export const activateDeactivatePrep = async (data: {
     console.error(
       `Can't update product isActive product_id: ${data.product_id}, prep_id: ${data.prep_id}`
     );
-    return;
+    throw new Error("Can't update product isActive");
   }
 };
 
@@ -217,7 +217,7 @@ export const deleteProductPrepById = async (data: {
     console.error(
       `Can't delete product prep product_id: ${data.product_id} prep_id:${data.prep_id}`
     );
-    return;
+    throw new Error("Can't delete product prep");
   }
 };
 
@@ -233,7 +233,7 @@ export const createProductPrep = async (data: {
 
   if (!res.ok) {
     console.error(`Can't create product prep product_id: ${data.product_id}`);
-    return;
+    throw new Error("Can't create product prep");
   }
 };
 
@@ -245,7 +245,7 @@ export const deleteProductById = async (id: number) => {
 
   if (!res.ok) {
     console.error(`Can't delete product  product_id: ${id}`);
-    return;
+    throw new Error("Can't delete product");
   }
 };
 
@@ -266,6 +266,6 @@ export const highlightProductPreps = async (data: {
     console.error(
       `Can't highlight(unhighlight) product preps  product_id: ${data.product_id}`
     );
-    return;
+    throw new Error("Can't highlight(unhighlight) product preps");
   }
 };

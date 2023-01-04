@@ -4,6 +4,7 @@ import { IPrep } from "../../../../../../main.type";
 import { queryClient } from "../../../../../../queryClient";
 import {
   activateDeactivatePrep,
+  CHECK_TOKEN_LOGIN,
   createProductPrep,
   deleteProductPrepById,
   getBusinessProductPreps,
@@ -22,6 +23,9 @@ const ContentPrep = ({ id }: ContentPrepProps) => {
   const { data } = useQuery({
     queryKey: [GET_BUSINESS_PRODUCTS_PREPS, id],
     queryFn: () => getBusinessProductPreps(id),
+    onError: () => {
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
+    },
   });
 
   const mutationDeactivateActivatePrep = useMutation({
@@ -30,7 +34,7 @@ const ContentPrep = ({ id }: ContentPrepProps) => {
       queryClient.invalidateQueries([GET_BUSINESS_PRODUCTS_PREPS, id]);
     },
     onError: () => {
-      console.log("error");
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
     },
   });
 
@@ -39,7 +43,9 @@ const ContentPrep = ({ id }: ContentPrepProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries([GET_BUSINESS_PRODUCTS_PREPS, id]);
     },
-    onError: () => {},
+    onError: () => {
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
+    },
   });
 
   const mutationCreateProductPrep = useMutation({
@@ -47,7 +53,9 @@ const ContentPrep = ({ id }: ContentPrepProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries([GET_BUSINESS_PRODUCTS_PREPS, id]);
     },
-    onError: () => {},
+    onError: () => {
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
+    },
   });
 
   const mutationHighlightProductPreps = useMutation({
@@ -55,7 +63,9 @@ const ContentPrep = ({ id }: ContentPrepProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries([GET_BUSINESS_PRODUCTS_PREPS, id]);
     },
-    onError: () => {},
+    onError: () => {
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
+    },
   });
 
   const handlerOnClickPrep = (prepId: number) => {

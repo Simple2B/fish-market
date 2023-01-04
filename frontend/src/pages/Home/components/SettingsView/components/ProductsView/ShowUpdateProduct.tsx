@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useOutletContext } from "react-router-dom";
-import { AddPrepForm, SetProductSoldBy } from "../../../../../../components";
+import { SetProductSoldBy } from "../../../../../../components";
 import { modalDataKeys, MODAL_TEXT_DATA } from "../../../../../../constants";
 import {
   IOpenModalData,
@@ -9,6 +9,7 @@ import {
 } from "../../../../../../main.type";
 import { queryClient } from "../../../../../../queryClient";
 import {
+  CHECK_TOKEN_LOGIN,
   deleteProductById,
   getBusinessProductById,
   GET_BUSINESS_PRODUCTS,
@@ -18,7 +19,6 @@ import {
 } from "../../../../../../services";
 import { ContentPrep } from "./ContentPrep";
 import { DeleteProductBtn } from "./DeleteProductBtn";
-import { HighlightButtons } from "./HighlightButtons";
 import { ProductInfo } from "./ProductInfo";
 import style from "./ShowUpdateProduct.module.css";
 
@@ -34,12 +34,18 @@ const ShowUpdateProduct = ({ id }: ProductId) => {
   const { data } = useQuery({
     queryKey: [GET_BUSINESS_PRODUCTS_BY_ID, id],
     queryFn: () => getBusinessProductById(id),
+    onError: () => {
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
+    },
   });
 
   const mutationUpdateProductValues = useMutation({
     mutationFn: updateBusinessProductById,
     onSuccess: () => {
       queryClient.invalidateQueries([GET_BUSINESS_PRODUCTS_BY_ID, id]);
+    },
+    onError: () => {
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
     },
   });
 
@@ -48,6 +54,9 @@ const ShowUpdateProduct = ({ id }: ProductId) => {
     onSuccess: () => {
       queryClient.invalidateQueries([GET_BUSINESS_PRODUCTS]);
       notify(textModalData.toastMessage);
+    },
+    onError: () => {
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
     },
   });
 
