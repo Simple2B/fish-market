@@ -1,4 +1,4 @@
-import { CreateProductType, ImageType } from "./../main.type";
+import { CreateProductType, ImageType, TypeProductsOut } from "./../main.type";
 import { API_BASE_URL, TOKEN_KEY } from "../constants";
 import { IUserBusinessInfo } from "../main.type";
 import { setRequestHeaders } from "../utils";
@@ -113,4 +113,58 @@ export const createProduct = async (data: CreateProductType) => {
   const resData = await res.json();
 
   return resData;
+};
+
+export const getBusinessProduct = async () => {
+  const res = await fetch(`${API_BASE_URL}/product/`, {
+    method: "GET",
+    headers: setRequestHeaders(TOKEN_KEY),
+  });
+
+  if (!res.ok) {
+    console.error("Can't get business product");
+    return [];
+  }
+
+  const resData = await res.json();
+
+  return resData.products.sort(
+    (pA: { id: number }, pB: { id: number }) => pB.id - pA.id
+  );
+};
+
+export const getBusinessProductById = async (id: number) => {
+  const res = await fetch(`${API_BASE_URL}/product/${id}`, {
+    method: "GET",
+    headers: setRequestHeaders(TOKEN_KEY),
+  });
+
+  if (!res.ok) {
+    console.error("Can't get business product by id");
+    return undefined;
+  }
+
+  const resData = await res.json();
+
+  return resData;
+};
+
+export const updateBusinessProductById = async (data: {
+  product_id: number;
+  body: Partial<Omit<TypeProductsOut, "is_out_of_stock">>;
+}) => {
+  // console.log(data.body, "body");
+
+  const res = await fetch(`${API_BASE_URL}/product/${data.product_id}`, {
+    method: "PATCH",
+    headers: setRequestHeaders(TOKEN_KEY),
+    body: JSON.stringify(data.body),
+  });
+
+  if (!res.ok) {
+    console.log(
+      `Can't update product_id: ${data.product_id} body:${data.body}`
+    );
+    return;
+  }
 };
