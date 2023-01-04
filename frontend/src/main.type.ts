@@ -58,7 +58,7 @@ export type TypeProductsOut = {
   id: number;
   name: string;
   price: number;
-  sold_by: typeof ItemUnit;
+  sold_by: ItemUnit;
   image: string;
   is_out_of_stock?: boolean;
 };
