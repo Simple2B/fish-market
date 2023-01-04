@@ -91,3 +91,7 @@ export type CreateProductType = {
   image: File | string;
   preps: IPrep[];
 };
+
+export type ObjId = {
+  id: number;
+};

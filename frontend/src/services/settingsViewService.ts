@@ -1,4 +1,4 @@
-import { CreateProductType, ImageType, TypeProductsOut } from "./../main.type";
+import { CreateProductType, ImageType, ItemUnit, ObjId } from "./../main.type";
 import { API_BASE_URL, TOKEN_KEY } from "../constants";
 import { IUserBusinessInfo } from "../main.type";
 import { setRequestHeaders } from "../utils";
@@ -128,9 +128,7 @@ export const getBusinessProduct = async () => {
 
   const resData = await res.json();
 
-  return resData.products.sort(
-    (pA: { id: number }, pB: { id: number }) => pB.id - pA.id
-  );
+  return resData.products.sort((pA: ObjId, pB: ObjId) => pB.id - pA.id);
 };
 
 export const getBusinessProductById = async (id: number) => {
@@ -151,10 +149,8 @@ export const getBusinessProductById = async (id: number) => {
 
 export const updateBusinessProductById = async (data: {
   product_id: number;
-  body: Partial<Omit<TypeProductsOut, "is_out_of_stock">>;
+  body: { sold_by: ItemUnit };
 }) => {
-  // console.log(data.body, "body");
-
   const res = await fetch(`${API_BASE_URL}/product/${data.product_id}`, {
     method: "PATCH",
     headers: setRequestHeaders(TOKEN_KEY),
@@ -162,9 +158,81 @@ export const updateBusinessProductById = async (data: {
   });
 
   if (!res.ok) {
+    console.log(`Can't update product soldBy product_id: ${data.product_id}`);
+    return;
+  }
+};
+
+export const getBusinessProductPreps = async (id: number) => {
+  const res = await fetch(`${API_BASE_URL}/product/${id}/prep`, {
+    method: "GET",
+    headers: setRequestHeaders(TOKEN_KEY),
+  });
+
+  if (!res.ok) {
+    console.log(`Can't get product preps: product_id${id}`);
+    return;
+  }
+
+  const resData = await res.json();
+
+  return resData.preps.sort((idA: ObjId, idB: ObjId) => idA.id - idB.id);
+};
+
+export const activateDeactivatePrep = async (data: {
+  product_id: number;
+  prep_id: number;
+  body: { is_active: boolean };
+}) => {
+  const res = await fetch(
+    `${API_BASE_URL}/product/${data.product_id}/prep/${data.prep_id}`,
+    {
+      method: "PATCH",
+      headers: setRequestHeaders(TOKEN_KEY),
+      body: JSON.stringify(data.body),
+    }
+  );
+
+  if (!res.ok) {
     console.log(
-      `Can't update product_id: ${data.product_id} body:${data.body}`
+      `Can't update product isActive product_id: ${data.product_id}, prep_id: ${data.prep_id}`
     );
+    return;
+  }
+};
+
+export const deleteProductPrepById = async (data: {
+  product_id: number;
+  prep_id: number;
+}) => {
+  const res = await fetch(
+    `${API_BASE_URL}/product/${data.product_id}/prep/${data.prep_id}`,
+    {
+      method: "DELETE",
+      headers: setRequestHeaders(TOKEN_KEY),
+    }
+  );
+
+  if (!res.ok) {
+    console.log(
+      `Can't delete product prep product_id: ${data.product_id} prep_id:${data.prep_id}`
+    );
+    return;
+  }
+};
+
+export const createProductPrep = async (data: {
+  product_id: number;
+  body: { name: string };
+}) => {
+  const res = await fetch(`${API_BASE_URL}/product/${data.product_id}/prep`, {
+    method: "POST",
+    headers: setRequestHeaders(TOKEN_KEY),
+    body: JSON.stringify(data.body),
+  });
+
+  if (!res.ok) {
+    console.log(`Can't create product prep product_id: ${data.product_id}`);
     return;
   }
 };

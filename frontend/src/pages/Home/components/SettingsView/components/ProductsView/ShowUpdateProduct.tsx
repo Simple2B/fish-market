@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { SetProductSoldBy } from "../../../../../../components";
+import { AddPrepForm, SetProductSoldBy } from "../../../../../../components";
 import { ItemUnit } from "../../../../../../main.type";
 import { queryClient } from "../../../../../../queryClient";
 import {
@@ -7,6 +7,7 @@ import {
   GET_BUSINESS_PRODUCTS_BY_ID,
   updateBusinessProductById,
 } from "../../../../../../services";
+import { ContentPrep } from "./ContentPrep";
 import { ProductInfo } from "./ProductInfo";
 import style from "./ShowUpdateProduct.module.css";
 
@@ -42,6 +43,7 @@ const ShowUpdateProduct = ({ id }: ProductId) => {
             soldByStatus={data.sold_by}
             handlerSoldBy={handlerSoldByProduct}
           />
+          <ContentPrep id={id} />
         </>
       )}
     </div>

@@ -6,6 +6,7 @@ export {
   GET_USER_BUSINESS_ADD_PRODUCT,
   GET_BUSINESS_PRODUCTS,
   GET_BUSINESS_PRODUCTS_BY_ID,
+  GET_BUSINESS_PRODUCTS_PREPS,
 } from "./queryKeys";
 
 export {
@@ -38,5 +39,9 @@ export {
   getBusinessProduct,
   getBusinessProductById,
   updateBusinessProductById,
+  getBusinessProductPreps,
+  activateDeactivatePrep,
+  deleteProductPrepById,
+  createProductPrep,
 } from "./settingsViewService";
 export type { uploadImageDatatype } from "./settingsViewService";
