@@ -65,7 +65,9 @@ def get_business_product_out(business_uid: str, db: Session = Depends(get_db)):
     products = [
         product
         for product in business.products
-        if not product.is_deleted and not product.is_out_of_stock
+        if not product.is_deleted
+        and not product.is_out_of_stock
+        and product.sold_by != m.SoldBy.unknown
     ]
 
     show_products = []
