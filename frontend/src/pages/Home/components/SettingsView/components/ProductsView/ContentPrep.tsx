@@ -8,16 +8,17 @@ import {
   deleteProductPrepById,
   getBusinessProductPreps,
   GET_BUSINESS_PRODUCTS_PREPS,
+  highlightProductPreps,
 } from "../../../../../../services";
+import { HighlightButtons } from "./HighlightButtons";
 
 import style from "./ShowUpdateProduct.module.css";
 
 type ContentPrepProps = {
   id: number;
-  children: React.ReactNode;
 };
 
-const ContentPrep = ({ id, children }: ContentPrepProps) => {
+const ContentPrep = ({ id }: ContentPrepProps) => {
   const { data } = useQuery({
     queryKey: [GET_BUSINESS_PRODUCTS_PREPS, id],
     queryFn: () => getBusinessProductPreps(id),
@@ -49,9 +50,15 @@ const ContentPrep = ({ id, children }: ContentPrepProps) => {
     onError: () => {},
   });
 
-  const handlerOnClickPrep = (prepId: number) => {
-    if (!data) return;
+  const mutationHighlightProductPreps = useMutation({
+    mutationFn: highlightProductPreps,
+    onSuccess: () => {
+      queryClient.invalidateQueries([GET_BUSINESS_PRODUCTS_PREPS, id]);
+    },
+    onError: () => {},
+  });
 
+  const handlerOnClickPrep = (prepId: number) => {
     const isActive = !data.find((prep: IPrep) => prep.id === prepId).is_active;
 
     const reqData = {
@@ -78,6 +85,15 @@ const ContentPrep = ({ id, children }: ContentPrepProps) => {
     });
   };
 
+  const handlerUHighlightAll = (isHighlight: boolean) => {
+    if (data && data.length <= 0) return;
+
+    mutationHighlightProductPreps.mutate({
+      product_id: id,
+      body: { is_highlight: isHighlight },
+    });
+  };
+
   return (
     <>
       {data && (
@@ -87,7 +103,10 @@ const ContentPrep = ({ id, children }: ContentPrepProps) => {
             handlerOnClickPrep={handlerOnClickPrep}
             handlerDeletePrep={handlerDeletePrep}
           >
-            {children}
+            <HighlightButtons
+              handlerHighlightAll={() => handlerUHighlightAll(true)}
+              handlerUnHighlightAll={() => handlerUHighlightAll(false)}
+            />
           </PrepsView>
           <AddPrepForm handlerAddPreps={handlerAddPreps} />
         </div>

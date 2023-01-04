@@ -44,5 +44,6 @@ export {
   deleteProductPrepById,
   createProductPrep,
   deleteProductById,
+  highlightProductPreps,
 } from "./settingsViewService";
 export type { uploadImageDatatype } from "./settingsViewService";

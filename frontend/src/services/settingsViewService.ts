@@ -248,3 +248,24 @@ export const deleteProductById = async (id: number) => {
     return;
   }
 };
+
+export const highlightProductPreps = async (data: {
+  product_id: number;
+  body: { is_highlight: boolean };
+}) => {
+  const res = await fetch(
+    `${API_BASE_URL}/product/${data.product_id}/prep-highlight`,
+    {
+      method: "PATCH",
+      headers: setRequestHeaders(TOKEN_KEY),
+      body: JSON.stringify(data.body),
+    }
+  );
+
+  if (!res.ok) {
+    console.error(
+      `Can't highlight(unhighlight) product preps  product_id: ${data.product_id}`
+    );
+    return;
+  }
+};

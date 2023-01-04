@@ -75,12 +75,7 @@ const ShowUpdateProduct = ({ id }: ProductId) => {
             soldByStatus={data.sold_by}
             handlerSoldBy={handlerSoldByProduct}
           />
-          <ContentPrep id={id}>
-            <HighlightButtons
-              handlerHighlightAll={() => {}}
-              handlerUnhighlightAll={() => {}}
-            />
-          </ContentPrep>
+          <ContentPrep id={id} />
           <DeleteProductBtn handlerDeleteProduct={handlerDeleteProduct} />
         </>
       )}
