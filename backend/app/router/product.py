@@ -215,3 +215,31 @@ def patch_product_prep_by_id(
     db.commit()
 
     return prep
+
+
+@router.patch(
+    "/{product_id}/prep-highlight",
+    status_code=status.HTTP_200_OK,
+)
+def highlight_product_prep(
+    data: s.HighlightPreps,
+    product_id: int,
+    db: Session = Depends(get_db),
+    current_user: m.User = Depends(get_current_user),
+):
+
+    product = db.query(m.Product).get(product_id)
+
+    check_access_to_product(product=product, user=current_user, product_id=product_id)
+
+    is_active = not data.is_highlight
+
+    preps = db.query(m.Prep).filter_by(
+        product_id=product_id, is_deleted=False, is_active=is_active
+    )
+
+    for prep in preps:
+        prep.is_active = data.is_highlight
+        db.commit()
+
+    return {"ok", True}

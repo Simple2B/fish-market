@@ -11,6 +11,7 @@ from .product_schemas import (
     CreateProduct,
     UpdateProduct,
     CreatePrep,
+    HighlightPreps,
 )
 from .business_product_out_schemas import (
     BusinessProductsOut,
