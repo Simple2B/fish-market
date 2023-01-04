@@ -1,12 +1,14 @@
-import { AddPrepForm } from "../../../../components";
-import { CreateProductType } from "../../../../main.type";
+import {
+  AddPrepForm,
+  PrepsView,
+  SetProductSoldBy,
+} from "../../../../components";
+import { CreateProductType, ItemUnit } from "../../../../main.type";
 import {
   CreateProductAction,
   CreateProductActionKeys,
 } from "../../AddProduct.type";
-import { PrepsView } from "../PrepsView";
 import { SetProductInfo } from "../SetProductInfo";
-import { SetProductSoldBy } from "../SetProductSoldBy";
 import style from "./CreateProduct.module.css";
 
 type CreateProductProps = {
@@ -41,12 +43,21 @@ const CreateProduct = ({
     });
   };
 
+  const handlerSoldBy = (status: ItemUnit) => {
+    productDispatch({
+      type: CreateProductActionKeys.ADD_PRODUCT_VALUE,
+      payload: { sold_by: status },
+    });
+  };
+
+  console.log(productState, "productState");
+
   return (
     <div className={style.productViewContent}>
       <SetProductInfo productDispatch={productDispatch} />
       <SetProductSoldBy
-        productState={productState}
-        productDispatch={productDispatch}
+        soldByStatus={productState.sold_by}
+        handlerSoldBy={handlerSoldBy}
       />
       <PrepsView
         preps={productState.preps}

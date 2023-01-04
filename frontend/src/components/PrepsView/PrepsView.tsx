@@ -1,9 +1,6 @@
 import style from "./PrepsView.module.css";
-import { IPrep } from "../../../../main.type";
-import {
-  settingsViewKey,
-  SETTINGS_VIEW_TEXT_DATA,
-} from "../../../../constants";
+import { IPrep } from "../../main.type";
+import { settingsViewKey, SETTINGS_VIEW_TEXT_DATA } from "../../constants";
 import { Prep } from "./Prep";
 
 const textData = SETTINGS_VIEW_TEXT_DATA;
