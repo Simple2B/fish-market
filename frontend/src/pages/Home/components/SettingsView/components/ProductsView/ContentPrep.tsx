@@ -45,22 +45,14 @@ const ContentPrep = ({ id }: ContentPrepProps) => {
     mutationFn: createProductPrep,
     onSuccess: () => {
       queryClient.invalidateQueries([GET_BUSINESS_PRODUCTS_PREPS, id]);
-      console.log("success created");
     },
-    onError: () => {
-      console.log("error, mutationCreateProductPrep");
-    },
+    onError: () => {},
   });
 
   const handlerOnClickPrep = (prepId: number) => {
     if (!data) return;
 
     const isActive = !data.find((prep: IPrep) => prep.id === prepId).is_active;
-
-    console.log(
-      data.find((prep: IPrep) => prep.id === prepId),
-      "prep"
-    );
 
     const reqData = {
       product_id: id,

@@ -3,11 +3,14 @@ import { AddPrepForm, SetProductSoldBy } from "../../../../../../components";
 import { ItemUnit } from "../../../../../../main.type";
 import { queryClient } from "../../../../../../queryClient";
 import {
+  deleteProductById,
   getBusinessProductById,
+  GET_BUSINESS_PRODUCTS,
   GET_BUSINESS_PRODUCTS_BY_ID,
   updateBusinessProductById,
 } from "../../../../../../services";
 import { ContentPrep } from "./ContentPrep";
+import { DeleteProductBtn } from "./DeleteProductBtn";
 import { ProductInfo } from "./ProductInfo";
 import style from "./ShowUpdateProduct.module.css";
 
@@ -25,13 +28,23 @@ const ShowUpdateProduct = ({ id }: ProductId) => {
     mutationFn: updateBusinessProductById,
     onSuccess: () => {
       queryClient.invalidateQueries([GET_BUSINESS_PRODUCTS_BY_ID, id]);
-      console.log("success");
+    },
+  });
+
+  const mutationDeleteProduct = useMutation({
+    mutationFn: deleteProductById,
+    onSuccess: () => {
+      queryClient.invalidateQueries([GET_BUSINESS_PRODUCTS]);
     },
   });
 
   const handlerSoldByProduct = (status: ItemUnit) => {
     const reqData = { product_id: id, body: { sold_by: status } };
     mutationUpdateProductValues.mutate(reqData);
+  };
+
+  const handlerDeleteProduct = () => {
+    mutationDeleteProduct.mutate(id);
   };
 
   return (
@@ -44,6 +57,7 @@ const ShowUpdateProduct = ({ id }: ProductId) => {
             handlerSoldBy={handlerSoldByProduct}
           />
           <ContentPrep id={id} />
+          <DeleteProductBtn handlerDeleteProduct={handlerDeleteProduct} />
         </>
       )}
     </div>

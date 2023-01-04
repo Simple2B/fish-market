@@ -236,3 +236,15 @@ export const createProductPrep = async (data: {
     return;
   }
 };
+
+export const deleteProductById = async (id: number) => {
+  const res = await fetch(`${API_BASE_URL}/product/${id}`, {
+    method: "DELETE",
+    headers: setRequestHeaders(TOKEN_KEY),
+  });
+
+  if (!res.ok) {
+    console.log(`Can't delete product  product_id: ${id}`);
+    return;
+  }
+};
