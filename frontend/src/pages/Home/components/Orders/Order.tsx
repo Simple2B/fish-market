@@ -5,7 +5,7 @@ import { useOutletContext } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 
 import style from "./Order.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { OrderItem } from "./OrderItem";
 import {
   IOpenModalData,
@@ -51,10 +51,19 @@ const Order = ({
   items,
   status,
   is_deleted,
-}: OrderData) => {
+  setArrayActiveOrders,
+}: OrderData & { setArrayActiveOrders: (n: number[]) => void }) => {
   const [showItems, setShowItems] = useState<boolean>(false);
 
   const { openModal } = useOutletContext<ManagerOutletContext>();
+
+  // useEffect(() => {
+  //   if (showItems) {
+  //     setArrayActiveOrders((current) => {
+  //       return [...current, id];
+  //     });
+  //   }
+  // }, [showItems]);
 
   const changeStatusOrder = useMutation({
     mutationFn: changeOrder,
@@ -178,7 +187,11 @@ const Order = ({
             </div>
             <div className={style.orderContentDataRow}>
               <span>Due date:</span>
-              {new Date(orderDataTime).toDateString()}
+              {new Date(orderDataTime).toLocaleString([], {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+              })}
             </div>
             <div className={style.orderContentDataRow}>
               <span>Name: </span> {customer_name}

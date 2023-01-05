@@ -42,8 +42,6 @@ export interface IOpenModalData {
 
 export type ManagerOutletContext = {
   openModal: (OpenModalData: IOpenModalData) => void;
-  activeBtnFilterName: string;
-  setActiveBtnFilterName: (n: string) => void;
 };
 
 // this enum already exists and in future will replace in the project

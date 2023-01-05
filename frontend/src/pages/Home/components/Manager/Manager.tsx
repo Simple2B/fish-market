@@ -20,11 +20,6 @@ const Manager = () => {
     return <Navigate to={"/orders"} replace={true} />;
   }
 
-  const [activeBtnFilterName, setActiveBtnFilterName] = useState<string>(
-    localStorage.getItem(ACTIVE_BTN_FILTER) ??
-      FILTER_BUTTONS[filterBtnNameKeys.PENDING].name!
-  );
-
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>("");
   const [modalConfirmLabel, setModalConfirmLabel] = useState<string>("");
@@ -57,18 +52,10 @@ const Manager = () => {
       <ToastContainer />
       <div className={style.navBar}>
         {contentManager.map((obj, idex) => {
-          return (
-            <MenuButton
-              key={idex}
-              btnName={obj.nameBtn}
-              setActiveBtnFilterName={setActiveBtnFilterName}
-            />
-          );
+          return <MenuButton key={idex} btnName={obj.nameBtn} />;
         })}
       </div>
-      <Outlet
-        context={{ openModal, activeBtnFilterName, setActiveBtnFilterName }}
-      />
+      <Outlet context={{ openModal }} />
       <CustomModal
         isOpen={isModalOpen}
         title={modalTitle}

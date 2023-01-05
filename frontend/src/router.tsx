@@ -15,11 +15,11 @@ const settingUrl = rebuildUrl(
 export const contentManager = [
   {
     nameBtn: NAV_MENU_BUTTONS[navMenuBtnNameKeys.ORDERS].name,
-    outLet: <Orders filterOptions={filterOptionsOrder} />,
+    outLet: <Orders filterOptions={filterOptionsOrder} isArchive={false} />,
   },
   {
     nameBtn: NAV_MENU_BUTTONS[navMenuBtnNameKeys.ARCHIVE].name,
-    outLet: <Orders filterOptions={filterOptionsArchive} />,
+    outLet: <Orders filterOptions={filterOptionsArchive} isArchive={true} />,
   },
   {
     nameBtn: NAV_MENU_BUTTONS[navMenuBtnNameKeys.OUT_OF_STOCK].name,

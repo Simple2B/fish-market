@@ -21,14 +21,15 @@ export {
   changeOrder,
   removeOrder,
   notify,
-  sortByData,
+  sortByDate,
   filterOptionsOrder,
   filterOptionsArchive,
   isOutOfStock,
   resetOutOfStock,
   isTokenValid,
+  getOrders,
 } from "./homeService";
-export type { FilteringFunctions, FilterBtnItem } from "./homeService";
+export type { FilteringFunctions, StatusBtnItem } from "./homeService";
 
 export {
   getUserBusinessInfo,

@@ -227,7 +227,7 @@ def highlight_product_prep(
     db: Session = Depends(get_db),
     current_user: m.User = Depends(get_current_user),
 ):
-
+    log(log.INFO, "highlight_product_prep: product_id [%d]", product_id)
     product = db.query(m.Product).get(product_id)
 
     check_access_to_product(product=product, user=current_user, product_id=product_id)

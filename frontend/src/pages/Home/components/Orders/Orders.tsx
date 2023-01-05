@@ -1,75 +1,85 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Spinner } from "../../../../components";
+
 import {
-  ACTIVE_BTN_FILTER_INDEX,
-  API_BASE_URL,
-  TOKEN_KEY,
-} from "../../../../constants";
-import {
-  FilteringFunctions,
   GET_ORDERS,
-  sortByData,
-  FilterBtnItem,
+  sortByDate,
+  StatusBtnItem,
+  getOrders,
+  CHECK_TOKEN_LOGIN,
 } from "../../../../services";
 import { Order } from "./Order";
 import style from "./Orders.module.css";
 import { FilterButton } from "./FilterButton";
-import { ManagerOutletContext, OrderData } from "../../../../main.type";
-import { useOutletContext } from "react-router-dom";
+import { OrderData } from "../../../../main.type";
+import { queryClient } from "../../../../queryClient";
 
-const Orders = ({ filterOptions }: { filterOptions: FilterBtnItem[] }) => {
+type OrdersProps = {
+  filterOptions: StatusBtnItem[];
+  isArchive: boolean;
+};
+
+const Orders = ({ filterOptions, isArchive }: OrdersProps) => {
   const [ordersData, setOrdersData] = useState<OrderData[]>([]);
-  const { activeBtnFilterName, setActiveBtnFilterName } =
-    useOutletContext<ManagerOutletContext>();
+  const [arrayActiveOrders, setArrayActiveOrders] = useState<number[]>([]);
+  const [activeBtnFilterName, setActiveBtnFilterName] = useState<string>("");
 
   const { data, isLoading } = useQuery({
-    queryKey: [GET_ORDERS],
-    queryFn: async () => {
-      const res = await fetch(`${API_BASE_URL}/order/`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
-        },
-      });
+    queryKey: [GET_ORDERS, isArchive],
+    queryFn: getOrders,
+    onSuccess: (data: OrderData[]) => {
+      if (activeBtnFilterName) {
+        const sortFunction = filterOptions.find(
+          (item) => item.name === activeBtnFilterName
+        )?.sortFn;
 
-      if (!res.ok) {
-        localStorage.removeItem(TOKEN_KEY);
-        console.error("Bad login");
-        return [];
+        if (!sortFunction) {
+          setActiveBtnFilterName("");
+          setOrdersData(data);
+          return;
+        }
+        setOrdersData([...data].sort(sortFunction));
+        return;
       }
 
-      const data = await res.json();
-
-      return data.orders.sort(sortByData);
+      setOrdersData(data);
+      console.log("onSuccess");
     },
-    onSuccess: (data) => {
-      if (!activeBtnFilterName) {
-        setActiveBtnFilterName(filterOptions[ACTIVE_BTN_FILTER_INDEX].name);
-      }
-
-      const filterFn = filterOptions.find(
-        (option) => option.name === activeBtnFilterName
-      )?.filterFn;
-
-      if (filterFn) {
-        setOrdersData(data.filter(filterFn));
-      }
+    onError: () => {
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
     },
   });
 
-  const handlerButtonsFilters = ({
-    filterFn,
-    name,
-  }: {
-    filterFn: FilteringFunctions;
-    name: string;
-  }) => {
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      console.log("5sek pass");
+
+      queryClient.invalidateQueries([GET_ORDERS]);
+
+      if (arrayActiveOrders.length >= 1) {
+        setOrdersData(
+          [...ordersData].sort((orderA, orderB) =>
+            arrayActiveOrders.includes(orderA.id) ? -1 : 0
+          )
+        );
+      }
+    }, 5000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const handlerButtonsFilters = ({ sortFn, name }: StatusBtnItem) => {
     if (!data) {
       return;
     }
-    setOrdersData([...data].filter(filterFn));
+
+    if (activeBtnFilterName === name) {
+      setActiveBtnFilterName("");
+      setOrdersData([...ordersData].sort(sortByDate));
+      return;
+    }
+    setOrdersData([...ordersData].sort(sortByDate).sort(sortFn));
     setActiveBtnFilterName(name);
   };
 
@@ -88,8 +98,13 @@ const Orders = ({ filterOptions }: { filterOptions: FilterBtnItem[] }) => {
         ))}
       </div>
       <div className={style.ordersContent}>
-        {ordersData &&
-          ordersData.map((el: OrderData) => <Order key={el.id} {...el} />)}
+        {ordersData.map((el: OrderData) => (
+          <Order
+            key={el.id}
+            {...el}
+            setArrayActiveOrders={setArrayActiveOrders}
+          />
+        ))}
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import { QueryFunction, QueryFunctionContext } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import {
   API_BASE_URL,
@@ -91,41 +92,40 @@ export const rebuildUrl = (url: string) => {
   return url.toLocaleLowerCase().replace(/\s+/g, "-");
 };
 
-export const isFilterInProgress = (order: OrderData): boolean => {
-  return (
-    (order.status === OrderStatus.in_progress ||
-      order.status === OrderStatus.ready) &&
-    !order.is_deleted
-  );
-};
-
-export const isFilterCreated = (order: OrderData): boolean => {
-  return order.status === OrderStatus.created && !order.is_deleted;
-};
-
-export const isFilterPending = (order: OrderData): boolean => {
-  return order.status === OrderStatus.pending && !order.is_deleted;
-};
-
-export const isFilterCompleted = (order: OrderData): boolean => {
-  return order.status === OrderStatus.picked_up && !order.is_deleted;
-};
-
-export const isFilterCancelled = (order: OrderData): boolean => {
-  return order.status === OrderStatus.can_not_complete || order.is_deleted;
-};
-
-export const sortByData = (orderA: OrderData, orderB: OrderData): number => {
+export const sortByDate = (orderA: OrderData, orderB: OrderData): number => {
   if (orderA.status == OrderStatus.created) {
     return Date.parse(orderB.pick_up_data!) - Date.parse(orderA.pick_up_data!);
   }
   return Date.parse(orderB.created_at) - Date.parse(orderA.created_at);
 };
 
+export const getOrders = async ({
+  queryKey,
+}: QueryFunctionContext<[string, boolean]>) => {
+  const [_, is_archive] = queryKey;
+
+  const res = await fetch(`${API_BASE_URL}/order/?is_archive=${is_archive}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
+    },
+  });
+
+  if (!res.ok) {
+    localStorage.removeItem(TOKEN_KEY);
+    console.error("Bad login");
+    throw new Error("Can't get orders");
+  }
+
+  const data = await res.json();
+
+  return data.orders.sort(sortByDate);
+};
+
 export type FilteringFunctions = (order: OrderData) => boolean;
 
-export type FilterBtnItem = {
-  filterFn: FilteringFunctions;
+export type StatusBtnItem = {
+  sortFn: (a: OrderData, b: OrderData) => number;
   name: string;
 };
 
@@ -141,28 +141,38 @@ export const notify = (message: string) =>
     theme: "light",
   });
 
-export const filterOptionsOrder = [
+export const filterOptionsOrder: StatusBtnItem[] = [
   {
-    name: FILTER_BUTTONS[filterBtnNameKeys.FUTURE_ORDERS].name!,
-    filterFn: isFilterCreated,
+    name: FILTER_BUTTONS[filterBtnNameKeys.FUTURE_ORDERS].name,
+    sortFn: (a: OrderData, b: OrderData): number =>
+      a.status === OrderStatus.created ? -1 : 0,
   },
   {
-    name: FILTER_BUTTONS[filterBtnNameKeys.PENDING].name!,
-    filterFn: isFilterPending,
+    name: FILTER_BUTTONS[filterBtnNameKeys.PENDING].name,
+    sortFn: (a: OrderData, b: OrderData): number =>
+      a.status === OrderStatus.pending ? -1 : 0,
   },
   {
-    name: FILTER_BUTTONS[filterBtnNameKeys.IN_PROGRESS].name!,
-    filterFn: isFilterInProgress,
+    name: FILTER_BUTTONS[filterBtnNameKeys.IN_PROGRESS].name,
+    sortFn: (a: OrderData, b: OrderData): number => {
+      return [OrderStatus.in_progress, OrderStatus.ready].includes(
+        a.status as OrderStatus
+      )
+        ? -1
+        : 0;
+    },
   },
 ];
 
-export const filterOptionsArchive = [
+export const filterOptionsArchive: StatusBtnItem[] = [
   {
-    name: FILTER_BUTTONS[filterBtnNameKeys.CANCELLED].name!,
-    filterFn: isFilterCancelled,
+    name: FILTER_BUTTONS[filterBtnNameKeys.CANCELLED].name,
+    sortFn: (a: OrderData, b: OrderData): number =>
+      !a.is_deleted && a.status === OrderStatus.can_not_complete ? -1 : 0,
   },
   {
-    name: FILTER_BUTTONS[filterBtnNameKeys.COMPLETED].name!,
-    filterFn: isFilterCompleted,
+    name: FILTER_BUTTONS[filterBtnNameKeys.COMPLETED].name,
+    sortFn: (a: OrderData, b: OrderData): number =>
+      !a.is_deleted && a.status === OrderStatus.picked_up ? -1 : 0,
   },
 ];
