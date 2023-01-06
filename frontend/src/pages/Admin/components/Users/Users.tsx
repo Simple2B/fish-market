@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Spinner } from "../../../../components";
+import { ManagerOutletContext } from "../../../../main.type";
 import { queryClient } from "../../../../queryClient";
 import {
   CHECK_TOKEN_LOGIN_A,
@@ -12,9 +13,11 @@ import { FunctionalPanel } from "../FunctionalPanel";
 import { User } from "./User";
 import style from "./Users.module.css";
 
-type Props = {};
+type Props = {
+  openModal: ManagerOutletContext["openModal"];
+};
 
-const Users = (props: Props) => {
+const Users = ({ openModal }: Props) => {
   const { data, isLoading } = useQuery({
     queryKey: [GET_USERS],
     queryFn: getAllUsers,
@@ -47,7 +50,9 @@ const Users = (props: Props) => {
         </thead>
         <tbody>
           {data &&
-            data.map((user: MarketUser) => <User key={user.id} {...user} />)}
+            data.map((user: MarketUser) => (
+              <User key={user.id} {...user} openModal={openModal} />
+            ))}
         </tbody>
       </table>
     </div>

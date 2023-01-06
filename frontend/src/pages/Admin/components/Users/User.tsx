@@ -2,8 +2,11 @@ import style from "./Users.module.css";
 import { MarketUser } from "../../Admin.type";
 import { useState } from "react";
 import { UserDetail } from "./UserDetail";
+import { ManagerOutletContext } from "../../../../main.type";
 
-const User = (props: MarketUser) => {
+const User = (
+  props: MarketUser & { openModal: ManagerOutletContext["openModal"] }
+) => {
   const [showUserDetail, setShowUserDetail] = useState<boolean>(false);
 
   const handlerOnUser = () => {
@@ -23,7 +26,9 @@ const User = (props: MarketUser) => {
         <td>{props.is_active ? "Active" : "Frozen"}</td>
         <td>{props.user_type}</td>
       </tr>
-      {showUserDetail && <UserDetail id={props.id} />}
+      {showUserDetail && (
+        <UserDetail id={props.id} openModal={props.openModal} />
+      )}
     </>
   );
 };
