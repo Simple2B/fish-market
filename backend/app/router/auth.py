@@ -15,7 +15,7 @@ from app.logger import log
 router = APIRouter(tags=["Authentication"])
 
 
-@router.post("/login", response_model=Token)
+@router.post("/login", response_model=Token, response_model_exclude_none=True)
 def login(
     user_credentials: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db),
@@ -33,13 +33,23 @@ def login(
 
     access_token = create_access_token(data={"user_id": user.id})
 
+    if user.role == m.UserRole.Admin:
+        return {"access_token": access_token, "token_type": "bearer", "is_admin": True}
     return {"access_token": access_token, "token_type": "bearer"}
 
 
 @router.get("/me-info", status_code=status.HTTP_200_OK)
 def user_info(
+    is_admin: bool = False,
     current_user: m.User = Depends(get_current_user),
 ):
+    if is_admin:
+        if current_user.role == m.UserRole.Admin:
+            return {"is_valid": True}
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access is denied",
+        )
     return {"is_valid": True}
 
 

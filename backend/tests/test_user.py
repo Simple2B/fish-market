@@ -25,6 +25,13 @@ new_user_data = s.UserCreate(
 def test_user_info(marketer_client: TestClient):
     res = marketer_client.get("/me-info")
     assert res.status_code == status.HTTP_200_OK
+    res = marketer_client.get("/me-info?is_admin=true")
+    assert res.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_admin_info(admin_client: TestClient):
+    res = admin_client.get("/me-info?is_admin=true")
+    assert res.status_code == status.HTTP_200_OK
 
 
 def test_user_not_info(client: TestClient):
@@ -42,6 +49,19 @@ def test_login_admin(client: TestClient, db: Session):
     assert res.status_code == status.HTTP_200_OK
     token = s.Token.parse_obj(res.json())
     assert token.access_token
+
+
+def test_get_all_user(admin_client: TestClient, db: Session):
+    users = (
+        db.query(m.User).filter_by(is_deleted=False, role=m.UserRole.Marketeer).all()
+    )
+    res = admin_client.get("/user/all")
+    assert res
+    res_data = s.AllUsers.parse_obj(res.json())
+    assert len(res_data.users) == len(users)
+    assert res_data.users[-1].id == users[-1].id
+
+    assert res_data.users[0].kg_sold == users[0].kg_sold
 
 
 def test_create_user_marketeer(admin_client: TestClient, db: Session):

@@ -30,6 +30,7 @@ def fill_test_data(db: SessionLocal):
             phone_number=fake.phone_number(),
             email=fake.email(),
             role=m.UserRole.Marketeer,
+            user_type="Fish",
         )
         db.add(user)
         db.commit()

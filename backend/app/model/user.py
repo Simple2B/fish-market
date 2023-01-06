@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 from app.hash_utils import make_hash, hash_verify
 from app.database import Base, SessionLocal
 
-from .enums import UserRole
+from .enums import UserRole, OrderStatus
 
 
 class User(Base):
@@ -20,15 +20,33 @@ class User(Base):
     address = Column(String(128), nullable=False)
     phone_number = Column(String(32), nullable=False, unique=True)
     is_deleted = Column(Boolean, default=False)
-
-    # orders_taken = Column(Integer, default=0)
-    # items_sold = Column(Integer, default=0)
-    # kg_sold = Column(Integer, default=0)
-    # sms_used = Column(Integer, default=0)
+    user_type = Column(String(128))
 
     role = Column(Enum(UserRole), default=UserRole.Marketeer)
 
     businesses = relationship("Business", viewonly=True)
+
+    @property
+    def orders_taken(self):
+        if self.businesses:
+            return len(self.businesses[0].orders)
+        return 0  # it is impossible take admin business
+
+    @property
+    def items_sold(self):
+        return 0
+
+    @property
+    def kg_sold(self):
+        return 0
+
+    @property
+    def meter_sold(self):
+        return 0
+
+    @property
+    def sms_used(self):
+        return 0
 
     @property
     def password(self):

@@ -45,7 +45,7 @@ def get_all_user(
     return s.AllUsers(users=users)
 
 
-@router.get("/{id}", response_model=s.UserOut)
+@router.get("/{id}", response_model=s.UserDetailOut)
 def get_user(
     id: int,
     db: Session = Depends(get_db),
