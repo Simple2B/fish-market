@@ -4,3 +4,4 @@ export { CustomBtn } from "./CustomBtn";
 export { AddPrepForm } from "./AddPrepForm";
 export { SetProductSoldBy } from "./SetProductSoldBy";
 export { PrepsView } from "./PrepsView";
+export { CustomModal } from "./СustomModal";
