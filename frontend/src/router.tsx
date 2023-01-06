@@ -1,6 +1,13 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { navMenuBtnNameKeys, NAV_MENU_BUTTONS } from "./constants";
-import { AddProduct, ChangePassword, Home, Market } from "./pages";
+import {
+  AddProduct,
+  Admin,
+  ChangePassword,
+  Home,
+  LoginUser,
+  Market,
+} from "./pages";
 import { Orders, OutOfStock, SettingsView } from "./pages/Home";
 import {
   rebuildUrl,
@@ -45,6 +52,8 @@ export const rootRouter = createBrowserRouter([
       };
     }),
   },
+  { path: "/login", element: <LoginUser /> },
+  { path: "/admin", element: <Admin /> },
   {
     path: "market/:marketId",
     element: <Market />,

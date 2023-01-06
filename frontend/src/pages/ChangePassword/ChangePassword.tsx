@@ -30,7 +30,7 @@ const ChangePassword = () => {
   });
 
   if (!isLoading && !data) {
-    navigate("/");
+    navigate("/login");
   }
   const {
     register,

@@ -33,8 +33,16 @@ export const loginUser = async (dataForm: {
   return await res.json();
 };
 
-export const isTokenValid = async () => {
-  const res = await fetch(`${API_BASE_URL}/me-info`, {
+export const isTokenValid = async ({
+  queryKey,
+}: QueryFunctionContext<[string, boolean?]>) => {
+  const [_, is_admin] = queryKey;
+
+  let routeStr = `${API_BASE_URL}/me-info`;
+
+  if (is_admin) routeStr += "?is_admin=true";
+
+  const res = await fetch(routeStr, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,

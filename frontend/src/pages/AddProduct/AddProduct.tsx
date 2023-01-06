@@ -37,7 +37,7 @@ const AddProduct = () => {
   });
 
   if (!isLoading && !data) {
-    navigator("/");
+    navigator("/login");
   }
 
   const mutationSetProductImage = useMutation({
