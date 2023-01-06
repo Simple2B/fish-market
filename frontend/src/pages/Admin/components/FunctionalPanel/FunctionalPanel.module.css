@@ -1,0 +1,39 @@
+.functionalPanelContent {
+    height: 9.6rem;
+
+    display: flex;
+}
+
+.functionalPanelContent div {
+    font-weight: 400;
+    font-size: 1.1rem;
+    line-height: 1.6rem;
+}
+
+.functionalPanelLeft {
+    width: 33rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.functionalPanelSelect {
+    height: 2.5rem;
+    width: 13rem;
+    border: 1px solid #C1E1FF;
+    border-radius: 5px;
+
+    padding: 0.5rem;
+    margin-left: 1rem;
+}
+
+.functionalPanelRight {
+    width: 53rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}

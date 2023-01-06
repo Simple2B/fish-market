@@ -1,12 +1,15 @@
 .usersContent {
-    width: 82rem;
+    width: 86rem;
 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     box-sizing: border-box;
 }
 
 
 .informationPanel {
-    width: 100%;
+    width: 82rem;
     border-spacing: 0px;
     border-collapse: separate;
     border: 1px solid black;
@@ -19,6 +22,7 @@
     padding: 1.5rem 1.25rem;
     border-bottom: 1px solid black;
     font-weight: 400;
+    width: 9rem;
 }
 
 
@@ -48,7 +52,6 @@
 
 .userDetailRow {
     padding: 0.5rem;
-    box-sizing: border-box;
     text-align: start;
 }
 

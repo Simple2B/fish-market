@@ -8,6 +8,7 @@ import {
 } from "../../../../services";
 
 import { MarketUser } from "../../Admin.type";
+import { FunctionalPanel } from "../FunctionalPanel";
 import { User } from "./User";
 import style from "./Users.module.css";
 
@@ -29,17 +30,20 @@ const Users = (props: Props) => {
     <Spinner />
   ) : (
     <div className={style.usersContent}>
+      <FunctionalPanel />
       <table className={style.informationPanel}>
         <thead className={style.informationPanelWrap}>
-          <th>User name</th>
-          <th>User number</th>
-          <th>Orders taken</th>
-          <th>Items sold</th>
-          <th>kg sold</th>
-          <th>Meter sold</th>
-          <th>SMS used</th>
-          <th>Status</th>
-          <th>User type</th>
+          <tr>
+            <th>User name</th>
+            <th>User number</th>
+            <th>Orders taken</th>
+            <th>Items sold</th>
+            <th>kg sold</th>
+            <th>Meter sold</th>
+            <th>SMS used</th>
+            <th>Status</th>
+            <th>User type</th>
+          </tr>
         </thead>
         <tbody>
           {data &&
