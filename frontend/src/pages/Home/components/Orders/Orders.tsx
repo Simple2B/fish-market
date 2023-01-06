@@ -30,57 +30,71 @@ const Orders = ({ filterOptions, isArchive }: OrdersProps) => {
     queryKey: [GET_ORDERS, isArchive],
     queryFn: getOrders,
     onSuccess: (data: OrderData[]) => {
-      if (activeBtnFilterName) {
-        const sortFunction = filterOptions.find(
-          (item) => item.name === activeBtnFilterName
-        )?.sortFn;
+      const sortResult = sortByIsActiveBtnFilterName(data);
 
-        if (!sortFunction) {
-          setActiveBtnFilterName("");
-          setOrdersData(data);
-          return;
-        }
-        setOrdersData([...data].sort(sortFunction));
-        return;
+      if (!sortResult) {
+        setActiveBtnFilterName("");
       }
-
-      setOrdersData(data);
-      console.log("onSuccess");
     },
     onError: () => {
       queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
     },
+    refetchInterval: 30000,
   });
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      console.log("5sek pass");
+    sortByIsActiveBtnFilterName(ordersData);
+  }, [arrayActiveOrders, activeBtnFilterName]);
 
-      queryClient.invalidateQueries([GET_ORDERS]);
+  const sortByIsActiveBtnFilterName = (data: OrderData[]): boolean => {
+    const dataForSort = [...data].sort(sortByDate);
 
-      if (arrayActiveOrders.length >= 1) {
-        setOrdersData(
-          [...ordersData].sort((orderA, orderB) =>
-            arrayActiveOrders.includes(orderA.id) ? -1 : 0
-          )
-        );
-      }
-    }, 5000);
-    return () => clearInterval(intervalId);
-  }, []);
+    const sortFunction = filterOptions.find(
+      (item) => item.name === activeBtnFilterName
+    )?.sortFn;
 
-  const handlerButtonsFilters = ({ sortFn, name }: StatusBtnItem) => {
+    if (activeBtnFilterName && sortFunction) {
+      dataForSort.sort(sortFunction);
+      sortByActiveOrderId(dataForSort);
+      setOrdersData(dataForSort);
+      return true;
+    }
+    sortByActiveOrderId(dataForSort);
+
+    setOrdersData(dataForSort);
+    return false;
+  };
+
+  const sortByActiveOrderId = (dataForSort: OrderData[]) => {
+    if (arrayActiveOrders.length >= 1) {
+      dataForSort.sort((orderA, orderB) =>
+        arrayActiveOrders.includes(orderA.id) ? -1 : 0
+      );
+    }
+  };
+
+  const handlerButtonsFilters = ({ name }: StatusBtnItem) => {
     if (!data) {
       return;
     }
 
+    const sortedOrders = [...ordersData];
+
     if (activeBtnFilterName === name) {
       setActiveBtnFilterName("");
-      setOrdersData([...ordersData].sort(sortByDate));
+      setOrdersData(sortedOrders);
       return;
     }
-    setOrdersData([...ordersData].sort(sortByDate).sort(sortFn));
+    setOrdersData(sortedOrders);
     setActiveBtnFilterName(name);
+  };
+
+  const onItemsShowChange = (id: number) => {
+    if (arrayActiveOrders.includes(id)) {
+      setArrayActiveOrders(arrayActiveOrders.filter((el) => el !== id));
+    } else {
+      setArrayActiveOrders([...arrayActiveOrders, id]);
+    }
   };
 
   return isLoading ? (
@@ -102,7 +116,8 @@ const Orders = ({ filterOptions, isArchive }: OrdersProps) => {
           <Order
             key={el.id}
             {...el}
-            setArrayActiveOrders={setArrayActiveOrders}
+            onItemsShowChange={onItemsShowChange}
+            showItems={arrayActiveOrders.includes(el.id)}
           />
         ))}
       </div>

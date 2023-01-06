@@ -5,7 +5,7 @@ import { useOutletContext } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 
 import style from "./Order.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { OrderItem } from "./OrderItem";
 import {
   IOpenModalData,
@@ -51,19 +51,13 @@ const Order = ({
   items,
   status,
   is_deleted,
-  setArrayActiveOrders,
-}: OrderData & { setArrayActiveOrders: (n: number[]) => void }) => {
-  const [showItems, setShowItems] = useState<boolean>(false);
-
+  onItemsShowChange,
+  showItems,
+}: OrderData & {
+  onItemsShowChange?: (id: number) => void;
+  showItems: boolean;
+}) => {
   const { openModal } = useOutletContext<ManagerOutletContext>();
-
-  // useEffect(() => {
-  //   if (showItems) {
-  //     setArrayActiveOrders((current) => {
-  //       return [...current, id];
-  //     });
-  //   }
-  // }, [showItems]);
 
   const changeStatusOrder = useMutation({
     mutationFn: changeOrder,
@@ -154,6 +148,10 @@ const Order = ({
     openModal(openModalData);
   };
 
+  const handlerStatusBtn = () => {
+    onItemsShowChange && onItemsShowChange(id);
+  };
+
   const activeStep = buttonsNameByStatus.findIndex((obj) => obj.key === status);
 
   const orderContent = classNames(style.orderContent, {
@@ -236,7 +234,7 @@ const Order = ({
             </div>
             <div
               className={style.orderContentStatusIconBtn}
-              onClick={() => setShowItems((currentIsShow) => !currentIsShow)}
+              onClick={handlerStatusBtn}
             >
               {showItems ? (
                 <BiChevronUp className={style.iconContent} />

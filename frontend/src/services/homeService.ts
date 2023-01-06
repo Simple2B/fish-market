@@ -119,7 +119,7 @@ export const getOrders = async ({
 
   const data = await res.json();
 
-  return data.orders.sort(sortByDate);
+  return data.orders;
 };
 
 export type FilteringFunctions = (order: OrderData) => boolean;
