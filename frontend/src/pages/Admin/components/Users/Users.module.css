@@ -1,0 +1,64 @@
+.usersContent {
+    width: 82rem;
+
+    box-sizing: border-box;
+}
+
+
+.informationPanel {
+    width: 100%;
+    border-spacing: 0px;
+    border-collapse: separate;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.informationPanel th {
+
+    box-sizing: border-box;
+    padding: 1.5rem 1.25rem;
+    border-bottom: 1px solid black;
+    font-weight: 400;
+}
+
+
+.informationPanel th:not(:first-child) {
+    border-left: 1px solid black;
+}
+
+.userContent:nth-child(even) {
+    background: #E4F2FF;
+}
+
+.userContent td {
+    padding: 1rem;
+    font-weight: 400;
+    font-size: 1.1rem;
+    line-height: 1.6rem;
+}
+
+.userContent td:not(:first-child) {
+    border-left: 1px solid black;
+}
+
+.userDetailContent {
+    height: 9.1rem;
+}
+
+
+.userDetailRow {
+    padding: 0.5rem;
+    box-sizing: border-box;
+    text-align: start;
+}
+
+.userDetailRow>span {
+    font-weight: 800;
+}
+
+.userDetailContent td {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    text-align: center;
+    vertical-align: middle;
+}

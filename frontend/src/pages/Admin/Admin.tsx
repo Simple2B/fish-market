@@ -19,7 +19,8 @@ const Admin = () => {
   }
 
   return (
-    <div>
+    <div className={style.adminPageContent}>
+      <div className={style.contentTitle}>User List</div>
       <Users />
     </div>
   );

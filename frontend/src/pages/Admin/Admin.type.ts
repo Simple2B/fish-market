@@ -1,4 +1,4 @@
-export type User = {
+export type MarketUser = {
   id: number;
   username: string;
   orders_taken: number;
@@ -11,7 +11,7 @@ export type User = {
   created_at: string;
 };
 
-export type UserDetail = {
+export type MarketUserDetail = {
   email: string;
   phone_number: string;
   address: string;

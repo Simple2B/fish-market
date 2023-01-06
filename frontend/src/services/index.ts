@@ -9,6 +9,7 @@ export {
   GET_BUSINESS_PRODUCTS_PREPS,
   CHECK_TOKEN_LOGIN_A,
   GET_USERS,
+  GET_USER_BY_ID,
 } from "./queryKeys";
 
 export {
@@ -51,4 +52,4 @@ export {
 } from "./settingsViewService";
 export type { uploadImageDatatype } from "./settingsViewService";
 
-export { getAllUsers } from "./adminService";
+export { getAllUsers, getUserById } from "./adminService";
