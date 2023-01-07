@@ -8,6 +8,7 @@ import { createCheckPhoneNumber } from "../../../../services";
 import { MarketActionTypes, ISetOrderData, IProduct } from "../../Market.type";
 import {
   createOrder,
+  isValidNumber,
   phoneNumberAutoFormat,
   replaceDash,
 } from "../../../../services/marketService";
@@ -108,14 +109,6 @@ const PersonalInfo = ({
       };
       mutation.mutate(phoneNumber);
     }
-  };
-
-  const isValidNumber = (v: string): boolean => {
-    const number = replaceDash(v);
-    if (number.length === 10 || number.length == 12) {
-      return true;
-    }
-    return false;
   };
 
   const handlerOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {

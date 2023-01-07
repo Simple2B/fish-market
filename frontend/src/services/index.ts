@@ -17,6 +17,7 @@ export {
   validatePhoneNumber,
   replaceDash,
   phoneNumberAutoFormat,
+  isValidNumber,
 } from "./marketService";
 
 export {
