@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
 import { CustomBtn } from "../../../../components";
+import { TOKEN_KEY } from "../../../../constants";
 import style from "./FunctionalPanel.module.css";
 
 type FunctionalPanelProps = {
@@ -14,6 +14,11 @@ type FunctionalPanelProps = {
 
 const FunctionalPanel = ({ handlerRegisterNewUser }: FunctionalPanelProps) => {
   const year = new Date().getFullYear();
+
+  const logOut = () => {
+    localStorage.removeItem(TOKEN_KEY);
+    window.location.reload();
+  };
 
   return (
     <div className={style.functionalPanelContent}>
@@ -37,9 +42,17 @@ const FunctionalPanel = ({ handlerRegisterNewUser }: FunctionalPanelProps) => {
         <CustomBtn
           btnName="Register New User"
           handlerOnClick={handlerRegisterNewUser}
+          additionalStyles={style.activeBtn}
         />
-        <CustomBtn btnName="Change password" />
-        <CustomBtn btnName="Login Out" />
+        <CustomBtn
+          btnName="Change password"
+          additionalStyles={style.activeBtn}
+        />
+        <CustomBtn
+          btnName="Login Out"
+          additionalStyles={style.activeBtn}
+          handlerOnClick={logOut}
+        />
       </div>
     </div>
   );

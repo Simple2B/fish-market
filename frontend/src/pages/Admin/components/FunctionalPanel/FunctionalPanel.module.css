@@ -37,3 +37,7 @@
     align-items: center;
     justify-content: space-evenly;
 }
+
+.activeBtn:hover {
+    background: #C1E1FF;
+}
