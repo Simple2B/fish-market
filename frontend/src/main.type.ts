@@ -44,6 +44,10 @@ export type ManagerOutletContext = {
   openModal: (OpenModalData: IOpenModalData) => void;
 };
 
+export type ManagerOutletContextAdmin = {
+  handlerRegisterNewUser: () => void;
+};
+
 // this enum already exists and in future will replace in the project
 export enum ItemUnit {
   by_kilogram = "by_kilogram",

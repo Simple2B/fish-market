@@ -15,9 +15,10 @@ import style from "./Users.module.css";
 
 type Props = {
   openModal: ManagerOutletContext["openModal"];
+  handlerRegisterNewUser: () => void;
 };
 
-const Users = ({ openModal }: Props) => {
+const Users = ({ openModal, handlerRegisterNewUser }: Props) => {
   const { data, isLoading } = useQuery({
     queryKey: [GET_USERS],
     queryFn: getAllUsers,
@@ -33,7 +34,7 @@ const Users = ({ openModal }: Props) => {
     <Spinner />
   ) : (
     <div className={style.usersContent}>
-      <FunctionalPanel />
+      <FunctionalPanel handlerRegisterNewUser={handlerRegisterNewUser} />
       <table className={style.informationPanel}>
         <thead className={style.informationPanelWrap}>
           <tr>

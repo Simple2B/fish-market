@@ -7,6 +7,7 @@ import {
   Home,
   LoginUser,
   Market,
+  RegisterNewUser,
 } from "./pages";
 import { Orders, OutOfStock, SettingsView } from "./pages/Home";
 import {
@@ -53,7 +54,16 @@ export const rootRouter = createBrowserRouter([
     }),
   },
   { path: "/login", element: <LoginUser /> },
-  { path: "/admin", element: <Admin /> },
+  {
+    path: "/admin",
+    element: <Admin />,
+    children: [
+      {
+        path: "/admin/register-new-user",
+        element: <RegisterNewUser />,
+      },
+    ],
+  },
   {
     path: "market/:marketId",
     element: <Market />,
