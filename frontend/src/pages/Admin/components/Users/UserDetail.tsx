@@ -1,9 +1,17 @@
 import style from "./Users.module.css";
-import { MarketUserDetail } from "../../Admin.type";
 import { CustomBtn } from "../../../../components";
 import { useQuery } from "@tanstack/react-query";
-import { getUserById, GET_USER_BY_ID } from "../../../../services";
-import { IOpenModalData, ManagerOutletContext } from "../../../../main.type";
+import {
+  CHECK_TOKEN_LOGIN_A,
+  getUserById,
+  GET_USER_BY_ID,
+} from "../../../../services";
+import {
+  IOpenModalData,
+  ManagerOutletContext,
+  MarketUserDetail,
+} from "../../../../main.type";
+import { queryClient } from "../../../../queryClient";
 
 type UserDetailProps = {
   id: number;
@@ -15,6 +23,9 @@ const UserDetail = ({ id, openModal }: UserDetailProps) => {
     queryKey: [GET_USER_BY_ID, id],
     queryFn: getUserById,
     onSuccess(data: MarketUserDetail) {},
+    onError: () => {
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN_A, true]);
+    },
   });
 
   const handlerDeleteUser = () => {

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Spinner } from "../../../../components";
-import { ManagerOutletContext } from "../../../../main.type";
+import { ManagerOutletContext, MarketUser } from "../../../../main.type";
 import { queryClient } from "../../../../queryClient";
 import {
   CHECK_TOKEN_LOGIN_A,
@@ -8,7 +8,6 @@ import {
   GET_USERS,
 } from "../../../../services";
 
-import { MarketUser } from "../../Admin.type";
 import { FunctionalPanel } from "../FunctionalPanel";
 import { User } from "./User";
 import style from "./Users.module.css";

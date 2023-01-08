@@ -1,9 +1,16 @@
+import { useMutation } from "@tanstack/react-query";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useOutletContext } from "react-router-dom";
 import { CustomBtn, ErrorMessage } from "../../../../components";
 import { ManagerOutletContextAdmin } from "../../../../main.type";
-import { isValidNumber, phoneNumberAutoFormat } from "../../../../services";
+import { queryClient } from "../../../../queryClient";
+import {
+  CHECK_TOKEN_LOGIN_A,
+  createNewUser,
+  isValidNumber,
+  phoneNumberAutoFormat,
+} from "../../../../services";
 import style from "./RegisterNewUser.module.css";
 
 type RegisterNewUserInputs = {
@@ -28,13 +35,44 @@ const RegisterNewUser = () => {
     handleSubmit,
     setValue,
     formState: { errors },
+    setError,
   } = useForm<RegisterNewUserInputs>();
+
+  const mutationCreateNewUser = useMutation({
+    mutationFn: createNewUser,
+    onSuccess: () => {
+      console.log("success");
+      handlerRegisterNewUser();
+    },
+    onError: () => {
+      console.log("error");
+
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN_A, true]);
+
+      setError("email", {});
+    },
+  });
 
   const handlerOnConfirm = (data: RegisterNewUserInputs) => {
     console.log("confirm");
 
     if (!data) return;
-    console.log("data", { data });
+
+    const reqData = {
+      user: {
+        user_type: data.user_type,
+        address: data.address,
+        username: data.username,
+        phone_number: data.user_phone_number,
+        email: data.email,
+        password: data.password,
+      },
+      business: { phone_number: data.business_phone_number, name: data.name },
+    };
+
+    console.log(reqData);
+
+    mutationCreateNewUser.mutate(reqData);
   };
 
   const handlerOnchangePhoneNumber = (
@@ -49,8 +87,6 @@ const RegisterNewUser = () => {
       setValue("business_phone_number", targetValue);
     }
   };
-
-  console.log(errors, "errors");
 
   return (
     <div className={style.registerNewUserContent}>
@@ -144,7 +180,9 @@ const RegisterNewUser = () => {
         ></button>
       </form>
       {Object.keys(errors).length >= 1 && (
-        <ErrorMessage text={"One of the inputs data is incorrect"} />
+        <ErrorMessage
+          text={"One of the inputs data is incorrect or email already exists"}
+        />
       )}
       <div className={style.contentButtons}>
         <CustomBtn
@@ -152,8 +190,13 @@ const RegisterNewUser = () => {
           handlerOnClick={() => {
             submitBtn.current?.click();
           }}
+          additionalStyles={style.activeBtn}
         />
-        <CustomBtn btnName="Cancel" handlerOnClick={handlerRegisterNewUser} />
+        <CustomBtn
+          btnName="Cancel"
+          handlerOnClick={handlerRegisterNewUser}
+          additionalStyles={style.activeBtn}
+        />
       </div>
     </div>
   );

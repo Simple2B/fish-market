@@ -1,8 +1,7 @@
 import style from "./Users.module.css";
-import { MarketUser } from "../../Admin.type";
 import { useState } from "react";
 import { UserDetail } from "./UserDetail";
-import { ManagerOutletContext } from "../../../../main.type";
+import { ManagerOutletContext, MarketUser } from "../../../../main.type";
 
 const User = (
   props: MarketUser & { openModal: ManagerOutletContext["openModal"] }

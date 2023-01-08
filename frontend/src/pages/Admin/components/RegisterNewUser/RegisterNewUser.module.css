@@ -75,6 +75,10 @@
     margin-bottom: 4rem;
 }
 
+.activeBtn:hover {
+    background: #C1E1FF;
+}
+
 @media (max-width: 1024px) {
     .registerNewUserContent {
         gap: 1rem 0;
