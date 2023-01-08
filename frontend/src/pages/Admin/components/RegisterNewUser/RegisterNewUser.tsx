@@ -41,12 +41,9 @@ const RegisterNewUser = () => {
   const mutationCreateNewUser = useMutation({
     mutationFn: createNewUser,
     onSuccess: () => {
-      console.log("success");
       handlerRegisterNewUser();
     },
     onError: () => {
-      console.log("error");
-
       queryClient.invalidateQueries([CHECK_TOKEN_LOGIN_A, true]);
 
       setError("email", {});
@@ -54,8 +51,6 @@ const RegisterNewUser = () => {
   });
 
   const handlerOnConfirm = (data: RegisterNewUserInputs) => {
-    console.log("confirm");
-
     if (!data) return;
 
     const reqData = {

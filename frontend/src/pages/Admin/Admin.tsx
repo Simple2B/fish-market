@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import style from "./Admin.module.css";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { CHECK_TOKEN_LOGIN_A, isTokenValid } from "../../services";
 import { Users } from "./components";
 import { useModal } from "../../hooks";
 import { CustomModal } from "../../components";
 import { useState } from "react";
+import { ToastContainer } from "react-toastify";
 
 const Admin = () => {
   const navigator = useNavigate();
@@ -58,6 +59,7 @@ const Admin = () => {
         onConfirm={onConfirm}
         onCancel={cleanModalState}
       />
+      <ToastContainer />
     </div>
   );
 };

@@ -53,4 +53,9 @@ export {
 } from "./settingsViewService";
 export type { uploadImageDatatype } from "./settingsViewService";
 
-export { getAllUsers, getUserById, createNewUser } from "./adminService";
+export {
+  getAllUsers,
+  getUserById,
+  createNewUser,
+  deleteUser,
+} from "./adminService";

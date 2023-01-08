@@ -1,10 +1,13 @@
 import style from "./Users.module.css";
 import { CustomBtn } from "../../../../components";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   CHECK_TOKEN_LOGIN_A,
+  deleteUser,
   getUserById,
+  GET_USERS,
   GET_USER_BY_ID,
+  notify,
 } from "../../../../services";
 import {
   IOpenModalData,
@@ -28,11 +31,26 @@ const UserDetail = ({ id, openModal }: UserDetailProps) => {
     },
   });
 
+  const mutationDeleteUser = useMutation({
+    mutationFn: deleteUser,
+    onSuccess: (data: { user_id: number }) => {
+      console.log("on Success", { data });
+
+      queryClient.invalidateQueries([GET_USERS]);
+      notify(`The account №${data.user_id} was deleted`);
+    },
+    onError: () => {
+      console.log("errror");
+
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN_A, true]);
+    },
+  });
+
   const handlerDeleteUser = () => {
     const openModalData: IOpenModalData = {
       modalTitle: `Are you sure you want to delete the account № ${id}?`,
       modalConfirmLabel: "Delete account",
-      confirmCallback: () => console.log("delete", id),
+      confirmCallback: () => mutationDeleteUser.mutate({ user_id: id }),
     };
     openModal(openModalData);
   };

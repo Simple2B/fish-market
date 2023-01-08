@@ -65,3 +65,19 @@ export const createNewUser = async (body: {
 
   return resData;
 };
+
+export const deleteUser = async ({ user_id }: { user_id: number }) => {
+  const res = await fetch(`${API_BASE_URL}/user/${user_id}`, {
+    method: "DELETE",
+    headers: setRequestHeaders(TOKEN_KEY),
+  });
+
+  if (!res.ok) {
+    console.error("Bad login");
+    throw new Error(`Can't delete user user_id ${user_id}`);
+  }
+
+  const resData = await res.json();
+
+  return resData;
+};

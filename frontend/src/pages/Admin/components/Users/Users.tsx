@@ -21,9 +21,6 @@ const Users = ({ openModal, handlerRegisterNewUser }: Props) => {
   const { data, isLoading } = useQuery({
     queryKey: [GET_USERS],
     queryFn: getAllUsers,
-    onSuccess: () => {
-      console.log("onSuccess");
-    },
     onError: () => {
       queryClient.invalidateQueries([CHECK_TOKEN_LOGIN_A, true]);
     },
