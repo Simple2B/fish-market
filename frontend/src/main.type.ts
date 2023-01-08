@@ -7,11 +7,20 @@ export enum OrderStatus {
   can_not_complete = "can_not_complete",
 }
 
+// this enum already exists and in future will replace in the project
+export enum ItemUnit {
+  by_kilogram = "by_kilogram",
+  by_unit = "by_unit",
+  by_both = "by_both",
+  unknown = "unknown",
+}
+
 export interface IOrder {
   prep_name: string;
   product_image: string;
   product_name: string;
   qty: number;
+  unit_type: ItemUnit;
 }
 
 export type OrderData = {
@@ -47,14 +56,6 @@ export type ManagerOutletContext = {
 export type ManagerOutletContextAdmin = {
   handlerRegisterNewUser: () => void;
 };
-
-// this enum already exists and in future will replace in the project
-export enum ItemUnit {
-  by_kilogram = "by_kilogram",
-  by_unit = "by_unit",
-  by_both = "by_both",
-  unknown = "unknown",
-}
 
 export type TypeProductsOut = {
   id: number;
