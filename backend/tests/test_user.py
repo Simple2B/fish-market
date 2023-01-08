@@ -12,13 +12,24 @@ USER_EMAIL = "test@test.ku"
 USER_PASSWORD = "secret"
 USER_ADDRESS = "Kalush 1D"
 USER_PHONE_NUMBER = "123131313"
+USER_TYPE = "Fish"
 
-new_user_data = s.UserCreate(
-    username=USER_NAME,
-    email=USER_EMAIL,
-    password=USER_PASSWORD,
-    address=USER_ADDRESS,
-    phone_number=USER_PHONE_NUMBER,
+BUSINESS_NAME = "FISH Market"
+
+
+new_user_data = s.CreateUserBusiness(
+    user=s.UserData(
+        username=USER_NAME,
+        user_type=USER_TYPE,
+        address=USER_ADDRESS,
+        phone_number=USER_PHONE_NUMBER,
+        email=USER_EMAIL,
+        password=USER_PASSWORD,
+    ),
+    business=s.BusinessData(
+        name=BUSINESS_NAME,
+        phone_number=USER_PHONE_NUMBER,
+    ),
 )
 
 
@@ -184,53 +195,24 @@ def test_user_market_update_by_admin(admin_client: TestClient, db: Session):
     )
 
     data_to_update = s.UserUpdate(
-        username=USER_NAME,
-        email=USER_EMAIL,
-        address=USER_ADDRESS,
-        phone_number=USER_PHONE_NUMBER,
-        is_active=user.is_active,
+        is_active=not user.is_active,
     )
 
     data_to_update = data_to_update.dict()
 
-    # test user can not update admin
+    # test admin can not update admin
     res = admin_client.patch(f"/user/{admin.id}", json=data_to_update)
     assert res.status_code == status.HTTP_404_NOT_FOUND
 
     # test admin update user
     res = admin_client.patch(f"/user/{user.id}", json=data_to_update)
     assert res.status_code == status.HTTP_200_OK
-    assert data_to_update == res.json()
-
-    # test data user was changed in db
-    user_from_db: m.User = db.query(m.User).get(user.id)
-    assert user_from_db.username == USER_NAME
-    assert user_from_db.email == USER_EMAIL
-    assert user_from_db.address == USER_ADDRESS
-    assert user_from_db.phone_number == USER_PHONE_NUMBER
-    assert user_from_db.is_active == user.is_active
-
-    # test one user filed was changed
-    new_address = "Ivano-Frankivsk 10A"
-    one_user_field_update = s.UserUpdate(address=new_address).dict()
-    res = admin_client.patch(f"/user/{user.id}", json=one_user_field_update)
-    assert res.status_code == status.HTTP_200_OK
-    assert res.json()["address"] == new_address
-    assert res.json()["username"] == USER_NAME
-
-    # test one user field was changed in db
-    user_from_db: m.User = db.query(m.User).get(user.id)
-    assert user_from_db.address == new_address
-    assert user_from_db.username == USER_NAME
+    assert user.id == res.json()["user_id"]
+    assert not user.is_active
 
     # test user id is not correct
     res = admin_client.patch(f"/user/{100}", json=data_to_update)
     assert res.status_code == status.HTTP_404_NOT_FOUND
-
-    # test fields is empty
-    data_to_update = {}
-    res = admin_client.patch(f"/user/{user.id}", json=data_to_update)
-    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
 def test_change_password(marketer_client: TestClient, db: Session):

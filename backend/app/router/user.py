@@ -87,7 +87,6 @@ def delete_user_marketeer(
     return {"user_id": user.id}
 
 
-# TODO make user can update himself
 @router.patch("/{id}", status_code=status.HTTP_200_OK)
 def update_user(
     id: int,
@@ -105,18 +104,9 @@ def update_user(
             status_code=status.HTTP_404_NOT_FOUND, detail="This user was not found"
         )
 
-    data: dict = data.dict()
-    for key, value in data.items():
-        if value is not None:
-            setattr(user, key, value)
+    user.is_active = data.is_active
 
     db.commit()
     db.refresh(user)
 
-    return s.UserUpdate(
-        username=user.username,
-        email=user.email,
-        address=user.address,
-        phone_number=user.phone_number,
-        is_active=user.is_active,
-    )
+    return {"user_id": user.id}
