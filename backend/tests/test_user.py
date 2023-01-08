@@ -249,3 +249,19 @@ def test_change_password(marketer_client: TestClient, db: Session):
     del marketer_client.headers["Authorization"]
     res = marketer_client.patch("/change-password", json=new_password_data.dict())
     assert res.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_login_as_user(admin_client: TestClient, db: Session):
+    user = db.query(m.User).filter_by(role=m.UserRole.Marketeer).first()
+
+    res = admin_client.get(f"/login-as-user/{user.id}")
+    assert res.status_code == status.HTTP_200_OK
+    token = s.Token.parse_obj(res.json())
+    assert token.access_token
+
+
+def test_login_as_user_not_admin(marketer_client: TestClient, db: Session):
+    user = db.query(m.User).filter_by(role=m.UserRole.Marketeer).first()
+
+    res = marketer_client.get(f"/login-as-user/{user.id}")
+    assert res.status_code == status.HTTP_403_FORBIDDEN

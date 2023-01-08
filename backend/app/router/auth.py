@@ -9,7 +9,7 @@ from app import model as m
 from app import schema as s
 from app.model import User
 from app.service.oauth2 import create_access_token
-from app.service import get_current_user
+from app.service import get_current_user, get_current_admin
 from app.logger import log
 
 router = APIRouter(tags=["Authentication"])
@@ -79,3 +79,23 @@ def change_password(
     user.password = new_password
     db.commit()
     return {"ok", True}
+
+
+@router.get(
+    "/login-as-user/{id}",
+    status_code=status.HTTP_200_OK,
+    response_model=Token,
+    response_model_exclude_none=True,
+)
+def login_as_user(
+    id: int,
+    current_user: int = Depends(get_current_admin),
+    db: Session = Depends(get_db),
+):
+
+    log(log.INFO, "login_as_user user: id [%d]", id)
+    user = db.query(m.User).get(id)
+
+    access_token = create_access_token(data={"user_id": user.id})
+
+    return {"access_token": access_token, "token_type": "bearer"}
