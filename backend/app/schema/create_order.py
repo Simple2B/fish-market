@@ -26,6 +26,10 @@ class ValidPhoneNumber(BaseModel):
 class CreateOrderItem(BaseModel):
     prep_id: int
     qty: float
+    unit_type: m.SoldBy
+
+    class Config:
+        use_enum_values = True
 
 
 class CreateOrder(BaseModel):

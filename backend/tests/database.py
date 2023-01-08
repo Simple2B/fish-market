@@ -130,7 +130,12 @@ def create_test_customer_order(db: SessionLocal) -> tuple[m.Business, m.Order]:
 
     for i, product in enumerate(products):
         for prep in product.preps:
-            order_item = m.OrderItem(order_id=order.id, prep_id=prep.id, qty=i + 1)
+            order_item = m.OrderItem(
+                order_id=order.id,
+                prep_id=prep.id,
+                qty=i + 1,
+                unit_type=m.SoldBy.by_kilogram,
+            )
             db.add(order_item)
             if i == 2:
                 break

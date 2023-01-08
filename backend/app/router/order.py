@@ -12,7 +12,7 @@ from app.logger import log
 router = APIRouter(prefix="/order", tags=["Orders"])
 
 
-@router.get("/", status_code=status.HTTP_200_OK)
+@router.get("/", status_code=status.HTTP_200_OK, response_model=s.OrdersOut)
 def get_orders(
     is_archive: bool = False,
     db: Session = Depends(get_db),

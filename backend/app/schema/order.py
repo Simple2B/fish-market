@@ -11,9 +11,11 @@ class OrderItemOut(BaseModel):
     product_name: str
     prep_name: str
     qty: float
+    unit_type: m.SoldBy
 
     class Config:
         orm_mode = True
+        use_enum_values = True
 
 
 class OrderOut(BaseModel):

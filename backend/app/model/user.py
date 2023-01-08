@@ -32,6 +32,7 @@ class User(Base):
             return len(self.businesses[0].orders)
         return 0  # it is impossible take admin business
 
+    # TODO provide valid data
     @property
     def items_sold(self):
         return 0
