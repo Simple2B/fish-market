@@ -26,7 +26,11 @@ const User = (
         <td>{props.user_type}</td>
       </tr>
       {showUserDetail && (
-        <UserDetail id={props.id} openModal={props.openModal} />
+        <UserDetail
+          id={props.id}
+          is_active={props.is_active}
+          openModal={props.openModal}
+        />
       )}
     </>
   );

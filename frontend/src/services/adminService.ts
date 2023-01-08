@@ -81,3 +81,23 @@ export const deleteUser = async ({ user_id }: { user_id: number }) => {
 
   return resData;
 };
+
+export const freezeUser = async (data: {
+  user_id: number;
+  body: { is_active: boolean };
+}) => {
+  const res = await fetch(`${API_BASE_URL}/user/${data.user_id}`, {
+    method: "PATCH",
+    headers: setRequestHeaders(TOKEN_KEY),
+    body: JSON.stringify(data.body),
+  });
+
+  if (!res.ok) {
+    console.error("Bad login");
+    throw new Error(`Can't freeze user user_id ${data.user_id}`);
+  }
+
+  const resData = await res.json();
+
+  return resData;
+};

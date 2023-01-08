@@ -58,4 +58,5 @@ export {
   getUserById,
   createNewUser,
   deleteUser,
+  freezeUser,
 } from "./adminService";
