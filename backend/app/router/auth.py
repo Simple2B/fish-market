@@ -26,7 +26,7 @@ def login(
         user_credentials.password,
     )
 
-    if not user:
+    if not user or user.is_deleted:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Invalid credentials"
         )

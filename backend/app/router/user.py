@@ -84,7 +84,7 @@ def delete_user_marketeer(
 
     user.is_deleted = True
     db.commit()
-    return {"ok": True}
+    return {"user_id": user.id}
 
 
 # TODO make user can update himself
