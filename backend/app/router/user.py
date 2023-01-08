@@ -14,18 +14,21 @@ router = APIRouter(prefix="/user", tags=["Users"])
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=s.UserOut)
-def create_user(
-    user: s.UserCreate,
+def create_user_business(
+    data: s.CreateUserBusiness,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_admin),
 ):
-    log(log.INFO, "create_user [%s]", user)
+    log(log.INFO, "create_user_business ")
 
-    new_user = m.User(**user.dict())
+    user_data = data.user
+    business_data = data.business
+
+    new_user = m.User(**user_data.dict())
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    user_business = m.Business(user_id=new_user.id)
+    user_business = m.Business(user_id=new_user.id, **business_data.dict())
     db.add(user_business)
     db.commit()
     return new_user

@@ -36,7 +36,10 @@ def fill_test_data(db: SessionLocal):
         db.commit()
         db.refresh(user)
         business = m.Business(
-            name=fake.company(), user_id=user.id, logo=fake.image_url()
+            name=fake.company(),
+            user_id=user.id,
+            logo=fake.image_url(),
+            phone_number=fake.phone_number(),
         )
         db.add(business)
         db.commit()

@@ -12,13 +12,13 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
-    username = Column(String(64), nullable=False, unique=True)
+    username = Column(String(64), nullable=False)
     email = Column(String(128), nullable=False, unique=True)
     password_hash = Column(String(128), nullable=False)
     created_at = Column(DateTime, default=datetime.now)
     is_active = Column(Boolean, default=True)
     address = Column(String(128), nullable=False)
-    phone_number = Column(String(32), nullable=False, unique=True)
+    phone_number = Column(String(32), nullable=False)
     is_deleted = Column(Boolean, default=False)
     user_type = Column(String(128))
 
