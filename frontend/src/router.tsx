@@ -1,12 +1,16 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { navMenuBtnNameKeys, NAV_MENU_BUTTONS } from "./constants";
-import { ChangePassword, Home, Market } from "./pages";
+import { AddProduct, ChangePassword, Home, Market } from "./pages";
 import { Orders, OutOfStock, SettingsView } from "./pages/Home";
 import {
   rebuildUrl,
   filterOptionsOrder,
   filterOptionsArchive,
 } from "./services";
+
+const settingUrl = rebuildUrl(
+  NAV_MENU_BUTTONS[navMenuBtnNameKeys.SETTINGS].name
+);
 
 export const contentManager = [
   {
@@ -46,9 +50,11 @@ export const rootRouter = createBrowserRouter([
     element: <Market />,
   },
   {
-    path:
-      rebuildUrl(NAV_MENU_BUTTONS[navMenuBtnNameKeys.SETTINGS].name) +
-      "/change-password",
+    path: settingUrl + "/change-password",
     element: <ChangePassword />,
+  },
+  {
+    path: settingUrl + "/add-product",
+    element: <AddProduct />,
   },
 ]);

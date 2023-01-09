@@ -47,10 +47,11 @@ export type ManagerOutletContext = {
 };
 
 // this enum already exists and in future will replace in the project
-enum ItemUnit {
-  by_kilogram = "Kg",
-  by_unit = "Unit",
+export enum ItemUnit {
+  by_kilogram = "By kg",
+  by_unit = "By unit",
   by_both = "by_both",
+  unknown = "unknown",
 }
 
 export type TypeProductsOut = {
@@ -76,3 +77,16 @@ export enum ImageType {
   logo = "logo",
   product = "product",
 }
+
+export interface IPrep {
+  name: string;
+  is_active: boolean;
+}
+
+export type CreateProductType = {
+  name: string;
+  price: number;
+  sold_by: ItemUnit;
+  image: File | string;
+  preps: IPrep[];
+};

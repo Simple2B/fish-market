@@ -31,10 +31,21 @@ def create_product(
 ):
     log(log.INFO, "create_product")
 
-    new_product = m.Product(business_id=business.id, **data.dict())
+    new_product = m.Product(
+        business_id=business.id,
+        name=data.name,
+        price=data.price,
+        sold_by=data.sold_by,
+        image=data.image,
+    )
     db.add(new_product)
     db.commit()
     db.refresh(new_product)
+
+    for prep in data.preps:
+        prep = m.Prep(product_id=new_product.id, **prep.dict())
+        db.add(prep)
+    db.commit()
 
     return new_product
 

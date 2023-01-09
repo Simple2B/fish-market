@@ -5,7 +5,13 @@ from .user_login import UserLogin
 from .token_app import Token, TokenData
 from .user_update import UserUpdate
 from .business_schemas import UserBusinessOut, BusinessUpdate, BusinessUpdateOut
-from .product_schemas import ProductsOut, ProductOut, CreateProduct, UpdateProduct
+from .product_schemas import (
+    ProductsOut,
+    ProductOut,
+    CreateProduct,
+    UpdateProduct,
+    CreatePrep,
+)
 from .business_product_out_schemas import (
     BusinessProductsOut,
     BusinessProductOut,

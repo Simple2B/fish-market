@@ -98,9 +98,17 @@ input {
     all: unset;
 }
 
+
 input[type='number'] {
-    width: 36px;
+    -moz-appearance: textfield;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+
 
 input[type=file]::file-selector-button {
     height: 100%;

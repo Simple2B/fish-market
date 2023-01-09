@@ -1,0 +1,1 @@
+export { SetProductSoldBy } from "./SetProductSoldBy";
