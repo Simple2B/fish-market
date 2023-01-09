@@ -20,8 +20,6 @@
     flex-direction: column;
 }
 
-
-
 .prepsViewContentChildren>div:first-child {
     margin: 0;
     font-weight: 800;
