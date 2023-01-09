@@ -10,6 +10,7 @@ export {
   CHECK_TOKEN_LOGIN_A,
   GET_USERS,
   GET_USER_BY_ID,
+  ENTER_AS_USER,
 } from "./queryKeys";
 
 export {
@@ -61,4 +62,5 @@ export {
   freezeUser,
   getYearList,
   getMonthListByYear,
+  loginAsUser,
 } from "./adminService";

@@ -4,10 +4,12 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   CHECK_TOKEN_LOGIN_A,
   deleteUser,
+  ENTER_AS_USER,
   freezeUser,
   getUserById,
   GET_USERS,
   GET_USER_BY_ID,
+  loginAsUser,
   notify,
 } from "../../../../services";
 import {
@@ -16,6 +18,8 @@ import {
   MarketUserDetail,
 } from "../../../../main.type";
 import { queryClient } from "../../../../queryClient";
+import { TOKEN_KEY } from "../../../../constants";
+import { useNavigate } from "react-router-dom";
 
 type UserDetailProps = {
   id: number;
@@ -24,7 +28,9 @@ type UserDetailProps = {
 };
 
 const UserDetail = ({ id, is_active, openModal }: UserDetailProps) => {
-  const headingWordFreeze = is_active ? "" : "Un";
+  const headingWordFreeze = is_active ? "F" : "Unf";
+
+  const navigator = useNavigate();
 
   const { data } = useQuery({
     queryKey: [GET_USER_BY_ID, id],
@@ -35,17 +41,30 @@ const UserDetail = ({ id, is_active, openModal }: UserDetailProps) => {
     },
   });
 
+  const queryLoginAsUser = useQuery({
+    queryKey: [ENTER_AS_USER, id],
+    queryFn: loginAsUser,
+    enabled: false,
+    onSuccess: (data: {
+      access_token: string;
+      token_type: string;
+      is_admin?: boolean;
+    }) => {
+      localStorage.setItem(TOKEN_KEY, data.access_token);
+      navigator("/");
+    },
+    onError: () => {
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN_A, true]);
+    },
+  });
+
   const mutationDeleteUser = useMutation({
     mutationFn: deleteUser,
     onSuccess: (data: { user_id: number }) => {
-      console.log("on Success", { data });
-
       queryClient.invalidateQueries([GET_USERS]);
       notify(`The account №${data.user_id} was deleted`);
     },
     onError: () => {
-      console.log("errror");
-
       queryClient.invalidateQueries([CHECK_TOKEN_LOGIN_A, true]);
     },
   });
@@ -53,14 +72,10 @@ const UserDetail = ({ id, is_active, openModal }: UserDetailProps) => {
   const mutationFreezeUser = useMutation({
     mutationFn: freezeUser,
     onSuccess: (data: { user_id: number }) => {
-      console.log("on Success", { data });
-
       queryClient.invalidateQueries([GET_USERS]);
-      notify(`The account № ${data.user_id} is ${headingWordFreeze}freeze now`);
+      notify(`The account № ${data.user_id} is ${headingWordFreeze}reeze now`);
     },
     onError: () => {
-      console.log("errror");
-
       queryClient.invalidateQueries([CHECK_TOKEN_LOGIN_A, true]);
     },
   });
@@ -76,8 +91,8 @@ const UserDetail = ({ id, is_active, openModal }: UserDetailProps) => {
 
   const handlerFreezeUser = () => {
     const openModalData: IOpenModalData = {
-      modalTitle: `Are you sure you want to ${headingWordFreeze}freeze the account № ${id}?`,
-      modalConfirmLabel: ` ${headingWordFreeze}freeze account`,
+      modalTitle: `Are you sure you want to ${headingWordFreeze.toLocaleLowerCase()}reeze the account № ${id}?`,
+      modalConfirmLabel: `${headingWordFreeze}reeze account`,
       confirmCallback: () =>
         mutationFreezeUser.mutate({
           user_id: id,
@@ -85,6 +100,10 @@ const UserDetail = ({ id, is_active, openModal }: UserDetailProps) => {
         }),
     };
     openModal(openModalData);
+  };
+
+  const handlerEnterAsUser = async () => {
+    queryLoginAsUser.refetch();
   };
 
   return (
@@ -109,11 +128,12 @@ const UserDetail = ({ id, is_active, openModal }: UserDetailProps) => {
             <CustomBtn
               btnName="Enter as user"
               additionalStyles={style.activeBtn}
+              handlerOnClick={handlerEnterAsUser}
             />
           </td>
           <td colSpan={2}>
             <CustomBtn
-              btnName="Freeze account"
+              btnName={`${headingWordFreeze}reeze account`}
               additionalStyles={style.activeBtn}
               handlerOnClick={handlerFreezeUser}
             />

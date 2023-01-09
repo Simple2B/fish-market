@@ -146,3 +146,23 @@ export const getMonthListByYear = (year: number): Array<string> => {
 
   return result;
 };
+
+export const loginAsUser = async ({
+  queryKey,
+}: QueryFunctionContext<[string, number]>) => {
+  const [_, id] = queryKey;
+
+  const res = await fetch(`${API_BASE_URL}/login-as-user/${id}`, {
+    method: "GET",
+    headers: setRequestHeaders(TOKEN_KEY),
+  });
+
+  if (!res.ok) {
+    console.error("Bad login");
+    throw new Error("Can't login as user");
+  }
+
+  const resData = await res.json();
+
+  return resData;
+};
