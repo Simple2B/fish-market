@@ -7,6 +7,7 @@ import {
   Home,
   LoginUser,
   Market,
+  MarketNotFound,
   RegisterNewUser,
 } from "./pages";
 import { Orders, OutOfStock, SettingsView } from "./pages/Home";
@@ -75,5 +76,9 @@ export const rootRouter = createBrowserRouter([
   {
     path: settingUrl + "/add-product",
     element: <AddProduct />,
+  },
+  {
+    path: "/market-not-found",
+    element: <MarketNotFound />,
   },
 ]);

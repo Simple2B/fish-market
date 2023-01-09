@@ -32,7 +32,7 @@ const buttonTitle = {
 export function Market() {
   const { marketId } = useParams<"marketId">();
   if (!marketId) {
-    return <Navigate to={"/"} replace={true} />;
+    return <Navigate to={"/market-not-found"} replace={true} />;
   }
 
   const [cartState, dispatchCart] = useReducer(cartReducer, initialStateCart);
