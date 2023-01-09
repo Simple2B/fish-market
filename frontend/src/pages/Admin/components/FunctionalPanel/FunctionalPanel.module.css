@@ -21,6 +21,9 @@
     box-sizing: border-box;
 }
 
+
+
+
 .functionalPanelSelect {
     height: 2.5rem;
     width: 13rem;
@@ -35,7 +38,8 @@
     width: 53rem;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: flex-end;
+    gap: 0 1rem;
 }
 
 .activeBtn:hover {

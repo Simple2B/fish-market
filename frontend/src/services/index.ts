@@ -59,4 +59,6 @@ export {
   createNewUser,
   deleteUser,
   freezeUser,
+  getYearList,
+  getMonthListByYear,
 } from "./adminService";

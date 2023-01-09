@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { Spinner } from "../../../../components";
 import { ManagerOutletContext, MarketUser } from "../../../../main.type";
 import { queryClient } from "../../../../queryClient";
@@ -18,6 +19,9 @@ type Props = {
 };
 
 const Users = ({ openModal, handlerRegisterNewUser }: Props) => {
+  const [yearData, setYearData] = useState<number>(0);
+  const [monthData, setMonthData] = useState<string>("");
+
   const { data, isLoading } = useQuery({
     queryKey: [GET_USERS],
     queryFn: getAllUsers,
@@ -26,11 +30,30 @@ const Users = ({ openModal, handlerRegisterNewUser }: Props) => {
     },
   });
 
+  const filterUsersByDate = (user: MarketUser) => {
+    const userDate = new Date(user.created_at);
+
+    const userYear = userDate.getFullYear();
+    const userMonth = userDate.toLocaleString("en-US", { month: "long" });
+
+    if (!yearData || !monthData) return true;
+
+    if (yearData && monthData) {
+      return userYear === yearData && monthData === userMonth;
+    } else false;
+  };
+
   return isLoading ? (
     <Spinner />
   ) : (
     <div className={style.usersContent}>
-      <FunctionalPanel handlerRegisterNewUser={handlerRegisterNewUser} />
+      <FunctionalPanel
+        handlerRegisterNewUser={handlerRegisterNewUser}
+        yearData={yearData}
+        monthData={monthData}
+        setYearData={setYearData}
+        setMonthData={setMonthData}
+      />
       <table className={style.informationPanel}>
         <thead className={style.informationPanelWrap}>
           <tr>
@@ -47,9 +70,11 @@ const Users = ({ openModal, handlerRegisterNewUser }: Props) => {
         </thead>
         <tbody>
           {data &&
-            data.map((user: MarketUser) => (
-              <User key={user.id} {...user} openModal={openModal} />
-            ))}
+            data
+              .filter(filterUsersByDate)
+              .map((user: MarketUser) => (
+                <User key={user.id} {...user} openModal={openModal} />
+              ))}
         </tbody>
       </table>
     </div>

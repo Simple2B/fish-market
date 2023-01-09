@@ -16,7 +16,7 @@ export const getAllUsers = async () => {
 
   const resData = await res.json();
 
-  return resData.users.sort((a: ObjId, b: ObjId) => b.id - a.id);
+  return resData.users;
 };
 
 export const getUserById = async ({
@@ -100,4 +100,49 @@ export const freezeUser = async (data: {
   const resData = await res.json();
 
   return resData;
+};
+
+export const arrOfMonth = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+export const getYearList = (): Array<number> => {
+  const result = new Array<number>();
+  const currentYear = new Date().getFullYear();
+
+  for (let year = 2022; year <= currentYear; year++) {
+    result.push(year);
+  }
+
+  return result;
+};
+
+export const getMonthListByYear = (year: number): Array<string> => {
+  const result = new Array<string>();
+  const currentYear = new Date().getFullYear();
+
+  if (year <= currentYear) {
+    let currentMonthIndex = 11;
+
+    if (year === currentYear) {
+      currentMonthIndex = new Date().getMonth();
+    }
+
+    for (let monthIndex = 0; monthIndex <= currentMonthIndex; monthIndex++) {
+      result.push(arrOfMonth[monthIndex]);
+    }
+  }
+
+  return result;
 };

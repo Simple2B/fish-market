@@ -1,23 +1,37 @@
+import { useState } from "react";
 import { CustomBtn } from "../../../../components";
 import { TOKEN_KEY } from "../../../../constants";
+import { getMonthListByYear, getYearList } from "../../../../services";
 import style from "./FunctionalPanel.module.css";
 
 type FunctionalPanelProps = {
   handlerRegisterNewUser: () => void;
+  yearData: number;
+  monthData: string;
+  setYearData: (n: number) => void;
+  setMonthData: (n: string) => void;
 };
 
-// {Array.from(new Array(5), (v, i) => (
-//     <option key={i} value={year + i}>
-//       {year + i}
-//     </option>
-//   ))}
-
-const FunctionalPanel = ({ handlerRegisterNewUser }: FunctionalPanelProps) => {
-  const year = new Date().getFullYear();
-
+const FunctionalPanel = ({
+  handlerRegisterNewUser,
+  yearData,
+  monthData,
+  setYearData,
+  setMonthData,
+}: FunctionalPanelProps) => {
   const logOut = () => {
     localStorage.removeItem(TOKEN_KEY);
     window.location.reload();
+  };
+
+  const handlerYearDataSelector = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setYearData(Number(e.target.value));
+  };
+
+  const handlerMonthDataSelector = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setMonthData(e.target.value);
   };
 
   return (
@@ -28,24 +42,43 @@ const FunctionalPanel = ({ handlerRegisterNewUser }: FunctionalPanelProps) => {
           <select
             className={style.functionalPanelSelect}
             placeholder="Choose option"
-          ></select>
+            value={yearData}
+            onChange={handlerYearDataSelector}
+          >
+            <option value={""}>Choose option...</option>
+            {getYearList().map((year: number) => {
+              return (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              );
+            })}
+          </select>
         </div>
         <div>
           Month subjected
           <select
             className={style.functionalPanelSelect}
             placeholder="Choose option"
-          ></select>
+            value={monthData}
+            onChange={handlerMonthDataSelector}
+            disabled={!yearData}
+          >
+            <option value={""}>Choose option...</option>
+            {getMonthListByYear(Number(yearData)).map((month: string) => {
+              return (
+                <option key={month} value={month}>
+                  {month}
+                </option>
+              );
+            })}
+          </select>
         </div>
       </div>
       <div className={style.functionalPanelRight}>
         <CustomBtn
           btnName="Register New User"
           handlerOnClick={handlerRegisterNewUser}
-          additionalStyles={style.activeBtn}
-        />
-        <CustomBtn
-          btnName="Change password"
           additionalStyles={style.activeBtn}
         />
         <CustomBtn

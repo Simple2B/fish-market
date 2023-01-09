@@ -43,6 +43,7 @@ def get_all_user(
     users: m.User = (
         db.query(m.User)
         .filter(and_(m.User.is_deleted == False, m.User.role != m.UserRole.Admin))
+        .order_by(m.User.id.desc())
         .all()
     )
     return s.AllUsers(users=users)
