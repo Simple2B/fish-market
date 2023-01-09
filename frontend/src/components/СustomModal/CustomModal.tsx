@@ -1,5 +1,5 @@
 import Modal from "react-modal";
-import { CustomModalProps } from "../../../../main.type";
+import { CustomModalProps } from "../../main.type";
 
 import style from "./CustomModal.module.css";
 
