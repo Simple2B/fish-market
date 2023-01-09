@@ -51,7 +51,7 @@ const UserDetail = ({ id, is_active, openModal }: UserDetailProps) => {
       is_admin?: boolean;
     }) => {
       localStorage.setItem(TOKEN_KEY, data.access_token);
-      navigator("/");
+      navigator("/", { replace: true });
     },
     onError: () => {
       queryClient.invalidateQueries([CHECK_TOKEN_LOGIN_A, true]);

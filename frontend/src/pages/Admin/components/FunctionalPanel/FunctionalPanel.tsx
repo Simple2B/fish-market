@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CustomBtn } from "../../../../components";
 import { TOKEN_KEY } from "../../../../constants";
 import { getMonthListByYear, getYearList } from "../../../../services";
@@ -19,9 +20,11 @@ const FunctionalPanel = ({
   setYearData,
   setMonthData,
 }: FunctionalPanelProps) => {
+  const navigator = useNavigate();
+
   const logOut = () => {
     localStorage.removeItem(TOKEN_KEY);
-    window.location.reload();
+    navigator("/login");
   };
 
   const handlerYearDataSelector = (e: React.ChangeEvent<HTMLSelectElement>) => {

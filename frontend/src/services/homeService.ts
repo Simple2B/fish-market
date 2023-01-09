@@ -1,4 +1,4 @@
-import { QueryFunction, QueryFunctionContext } from "@tanstack/react-query";
+import { QueryFunctionContext } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import {
   API_BASE_URL,
@@ -52,7 +52,7 @@ export const isTokenValid = async ({
   if (!res.ok) {
     localStorage.removeItem(TOKEN_KEY);
     console.error("Bad login");
-    return false;
+    throw new Error("Bad login");
   }
 
   const data = await res.json();
@@ -69,6 +69,11 @@ export const changeOrder = async (data: {
     headers: setRequestHeaders(TOKEN_KEY),
     body: JSON.stringify(data.body),
   });
+
+  if (!res.ok) {
+    console.log("Change Order error");
+    throw new Error("Can't change order");
+  }
 };
 
 export const removeOrder = async (data: { order_id: number }) => {
@@ -76,6 +81,11 @@ export const removeOrder = async (data: { order_id: number }) => {
     method: "DELETE",
     headers: setRequestHeaders(TOKEN_KEY),
   });
+
+  if (!res.ok) {
+    console.log("Remove order error");
+    throw new Error("Can't remove order");
+  }
 };
 
 export const isOutOfStock = async (data: {
@@ -94,6 +104,11 @@ export const resetOutOfStock = async () => {
     method: "PATCH",
     headers: setRequestHeaders(TOKEN_KEY),
   });
+
+  if (!res.ok) {
+    console.log("Reset Out of stock error");
+    throw new Error("Can't reset Out of stock");
+  }
 };
 
 export const rebuildUrl = (url: string) => {

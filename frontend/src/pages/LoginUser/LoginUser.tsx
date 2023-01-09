@@ -18,6 +18,14 @@ type Inputs = {
 const LoginUser = () => {
   const navigator = useNavigate();
 
+  const {
+    register,
+    handleSubmit,
+    setError,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>();
+
   const mutationLoginUser = useMutation({
     mutationFn: loginUser,
     onSuccess: async (data: {
@@ -25,14 +33,12 @@ const LoginUser = () => {
       token_type: string;
       is_admin?: boolean;
     }) => {
-      console.log("success");
-
       localStorage.setItem(TOKEN_KEY, data.access_token);
 
       if (data.is_admin) {
-        navigator("/admin");
+        navigator("/admin", { replace: true });
       } else {
-        navigator("/");
+        navigator("/", { replace: true });
       }
     },
     onError: async () => {
@@ -42,14 +48,6 @@ const LoginUser = () => {
       });
     },
   });
-
-  const {
-    register,
-    handleSubmit,
-    setError,
-    watch,
-    formState: { errors },
-  } = useForm<Inputs>();
 
   const styleBtnSubmit = classNames(style.formBtnDisable, {
     [style.formBtnEnable]: watch("email") && watch("password"),

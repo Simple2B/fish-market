@@ -16,6 +16,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import {
   changeOrder,
+  CHECK_TOKEN_LOGIN,
   GET_ORDERS,
   notify,
   removeOrder,
@@ -65,7 +66,7 @@ const Order = ({
       queryClient.invalidateQueries([GET_ORDERS]);
     },
     onError: async (err) => {
-      console.error(`changeStatusOrder error ${err}`);
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
     },
   });
 
@@ -76,7 +77,7 @@ const Order = ({
       notify(textDataRemoved.toastMessage);
     },
     onError: async (err) => {
-      console.error(`removeOrderData error ${err}`);
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
     },
   });
 

@@ -1,8 +1,12 @@
 import { isError, useMutation, useQuery } from "@tanstack/react-query";
 import { useReducer } from "react";
 import { useNavigate } from "react-router-dom";
-import { CustomBtn } from "../../components";
-import { settingsViewKey, SETTINGS_VIEW_TEXT_DATA } from "../../constants";
+import { CustomBtn, Spinner } from "../../components";
+import {
+  REFETCH_INTERVAL_VALID_TOKEN,
+  settingsViewKey,
+  SETTINGS_VIEW_TEXT_DATA,
+} from "../../constants";
 import { ImageType } from "../../main.type";
 import {
   createProduct,
@@ -31,14 +35,14 @@ const AddProduct = () => {
     initialStateProduct
   );
 
-  const { data, isLoading } = useQuery({
+  const { isLoading } = useQuery({
     queryKey: [CHECK_TOKEN_CHANGE_PASSWORD],
     queryFn: isTokenValid,
+    onError: () => {
+      navigator("/login");
+    },
+    refetchInterval: REFETCH_INTERVAL_VALID_TOKEN,
   });
-
-  if (!isLoading && !data) {
-    navigator("/login");
-  }
 
   const mutationSetProductImage = useMutation({
     mutationFn: uploadImage,
@@ -105,7 +109,9 @@ const AddProduct = () => {
     mutationCreateProduct.mutate(reqData);
   };
 
-  return (
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <div className={style.addProductContent}>
       <div className={style.addProductContentTitle}>
         {textData[settingsViewKey.ADD_NEW_ITEM]}

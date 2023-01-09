@@ -4,21 +4,13 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { CHECK_TOKEN_LOGIN_A, isTokenValid } from "../../services";
 import { Users } from "./components";
 import { useModal } from "../../hooks";
-import { CustomModal } from "../../components";
-import { useState } from "react";
+import { CustomModal, Spinner } from "../../components";
+import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
+import { REFETCH_INTERVAL_VALID_TOKEN } from "../../constants";
 
 const Admin = () => {
   const navigator = useNavigate();
-
-  const { data, isLoading } = useQuery({
-    queryKey: [CHECK_TOKEN_LOGIN_A, true],
-    queryFn: isTokenValid,
-  });
-
-  if (!isLoading && !data) {
-    navigator("/login");
-  }
 
   const [isOpenRegisterNewUser, setIsOpenRegisterNewUser] =
     useState<boolean>(false);
@@ -32,6 +24,15 @@ const Admin = () => {
     openModal,
   ] = useModal();
 
+  const { isLoading } = useQuery({
+    queryKey: [CHECK_TOKEN_LOGIN_A, true],
+    queryFn: isTokenValid,
+    onError: () => {
+      navigator("/login");
+    },
+    refetchInterval: REFETCH_INTERVAL_VALID_TOKEN,
+  });
+
   const handlerRegisterNewUser = () => {
     if (isOpenRegisterNewUser) {
       navigator("/admin");
@@ -41,6 +42,10 @@ const Admin = () => {
       setIsOpenRegisterNewUser(true);
     }
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return isOpenRegisterNewUser ? (
     <Outlet context={{ handlerRegisterNewUser }} />

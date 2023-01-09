@@ -16,11 +16,6 @@ import style from "./Manager.module.css";
 
 const Manager = () => {
   const pathname = useLocation().pathname;
-
-  if (pathname === "/") {
-    return <Navigate to={"/orders"} replace={true} />;
-  }
-
   const [
     isModalOpen,
     modalTitle,
@@ -29,6 +24,10 @@ const Manager = () => {
     cleanModalState,
     openModal,
   ] = useModal();
+
+  if (pathname === "/") {
+    return <Navigate to={"/orders"} replace={true} />;
+  }
 
   return (
     <div className={style.managerPage}>
