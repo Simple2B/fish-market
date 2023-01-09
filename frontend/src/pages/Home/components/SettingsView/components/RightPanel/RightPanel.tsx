@@ -29,7 +29,7 @@ const RightPanel = ({
   const shopLink = `${window.location.origin}/market/${web_site_id}`;
 
   const handlerIcon = () => {
-    navigate.clipboard.writeText(shopLink);
+    navigator.clipboard.writeText(shopLink);
   };
 
   const logOut = () => {
