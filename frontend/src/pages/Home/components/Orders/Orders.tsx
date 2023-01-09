@@ -9,6 +9,7 @@ import {
   StatusBtnItem,
   getOrders,
   CHECK_TOKEN_LOGIN,
+  sortByActiveOrderId,
 } from "../../../../services";
 import { Order } from "./Order";
 import style from "./Orders.module.css";
@@ -55,22 +56,14 @@ const Orders = ({ filterOptions, isArchive }: OrdersProps) => {
 
     if (activeBtnFilterName && sortFunction) {
       dataForSort.sort(sortFunction);
-      sortByActiveOrderId(dataForSort);
+      sortByActiveOrderId(dataForSort, arrayActiveOrders);
       setOrdersData(dataForSort);
       return true;
     }
-    sortByActiveOrderId(dataForSort);
+    sortByActiveOrderId(dataForSort, arrayActiveOrders);
 
     setOrdersData(dataForSort);
     return false;
-  };
-
-  const sortByActiveOrderId = (dataForSort: OrderData[]) => {
-    if (arrayActiveOrders.length >= 1) {
-      dataForSort.sort((orderA, orderB) =>
-        arrayActiveOrders.includes(orderA.id) ? -1 : 0
-      );
-    }
   };
 
   const handlerButtonsFilters = ({ name }: StatusBtnItem) => {

@@ -33,6 +33,7 @@ export {
   resetOutOfStock,
   isTokenValid,
   getOrders,
+  sortByActiveOrderId,
 } from "./homeService";
 export type { FilteringFunctions, StatusBtnItem } from "./homeService";
 

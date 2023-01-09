@@ -41,17 +41,11 @@
 
 .contentForm {
     height: 100%;
-    /* width: 50%; */
     display: flex;
     justify-content: flex-start;
 }
 
 .contentFormWrap {
-    /* width: 43%; */
     margin-left: 50px;
 
 }
-
-/* .contentCartWrap {
-    width: 50%;
-} */

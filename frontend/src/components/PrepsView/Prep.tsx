@@ -20,10 +20,18 @@ const Prep = ({
     [style.activePrep]: is_active,
   });
 
+  const handlerOnClickPrep = () => {
+    handlerOnClick(id);
+  };
+
+  const handlerDeletePrep = () => {
+    handlerDelete(id);
+  };
+
   return (
-    <div className={prepContent} onClick={() => handlerOnClick(id)}>
+    <div className={prepContent} onClick={handlerOnClickPrep}>
       <div>{name}</div>
-      <div onClick={() => handlerDelete(id)}>✕</div>
+      <div onClick={handlerDeletePrep}>✕</div>
     </div>
   );
 };

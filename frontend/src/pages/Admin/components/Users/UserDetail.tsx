@@ -30,7 +30,7 @@ type UserDetailProps = {
 const UserDetail = ({ id, is_active, openModal }: UserDetailProps) => {
   const headingWordFreeze = is_active ? "F" : "Unf";
 
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   const { data } = useQuery({
     queryKey: [GET_USER_BY_ID, id],
@@ -51,7 +51,7 @@ const UserDetail = ({ id, is_active, openModal }: UserDetailProps) => {
       is_admin?: boolean;
     }) => {
       localStorage.setItem(TOKEN_KEY, data.access_token);
-      navigator("/", { replace: true });
+      navigate("/", { replace: true });
     },
     onError: () => {
       queryClient.invalidateQueries([CHECK_TOKEN_LOGIN_A, true]);

@@ -1,5 +1,5 @@
 import { QueryFunctionContext } from "@tanstack/react-query";
-import { API_BASE_URL, TOKEN_KEY } from "../constants";
+import { API_BASE_URL, arrOfMonth, TOKEN_KEY } from "../constants";
 import { MarketUser, ObjId } from "../main.type";
 import { setRequestHeaders } from "../utils";
 
@@ -101,21 +101,6 @@ export const freezeUser = async (data: {
 
   return resData;
 };
-
-export const arrOfMonth = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
 
 export const getYearList = (): Array<number> => {
   const result = new Array<number>();

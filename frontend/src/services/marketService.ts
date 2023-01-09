@@ -77,8 +77,5 @@ export const phoneNumberAutoFormat = (phoneNumber: string): string => {
 
 export const isValidNumber = (v: string): boolean => {
   const number = replaceDash(v);
-  if (number.length === 10 || number.length == 12) {
-    return true;
-  }
-  return false;
+  return number.length === 10 || number.length == 12;
 };

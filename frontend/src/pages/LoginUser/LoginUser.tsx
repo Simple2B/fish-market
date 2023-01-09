@@ -16,7 +16,7 @@ type Inputs = {
 };
 
 const LoginUser = () => {
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -36,9 +36,9 @@ const LoginUser = () => {
       localStorage.setItem(TOKEN_KEY, data.access_token);
 
       if (data.is_admin) {
-        navigator("/admin", { replace: true });
+        navigate("/admin", { replace: true });
       } else {
-        navigator("/", { replace: true });
+        navigate("/", { replace: true });
       }
     },
     onError: async () => {

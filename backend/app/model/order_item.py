@@ -17,10 +17,6 @@ class OrderItem(Base):
     prep = relationship("Prep")
     order = relationship("Order")
 
-    # @property
-    # def product(self):
-    #     return self.prep.product
-
     @property
     def product(self):
         return self.prep.product

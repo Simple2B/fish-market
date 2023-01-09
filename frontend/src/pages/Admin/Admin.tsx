@@ -10,7 +10,7 @@ import { ToastContainer } from "react-toastify";
 import { REFETCH_INTERVAL_VALID_TOKEN } from "../../constants";
 
 const Admin = () => {
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   const [isOpenRegisterNewUser, setIsOpenRegisterNewUser] =
     useState<boolean>(false);
@@ -28,17 +28,17 @@ const Admin = () => {
     queryKey: [CHECK_TOKEN_LOGIN_A, true],
     queryFn: isTokenValid,
     onError: () => {
-      navigator("/login");
+      navigate("/login");
     },
     refetchInterval: REFETCH_INTERVAL_VALID_TOKEN,
   });
 
   const handlerRegisterNewUser = () => {
     if (isOpenRegisterNewUser) {
-      navigator("/admin");
+      navigate("/admin");
       setIsOpenRegisterNewUser(false);
     } else {
-      navigator("/admin/register-new-user");
+      navigate("/admin/register-new-user");
       setIsOpenRegisterNewUser(true);
     }
   };

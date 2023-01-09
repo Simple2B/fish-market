@@ -28,7 +28,7 @@ import { CreateProduct } from "./components/CreateProduct";
 const textData = SETTINGS_VIEW_TEXT_DATA;
 
 const AddProduct = () => {
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   const [newProductState, newProductDispatch] = useReducer(
     createProductReducer,
@@ -39,7 +39,7 @@ const AddProduct = () => {
     queryKey: [CHECK_TOKEN_CHANGE_PASSWORD],
     queryFn: isTokenValid,
     onError: () => {
-      navigator("/login");
+      navigate("/login");
     },
     refetchInterval: REFETCH_INTERVAL_VALID_TOKEN,
   });
@@ -53,12 +53,12 @@ const AddProduct = () => {
     onSuccess: () => {
       notify(textData[settingsViewKey.MES_PRODUCT_WAS_CREATED]);
       newProductDispatch({ type: CreateProductActionKeys.RESET_DATA });
-      navigator("/settings");
+      navigate("/settings");
     },
     onError: () => {
       newProductDispatch({ type: CreateProductActionKeys.RESET_DATA });
       notify(textData[settingsViewKey.MES_PRODUCT_WAS_NOT_CREATED]);
-      navigator("/settings");
+      navigate("/settings");
     },
   });
 
@@ -82,7 +82,7 @@ const AddProduct = () => {
   };
 
   const handlerCancelBtn = () => {
-    navigator("/settings");
+    navigate("/settings");
   };
 
   const handlerOnAddProduct = async () => {

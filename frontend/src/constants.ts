@@ -6,6 +6,21 @@ export const ACTIVE_BTN_FILTER_INDEX = 1;
 export const IS_REMOVED_BTN_NAME = "Removed";
 export const REFETCH_INTERVAL_VALID_TOKEN = 180000;
 
+export const arrOfMonth = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 export const modalDataKeys = {
   CAN_NOT_COMPLETED: "canNotCompletedKey",
   REMOVE_ORDER: "removeOrderKey",

@@ -1,6 +1,5 @@
 .prepsViewContent {
     height: 100%;
-    /* width: 41.25rem; */
     font-weight: 400;
     font-size: 1.1rem;
     line-height: 1.6rem;
@@ -37,8 +36,6 @@
     flex-wrap: wrap;
     overflow-y: scroll;
 }
-
-
 
 
 .prepsViewContentChildren {

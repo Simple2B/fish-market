@@ -20,11 +20,11 @@ const FunctionalPanel = ({
   setYearData,
   setMonthData,
 }: FunctionalPanelProps) => {
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   const logOut = () => {
     localStorage.removeItem(TOKEN_KEY);
-    navigator("/login");
+    navigate("/login");
   };
 
   const handlerYearDataSelector = (e: React.ChangeEvent<HTMLSelectElement>) => {

@@ -78,8 +78,6 @@ export function Market() {
     setStep(BusinessStep.START_ORDER);
   };
 
-  // console.log(orderState, "orderState");
-
   return orderState.isNumberVerified ? (
     <>
       <NextClient />

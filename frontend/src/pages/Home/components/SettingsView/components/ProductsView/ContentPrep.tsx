@@ -104,6 +104,14 @@ const ContentPrep = ({ id }: ContentPrepProps) => {
     });
   };
 
+  const onClickHighlightAll = () => {
+    handlerUHighlightAll(true);
+  };
+
+  const onClickUnHighlightAll = () => {
+    handlerUHighlightAll(false);
+  };
+
   return (
     <>
       {data && (
@@ -114,8 +122,8 @@ const ContentPrep = ({ id }: ContentPrepProps) => {
             handlerDeletePrep={handlerDeletePrep}
           >
             <HighlightButtons
-              handlerHighlightAll={() => handlerUHighlightAll(true)}
-              handlerUnHighlightAll={() => handlerUHighlightAll(false)}
+              handlerHighlightAll={onClickHighlightAll}
+              handlerUnHighlightAll={onClickUnHighlightAll}
             />
           </PrepsView>
           <AddPrepForm handlerAddPreps={handlerAddPreps} />

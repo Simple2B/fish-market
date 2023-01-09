@@ -199,3 +199,14 @@ export const filterOptionsArchive: StatusBtnItem[] = [
       !a.is_deleted && a.status === OrderStatus.picked_up ? -1 : 0,
   },
 ];
+
+export const sortByActiveOrderId = (
+  dataForSort: OrderData[],
+  arrayActiveOrders: number[]
+) => {
+  if (arrayActiveOrders.length >= 1) {
+    dataForSort.sort((orderA, orderB) =>
+      arrayActiveOrders.includes(orderA.id) ? -1 : 0
+    );
+  }
+};

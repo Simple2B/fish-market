@@ -65,8 +65,6 @@ const RegisterNewUser = () => {
       business: { phone_number: data.business_phone_number, name: data.name },
     };
 
-    console.log(reqData);
-
     mutationCreateNewUser.mutate(reqData);
   };
 
