@@ -84,7 +84,7 @@ const PersonalInfo = ({
               return {
                 prep_id: product.prepId,
                 qty: product.qty,
-                unit_type: product.itemType,
+                unit_type: product.itemType == "Kg" ? "by_kilogram" : "by_unit",
               };
             }),
           },

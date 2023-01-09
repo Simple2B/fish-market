@@ -68,7 +68,7 @@ export interface IBusinessOut {
 export interface IOrderItem {
   prep_id: number;
   qty: number;
-  unit_type: ItemUnit;
+  unit_type: string;
 }
 
 export type CreateOrderItems = {
