@@ -26,14 +26,14 @@ def test_get_orders(
 
     order.is_deleted = True
     db.commit()
-    res = marketer_client.get(f"/order/?is_archive=true")
+    res = marketer_client.get("/order/?is_archive=true")
     res_data = s.OrdersOut.parse_obj(res.json())
     assert res_data.orders
 
     order.status = m.OrderStatus.picked_up
     order.is_deleted = False
     db.commit()
-    res = marketer_client.get(f"/order/?is_archive=true")
+    res = marketer_client.get("/order/?is_archive=true")
     assert res
     res_data = s.OrdersOut.parse_obj(res.json())
     assert order.status in status_list_is_archive

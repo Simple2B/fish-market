@@ -90,7 +90,7 @@ def test_patch_product_prep(marketer_client: TestClient, db: Session):
     )
     assert res.status_code == status.HTTP_200_OK
     data_res = s.ProductPrepOut.parse_obj(res.json())
-    assert data_res.is_active == str(prep_data_update.is_active)
+    assert data_res.is_active == prep_data_update.is_active
 
     # test update was in db
     prep = db.query(m.Prep).get(take_first_prep.id)

@@ -70,9 +70,9 @@ def test_get_all_user(admin_client: TestClient, db: Session):
     assert res
     res_data = s.AllUsers.parse_obj(res.json())
     assert len(res_data.users) == len(users)
-    assert res_data.users[-1].id == users[-1].id
+    assert res_data.users[-1].id == users[0].id
 
-    assert res_data.users[0].kg_sold == users[0].kg_sold
+    assert res_data.users[0].kg_sold == users[-1].kg_sold
 
 
 def test_create_user_marketeer(admin_client: TestClient, db: Session):
@@ -94,7 +94,7 @@ def test_create_user_marketeer(admin_client: TestClient, db: Session):
     # admin do not need to check his data
     assert count_of_user == len(response.json()["users"])
 
-    user = s.UserOut.parse_obj(response.json()["users"][-1])
+    user = s.UserOut.parse_obj(response.json()["users"][0])
     assert user.username == USER_NAME
     # new user can login
     del admin_client.headers["Authorization"]
@@ -117,8 +117,8 @@ def test_admin_get_user_marketeer_by_id(admin_client: TestClient, db: Session):
     user: m.User = db.query(m.User).filter_by(role=m.UserRole.Marketeer).first()
     res = admin_client.get(f"/user/{user.id}")
     assert res.status_code == status.HTTP_200_OK
-    user_data = s.UserOut.parse_obj(res.json())
-    assert user_data.username == user.username
+    user_data = s.UserDetailOut.parse_obj(res.json())
+    assert user_data.email == user.email
 
     user: m.User = db.query(m.User).filter_by(role=m.UserRole.Admin).first()
     res = admin_client.get(f"/user/{user.id}")

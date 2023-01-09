@@ -1,3 +1,4 @@
+# flake8: noqa E712
 from fastapi import Depends, APIRouter, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
