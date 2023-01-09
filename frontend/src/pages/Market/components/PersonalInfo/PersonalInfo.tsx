@@ -8,6 +8,7 @@ import { createCheckPhoneNumber } from "../../../../services";
 import { MarketActionTypes, ISetOrderData, IProduct } from "../../Market.type";
 import {
   createOrder,
+  isValidNumber,
   phoneNumberAutoFormat,
   replaceDash,
 } from "../../../../services/marketService";
@@ -80,7 +81,11 @@ const PersonalInfo = ({
             customer_name: fullName,
             note: noteValue,
             items: cartState.map((product) => {
-              return { prep_id: product.prepId, qty: product.qty };
+              return {
+                prep_id: product.prepId,
+                qty: product.qty,
+                unit_type: product.itemType == "Kg" ? "by_kilogram" : "by_unit",
+              };
             }),
           },
           business_uid: marketId,
@@ -108,14 +113,6 @@ const PersonalInfo = ({
       };
       mutation.mutate(phoneNumber);
     }
-  };
-
-  const isValidNumber = (v: string): boolean => {
-    const number = replaceDash(v);
-    if (number.length === 10 || number.length == 12) {
-      return true;
-    }
-    return false;
   };
 
   const handlerOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {

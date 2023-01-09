@@ -1,7 +1,8 @@
-from sqlalchemy import Column, ForeignKey, Integer, Float
+from sqlalchemy import Column, Enum, ForeignKey, Integer, Float
 from sqlalchemy.orm import relationship
 
 from app.database import Base
+from .enums import SoldBy
 
 
 class OrderItem(Base):
@@ -10,6 +11,7 @@ class OrderItem(Base):
     id = Column(Integer, primary_key=True)
     order_id = Column(Integer, ForeignKey("orders.id"))
     prep_id = Column(Integer, ForeignKey("preps.id"))
+    unit_type = Column(Enum(SoldBy))
     qty = Column(Float, default=0.0)
 
     prep = relationship("Prep")

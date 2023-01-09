@@ -24,18 +24,17 @@ const RightPanel = ({
   web_site_id,
 }: Pick<IUserBusinessInfo, "web_site_id">) => {
   const { openModal } = useOutletContext<ManagerOutletContext>();
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const shopLink = `${window.location.origin}/market/${web_site_id}`;
 
   const handlerIcon = () => {
-    navigator.clipboard.writeText(shopLink);
+    navigate.clipboard.writeText(shopLink);
   };
 
   const logOut = () => {
     localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(ACTIVE_BTN_FILTER);
-    window.location.reload();
+    navigate("/login");
   };
 
   const handlerBtnLogOut = () => {

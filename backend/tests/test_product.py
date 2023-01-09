@@ -192,3 +192,22 @@ def test_reset_product_out_of_stock(marketer_client: TestClient, db: Session):
     assert "ok" in res.json()
 
     assert all([not product.is_out_of_stock for product in business.active_products])
+
+
+def test_highlight_product_prep(marketer_client: TestClient, db: Session):
+    product: m.Product = db.query(m.Product).filter_by(is_deleted=False).first()
+
+    reqData = s.HighlightPreps(is_highlight=False)
+
+    res = marketer_client.patch(
+        f"/product/{product.id}/prep-highlight", json=reqData.dict()
+    )
+    assert res.status_code == status.HTTP_200_OK
+    assert all([not prep.is_active for prep in product.preps if not prep.is_deleted])
+
+    reqData.is_highlight = True
+    res = marketer_client.patch(
+        f"/product/{product.id}/prep-highlight", json=reqData.dict()
+    )
+    assert res.status_code == status.HTTP_200_OK
+    assert all([prep.is_active for prep in product.preps if not prep.is_deleted])

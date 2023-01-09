@@ -1,6 +1,10 @@
 import style from "./Product.module.css";
 import { useMutation } from "@tanstack/react-query";
-import { GET_USER_PRODUCTS, isOutOfStock } from "../../../../services";
+import {
+  CHECK_TOKEN_LOGIN,
+  GET_USER_PRODUCTS,
+  isOutOfStock,
+} from "../../../../services";
 import classNames from "classnames";
 import { TypeProductsOut } from "../../../../main.type";
 import { queryClient } from "../../../../queryClient";
@@ -17,8 +21,8 @@ const Product = ({
     onSuccess: async (data) => {
       queryClient.invalidateQueries([GET_USER_PRODUCTS]);
     },
-    onError: async (err) => {
-      console.error(err, "mutationIsOutOfStock");
+    onError: async () => {
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
     },
   });
 

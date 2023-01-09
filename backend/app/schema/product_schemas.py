@@ -53,3 +53,7 @@ class UpdateProduct(BaseModel):
 
     class Config:
         use_enum_values = True
+
+
+class HighlightPreps(BaseModel):
+    is_highlight: bool

@@ -1,11 +1,11 @@
 import classNames from "classnames";
-import { FilterBtnItem } from "../../../../services";
+import { StatusBtnItem } from "../../../../services";
 
 import style from "./FilterButton.module.css";
 
 type FilterButtonProps = {
-  item: FilterBtnItem;
-  handlerButtonsFilters: (item: FilterBtnItem) => void;
+  item: StatusBtnItem;
+  handlerButtonsFilters: (item: StatusBtnItem) => void;
   activeBtnFilterName: string;
 };
 

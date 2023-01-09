@@ -1,0 +1,54 @@
+.prepsViewContent {
+    height: 100%;
+    font-weight: 400;
+    font-size: 1.1rem;
+    line-height: 1.6rem;
+}
+
+.prepsViewContentWrap {
+    height: inherit;
+    width: 32.6rem;
+
+    display: flex;
+    gap: 1rem 1rem;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    border-right: 1px solid black;
+}
+
+.prepsViewContentWrapWithOutChildren {
+    flex-direction: column;
+}
+
+.prepsViewContentChildren>div:first-child {
+    margin: 0;
+    font-weight: 800;
+}
+
+.prepsList {
+    width: 100%;
+    align-content: flex-start;
+    box-sizing: border-box;
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+}
+
+
+.prepsViewContentChildren {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.noPrepsText {
+    font-weight: 500;
+    color: #D1D1D1;
+}
+
+@media (max-width: 1024px) {
+    .prepsViewContentWrap {
+        width: 25rem;
+    }
+}

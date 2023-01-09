@@ -66,7 +66,11 @@ const ConfirmCodeForm = ({
             customer_name: orderState.name,
             note: orderState.note,
             items: cartState.map((product) => {
-              return { prep_id: product.prepId, qty: product.qty };
+              return {
+                prep_id: product.prepId,
+                qty: product.qty,
+                unit_type: product.itemType == "Kg" ? "by_kilogram" : "by_unit",
+              };
             }),
           },
           business_uid: marketId,

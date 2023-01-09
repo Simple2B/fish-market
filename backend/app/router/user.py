@@ -14,18 +14,21 @@ router = APIRouter(prefix="/user", tags=["Users"])
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=s.UserOut)
-def create_user(
-    user: s.UserCreate,
+def create_user_business(
+    data: s.CreateUserBusiness,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_admin),
 ):
-    log(log.INFO, "create_user [%s]", user)
+    log(log.INFO, "create_user_business ")
 
-    new_user = m.User(**user.dict())
+    user_data = data.user
+    business_data = data.business
+
+    new_user = m.User(**user_data.dict())
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    user_business = m.Business(user_id=new_user.id)
+    user_business = m.Business(user_id=new_user.id, **business_data.dict())
     db.add(user_business)
     db.commit()
     return new_user
@@ -40,12 +43,13 @@ def get_all_user(
     users: m.User = (
         db.query(m.User)
         .filter(and_(m.User.is_deleted == False, m.User.role != m.UserRole.Admin))
+        .order_by(m.User.id.desc())
         .all()
     )
     return s.AllUsers(users=users)
 
 
-@router.get("/{id}", response_model=s.UserOut)
+@router.get("/{id}", response_model=s.UserDetailOut)
 def get_user(
     id: int,
     db: Session = Depends(get_db),
@@ -81,10 +85,9 @@ def delete_user_marketeer(
 
     user.is_deleted = True
     db.commit()
-    return {"ok": True}
+    return {"user_id": user.id}
 
 
-# TODO make user can update himself
 @router.patch("/{id}", status_code=status.HTTP_200_OK)
 def update_user(
     id: int,
@@ -102,18 +105,9 @@ def update_user(
             status_code=status.HTTP_404_NOT_FOUND, detail="This user was not found"
         )
 
-    data: dict = data.dict()
-    for key, value in data.items():
-        if value is not None:
-            setattr(user, key, value)
+    user.is_active = data.is_active
 
     db.commit()
     db.refresh(user)
 
-    return s.UserUpdate(
-        username=user.username,
-        email=user.email,
-        address=user.address,
-        phone_number=user.phone_number,
-        is_active=user.is_active,
-    )
+    return {"user_id": user.id}

@@ -4,12 +4,29 @@ export const TOKEN_KEY = "TOKEN";
 export const ACTIVE_BTN_FILTER = "activeBtnFilterKey";
 export const ACTIVE_BTN_FILTER_INDEX = 1;
 export const IS_REMOVED_BTN_NAME = "Removed";
+export const REFETCH_INTERVAL_VALID_TOKEN = 180000;
+
+export const arrOfMonth = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
 export const modalDataKeys = {
   CAN_NOT_COMPLETED: "canNotCompletedKey",
   REMOVE_ORDER: "removeOrderKey",
   REPLENISH_ALL: "replenishAllKey",
   LOG_OUT_MODAL: "logOutModalKey",
+  DELETE_PRODUCT: "deleteProductKey",
 };
 
 export const filterBtnNameKeys = {
@@ -35,16 +52,36 @@ export const settingsViewKey = {
   UPLOAD_IMAGE: "uploadImage",
   ADD_NEW_ITEM: "addNewProductKey",
   ADD_ITEM: "addProductKey",
-  ADD: "",
+  ADD: "addKey",
   CANCEL: "cancelKey",
   DELETE_ITEM: "",
   CONFIRM: "Confirm",
   TITLE_LINK: "titleLinkKey",
   NOTIFY_MES: "notifyMessageKey",
   SOLD_BY_TEXT: "soldByTextKey",
+  SOLD_BY_KG: "soldByKgKey",
+  SOLD_BY_UNIT: "soldByUnitKey",
+  NO_PREPS_TEXT: "noPrepTextKey",
+  PREPS_TITLE: "prepsTitleKey",
+  ADD_PREP_TITLE: "addPrepTitleKey",
+  MES_PRODUCT_WAS_CREATED: "mesProductWasCreatedKey",
+  MES_PRODUCT_WAS_NOT_CREATED: "mesProductWasNotCreatedKey",
+  HIGHLIGHT_ALL_TEXT: "highlightAllTextKey",
+  UNHIGHLIGHT_ALL_TEXT: "unhighlightAllTextKey",
 };
 
 export const SETTINGS_VIEW_TEXT_DATA = {
+  [settingsViewKey.HIGHLIGHT_ALL_TEXT]: "Highlight all",
+  [settingsViewKey.UNHIGHLIGHT_ALL_TEXT]: "Unhighlight all",
+  [settingsViewKey.SOLD_BY_KG]: "By kg",
+  [settingsViewKey.SOLD_BY_UNIT]: "By unit",
+  [settingsViewKey.MES_PRODUCT_WAS_CREATED]: "A new item was created",
+  [settingsViewKey.MES_PRODUCT_WAS_NOT_CREATED]: "A new item was not created",
+  [settingsViewKey.ADD]: "Add",
+  [settingsViewKey.ADD_PREP_TITLE]: "Add new prep",
+  [settingsViewKey.PREPS_TITLE]: "Preps possible:",
+  [settingsViewKey.NO_PREPS_TEXT]:
+    "There are no preps possible right now. Please add new preps on the right.",
   [settingsViewKey.SOLD_BY_TEXT]: "Sold by",
   [settingsViewKey.ADD_NEW_ITEM]: "Add new item",
   [settingsViewKey.CANCEL]: "Cancel",
@@ -77,6 +114,12 @@ export const CHANGE_PASSWORD_INPUT_DATA = {
 };
 
 export const MODAL_TEXT_DATA = {
+  [modalDataKeys.DELETE_PRODUCT]: {
+    title: "Are you sure you want to delete ",
+    btnName: "Delete item",
+    toastMessage: "The item was successfully deleted!",
+  },
+
   [modalDataKeys.CAN_NOT_COMPLETED]: {
     title: "Are you sure?",
     btnName: "Can’t complete",

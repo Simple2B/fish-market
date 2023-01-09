@@ -1,4 +1,4 @@
-import { useState, useReducer, useRef } from "react";
+import { useState, useReducer, useRef, useEffect } from "react";
 import { Navigate, useParams } from "react-router-dom";
 
 import { ProductList } from "./components/ProductList";
@@ -44,6 +44,16 @@ export function Market() {
   const [step, setStep] = useState<BusinessStep>(BusinessStep.START_ORDER);
 
   const customerConfirmRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (orderState.isNumberVerified) {
+        handlerStepNextClient();
+      }
+    }, 20000);
+
+    return () => clearTimeout(timer);
+  }, [orderState.isNumberVerified]);
 
   const handleStepBusiness = () => {
     if (step === BusinessStep.ORDER && cartState.length < 1) return;

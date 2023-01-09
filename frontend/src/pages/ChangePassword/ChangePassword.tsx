@@ -2,10 +2,11 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import classNames from "classnames";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { CustomBtn, ErrorMessage } from "../../components";
+import { CustomBtn, ErrorMessage, Spinner } from "../../components";
 import {
   changePasswordKeys,
   CHANGE_PASSWORD_INPUT_DATA,
+  REFETCH_INTERVAL_VALID_TOKEN,
   settingsViewKey,
   SETTINGS_VIEW_TEXT_DATA,
 } from "../../constants";
@@ -23,15 +24,16 @@ type Inputs = {
 };
 
 const ChangePassword = () => {
-  let navigate = useNavigate();
-  const { data, isLoading } = useQuery({
+  const navigate = useNavigate();
+  const { isLoading } = useQuery({
     queryKey: [CHECK_TOKEN_CHANGE_PASSWORD],
     queryFn: isTokenValid,
+    onError: () => {
+      navigate("/login");
+    },
+    refetchInterval: REFETCH_INTERVAL_VALID_TOKEN,
   });
 
-  if (!isLoading && !data) {
-    navigate("/");
-  }
   const {
     register,
     handleSubmit,
@@ -76,7 +78,9 @@ const ChangePassword = () => {
       watch("password") && watch("new_password") && watch("repeat_password"),
   });
 
-  return (
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <div className={style.changePasswordContent}>
       <form
         onSubmit={handleSubmit(handlerSubmitBtn)}

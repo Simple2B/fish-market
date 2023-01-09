@@ -12,18 +12,36 @@ USER_EMAIL = "test@test.ku"
 USER_PASSWORD = "secret"
 USER_ADDRESS = "Kalush 1D"
 USER_PHONE_NUMBER = "123131313"
+USER_TYPE = "Fish"
 
-new_user_data = s.UserCreate(
-    username=USER_NAME,
-    email=USER_EMAIL,
-    password=USER_PASSWORD,
-    address=USER_ADDRESS,
-    phone_number=USER_PHONE_NUMBER,
+BUSINESS_NAME = "FISH Market"
+
+
+new_user_data = s.CreateUserBusiness(
+    user=s.UserData(
+        username=USER_NAME,
+        user_type=USER_TYPE,
+        address=USER_ADDRESS,
+        phone_number=USER_PHONE_NUMBER,
+        email=USER_EMAIL,
+        password=USER_PASSWORD,
+    ),
+    business=s.BusinessData(
+        name=BUSINESS_NAME,
+        phone_number=USER_PHONE_NUMBER,
+    ),
 )
 
 
 def test_user_info(marketer_client: TestClient):
     res = marketer_client.get("/me-info")
+    assert res.status_code == status.HTTP_200_OK
+    res = marketer_client.get("/me-info?is_admin=true")
+    assert res.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_admin_info(admin_client: TestClient):
+    res = admin_client.get("/me-info?is_admin=true")
     assert res.status_code == status.HTTP_200_OK
 
 
@@ -42,6 +60,19 @@ def test_login_admin(client: TestClient, db: Session):
     assert res.status_code == status.HTTP_200_OK
     token = s.Token.parse_obj(res.json())
     assert token.access_token
+
+
+def test_get_all_user(admin_client: TestClient, db: Session):
+    users = (
+        db.query(m.User).filter_by(is_deleted=False, role=m.UserRole.Marketeer).all()
+    )
+    res = admin_client.get("/user/all")
+    assert res
+    res_data = s.AllUsers.parse_obj(res.json())
+    assert len(res_data.users) == len(users)
+    assert res_data.users[-1].id == users[0].id
+
+    assert res_data.users[0].kg_sold == users[-1].kg_sold
 
 
 def test_create_user_marketeer(admin_client: TestClient, db: Session):
@@ -63,7 +94,7 @@ def test_create_user_marketeer(admin_client: TestClient, db: Session):
     # admin do not need to check his data
     assert count_of_user == len(response.json()["users"])
 
-    user = s.UserOut.parse_obj(response.json()["users"][-1])
+    user = s.UserOut.parse_obj(response.json()["users"][0])
     assert user.username == USER_NAME
     # new user can login
     del admin_client.headers["Authorization"]
@@ -86,8 +117,8 @@ def test_admin_get_user_marketeer_by_id(admin_client: TestClient, db: Session):
     user: m.User = db.query(m.User).filter_by(role=m.UserRole.Marketeer).first()
     res = admin_client.get(f"/user/{user.id}")
     assert res.status_code == status.HTTP_200_OK
-    user_data = s.UserOut.parse_obj(res.json())
-    assert user_data.username == user.username
+    user_data = s.UserDetailOut.parse_obj(res.json())
+    assert user_data.email == user.email
 
     user: m.User = db.query(m.User).filter_by(role=m.UserRole.Admin).first()
     res = admin_client.get(f"/user/{user.id}")
@@ -164,53 +195,24 @@ def test_user_market_update_by_admin(admin_client: TestClient, db: Session):
     )
 
     data_to_update = s.UserUpdate(
-        username=USER_NAME,
-        email=USER_EMAIL,
-        address=USER_ADDRESS,
-        phone_number=USER_PHONE_NUMBER,
-        is_active=user.is_active,
+        is_active=not user.is_active,
     )
 
     data_to_update = data_to_update.dict()
 
-    # test user can not update admin
+    # test admin can not update admin
     res = admin_client.patch(f"/user/{admin.id}", json=data_to_update)
     assert res.status_code == status.HTTP_404_NOT_FOUND
 
     # test admin update user
     res = admin_client.patch(f"/user/{user.id}", json=data_to_update)
     assert res.status_code == status.HTTP_200_OK
-    assert data_to_update == res.json()
-
-    # test data user was changed in db
-    user_from_db: m.User = db.query(m.User).get(user.id)
-    assert user_from_db.username == USER_NAME
-    assert user_from_db.email == USER_EMAIL
-    assert user_from_db.address == USER_ADDRESS
-    assert user_from_db.phone_number == USER_PHONE_NUMBER
-    assert user_from_db.is_active == user.is_active
-
-    # test one user filed was changed
-    new_address = "Ivano-Frankivsk 10A"
-    one_user_field_update = s.UserUpdate(address=new_address).dict()
-    res = admin_client.patch(f"/user/{user.id}", json=one_user_field_update)
-    assert res.status_code == status.HTTP_200_OK
-    assert res.json()["address"] == new_address
-    assert res.json()["username"] == USER_NAME
-
-    # test one user field was changed in db
-    user_from_db: m.User = db.query(m.User).get(user.id)
-    assert user_from_db.address == new_address
-    assert user_from_db.username == USER_NAME
+    assert user.id == res.json()["user_id"]
+    assert not user.is_active
 
     # test user id is not correct
     res = admin_client.patch(f"/user/{100}", json=data_to_update)
     assert res.status_code == status.HTTP_404_NOT_FOUND
-
-    # test fields is empty
-    data_to_update = {}
-    res = admin_client.patch(f"/user/{user.id}", json=data_to_update)
-    assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
 def test_change_password(marketer_client: TestClient, db: Session):
@@ -247,3 +249,19 @@ def test_change_password(marketer_client: TestClient, db: Session):
     del marketer_client.headers["Authorization"]
     res = marketer_client.patch("/change-password", json=new_password_data.dict())
     assert res.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_login_as_user(admin_client: TestClient, db: Session):
+    user = db.query(m.User).filter_by(role=m.UserRole.Marketeer).first()
+
+    res = admin_client.get(f"/login-as-user/{user.id}")
+    assert res.status_code == status.HTTP_200_OK
+    token = s.Token.parse_obj(res.json())
+    assert token.access_token
+
+
+def test_login_as_user_not_admin(marketer_client: TestClient, db: Session):
+    user = db.query(m.User).filter_by(role=m.UserRole.Marketeer).first()
+
+    res = marketer_client.get(f"/login-as-user/{user.id}")
+    assert res.status_code == status.HTTP_403_FORBIDDEN

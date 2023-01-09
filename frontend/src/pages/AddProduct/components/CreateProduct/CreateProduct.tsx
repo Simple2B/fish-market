@@ -1,7 +1,14 @@
-import { CreateProductType } from "../../../../main.type";
-import { CreateProductAction } from "../../AddProduct.type";
+import {
+  AddPrepForm,
+  PrepsView,
+  SetProductSoldBy,
+} from "../../../../components";
+import { CreateProductType, ItemUnit } from "../../../../main.type";
+import {
+  CreateProductAction,
+  CreateProductActionKeys,
+} from "../../AddProduct.type";
 import { SetProductInfo } from "../SetProductInfo";
-import { SetProductSoldBy } from "../SetProductSoldBy";
 import style from "./CreateProduct.module.css";
 
 type CreateProductProps = {
@@ -13,13 +20,49 @@ const CreateProduct = ({
   productDispatch,
   productState,
 }: CreateProductProps) => {
+  const handlerAddPreps = (data: { prep: string }) => {
+    if (!data) return;
+
+    productDispatch({
+      type: CreateProductActionKeys.ADDED_PREP,
+      payload: { name: data.prep },
+    });
+  };
+
+  const handlerOnClickPrep = (prepId: number) => {
+    productDispatch({
+      type: CreateProductActionKeys.ACTIVATE_DEACTIVATE_PREP,
+      payload: { id: prepId },
+    });
+  };
+
+  const handlerDeletePrep = (prepId: number) => {
+    productDispatch({
+      type: CreateProductActionKeys.DELETE_PREP,
+      payload: { id: prepId },
+    });
+  };
+
+  const handlerSoldBy = (status: ItemUnit) => {
+    productDispatch({
+      type: CreateProductActionKeys.ADD_PRODUCT_VALUE,
+      payload: { sold_by: status },
+    });
+  };
+
   return (
     <div className={style.productViewContent}>
       <SetProductInfo productDispatch={productDispatch} />
       <SetProductSoldBy
-        productState={productState}
-        productDispatch={productDispatch}
+        soldByStatus={productState.sold_by}
+        handlerSoldBy={handlerSoldBy}
       />
+      <PrepsView
+        preps={productState.preps}
+        handlerOnClickPrep={handlerOnClickPrep}
+        handlerDeletePrep={handlerDeletePrep}
+      />
+      <AddPrepForm handlerAddPreps={handlerAddPreps} />
     </div>
   );
 };

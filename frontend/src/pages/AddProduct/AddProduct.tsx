@@ -1,10 +1,20 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { isError, useMutation, useQuery } from "@tanstack/react-query";
 import { useReducer } from "react";
 import { useNavigate } from "react-router-dom";
-import { CustomBtn } from "../../components";
-import { settingsViewKey, SETTINGS_VIEW_TEXT_DATA } from "../../constants";
+import { CustomBtn, Spinner } from "../../components";
+import {
+  REFETCH_INTERVAL_VALID_TOKEN,
+  settingsViewKey,
+  SETTINGS_VIEW_TEXT_DATA,
+} from "../../constants";
 import { ImageType } from "../../main.type";
-import { getUserBusinessInfo, isTokenValid, uploadImage } from "../../services";
+import {
+  createProduct,
+  getUserBusinessInfo,
+  isTokenValid,
+  notify,
+  uploadImage,
+} from "../../services";
 import { CHECK_TOKEN_CHANGE_PASSWORD } from "../../services/queryKeys";
 
 import style from "./AddProduct.module.css";
@@ -12,29 +22,44 @@ import {
   createProductReducer,
   initialStateProduct,
 } from "./AddProduct.reducer";
+import { CreateProductActionKeys } from "./AddProduct.type";
 import { CreateProduct } from "./components/CreateProduct";
 
 const textData = SETTINGS_VIEW_TEXT_DATA;
 
 const AddProduct = () => {
-  const navigator = useNavigate();
+  const navigate = useNavigate();
 
   const [newProductState, newProductDispatch] = useReducer(
     createProductReducer,
     initialStateProduct
   );
 
-  const { data, isLoading } = useQuery({
+  const { isLoading } = useQuery({
     queryKey: [CHECK_TOKEN_CHANGE_PASSWORD],
     queryFn: isTokenValid,
+    onError: () => {
+      navigate("/login");
+    },
+    refetchInterval: REFETCH_INTERVAL_VALID_TOKEN,
   });
-
-  if (!isLoading && !data) {
-    navigator("/");
-  }
 
   const mutationSetProductImage = useMutation({
     mutationFn: uploadImage,
+  });
+
+  const mutationCreateProduct = useMutation({
+    mutationFn: createProduct,
+    onSuccess: () => {
+      notify(textData[settingsViewKey.MES_PRODUCT_WAS_CREATED]);
+      newProductDispatch({ type: CreateProductActionKeys.RESET_DATA });
+      navigate("/settings");
+    },
+    onError: () => {
+      newProductDispatch({ type: CreateProductActionKeys.RESET_DATA });
+      notify(textData[settingsViewKey.MES_PRODUCT_WAS_NOT_CREATED]);
+      navigate("/settings");
+    },
   });
 
   const createProductImage = async (
@@ -51,17 +76,42 @@ const AddProduct = () => {
       file: file,
     });
 
-    console.log(resData, "resData");
-
     if (!resData) return;
+
     return resData.img_url;
   };
 
   const handlerCancelBtn = () => {
-    navigator("/settings");
+    navigate("/settings");
   };
 
-  return (
+  const handlerOnAddProduct = async () => {
+    if (
+      !newProductState.name ||
+      !newProductState.price ||
+      typeof newProductState.image === "string" ||
+      newProductState.preps.length <= 0
+    ) {
+      return;
+    }
+
+    const imageUrl = await createProductImage(newProductState.image);
+
+    if (!imageUrl) return;
+
+    newProductDispatch({
+      type: CreateProductActionKeys.ADD_PRODUCT_VALUE,
+      payload: { image: imageUrl },
+    });
+
+    const reqData = { ...newProductState, image: imageUrl };
+
+    mutationCreateProduct.mutate(reqData);
+  };
+
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <div className={style.addProductContent}>
       <div className={style.addProductContentTitle}>
         {textData[settingsViewKey.ADD_NEW_ITEM]}
@@ -74,6 +124,7 @@ const AddProduct = () => {
         <CustomBtn
           btnName={textData[settingsViewKey.ADD_ITEM]}
           additionalStyles={style.activeBtn}
+          handlerOnClick={handlerOnAddProduct}
         />
         <CustomBtn
           btnName={textData[settingsViewKey.CANCEL]}

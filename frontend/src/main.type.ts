@@ -7,11 +7,20 @@ export enum OrderStatus {
   can_not_complete = "can_not_complete",
 }
 
+// this enum already exists and in future will replace in the project
+export enum ItemUnit {
+  by_kilogram = "by_kilogram",
+  by_unit = "by_unit",
+  by_both = "by_both",
+  unknown = "unknown",
+}
+
 export interface IOrder {
   prep_name: string;
   product_image: string;
   product_name: string;
   qty: number;
+  unit_type: ItemUnit;
 }
 
 export type OrderData = {
@@ -42,23 +51,17 @@ export interface IOpenModalData {
 
 export type ManagerOutletContext = {
   openModal: (OpenModalData: IOpenModalData) => void;
-  activeBtnFilterName: string;
-  setActiveBtnFilterName: (n: string) => void;
 };
 
-// this enum already exists and in future will replace in the project
-export enum ItemUnit {
-  by_kilogram = "By kg",
-  by_unit = "By unit",
-  by_both = "by_both",
-  unknown = "unknown",
-}
+export type ManagerOutletContextAdmin = {
+  handlerRegisterNewUser: () => void;
+};
 
 export type TypeProductsOut = {
   id: number;
   name: string;
   price: number;
-  sold_by: typeof ItemUnit;
+  sold_by: ItemUnit;
   image: string;
   is_out_of_stock?: boolean;
 };
@@ -79,6 +82,7 @@ export enum ImageType {
 }
 
 export interface IPrep {
+  id: number;
   name: string;
   is_active: boolean;
 }
@@ -89,4 +93,27 @@ export type CreateProductType = {
   sold_by: ItemUnit;
   image: File | string;
   preps: IPrep[];
+};
+
+export type ObjId = {
+  id: number;
+};
+
+export type MarketUser = {
+  id: number;
+  username: string;
+  orders_taken: number;
+  items_sold: number;
+  kg_sold: number;
+  meter_sold: number;
+  sms_used: number;
+  is_active: boolean;
+  user_type: string;
+  created_at: string;
+};
+
+export type MarketUserDetail = {
+  email: string;
+  phone_number: string;
+  address: string;
 };

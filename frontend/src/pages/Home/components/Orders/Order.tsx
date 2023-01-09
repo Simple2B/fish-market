@@ -16,6 +16,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import {
   changeOrder,
+  CHECK_TOKEN_LOGIN,
   GET_ORDERS,
   notify,
   removeOrder,
@@ -51,9 +52,12 @@ const Order = ({
   items,
   status,
   is_deleted,
-}: OrderData) => {
-  const [showItems, setShowItems] = useState<boolean>(false);
-
+  onItemsShowChange,
+  showItems,
+}: OrderData & {
+  onItemsShowChange?: (id: number) => void;
+  showItems: boolean;
+}) => {
   const { openModal } = useOutletContext<ManagerOutletContext>();
 
   const changeStatusOrder = useMutation({
@@ -62,7 +66,7 @@ const Order = ({
       queryClient.invalidateQueries([GET_ORDERS]);
     },
     onError: async (err) => {
-      console.error(`changeStatusOrder error ${err}`);
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
     },
   });
 
@@ -73,7 +77,7 @@ const Order = ({
       notify(textDataRemoved.toastMessage);
     },
     onError: async (err) => {
-      console.error(`removeOrderData error ${err}`);
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
     },
   });
 
@@ -145,6 +149,10 @@ const Order = ({
     openModal(openModalData);
   };
 
+  const handlerStatusBtn = () => {
+    onItemsShowChange && onItemsShowChange(id);
+  };
+
   const activeStep = buttonsNameByStatus.findIndex((obj) => obj.key === status);
 
   const orderContent = classNames(style.orderContent, {
@@ -178,7 +186,11 @@ const Order = ({
             </div>
             <div className={style.orderContentDataRow}>
               <span>Due date:</span>
-              {new Date(orderDataTime).toDateString()}
+              {new Date(orderDataTime).toLocaleString([], {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+              })}
             </div>
             <div className={style.orderContentDataRow}>
               <span>Name: </span> {customer_name}
@@ -223,7 +235,7 @@ const Order = ({
             </div>
             <div
               className={style.orderContentStatusIconBtn}
-              onClick={() => setShowItems((currentIsShow) => !currentIsShow)}
+              onClick={handlerStatusBtn}
             >
               {showItems ? (
                 <BiChevronUp className={style.iconContent} />

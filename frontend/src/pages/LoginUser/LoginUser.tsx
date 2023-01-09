@@ -1,13 +1,14 @@
 import classNames from "classnames";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 import style from "./LoginUser.module.css";
-import { loginUser } from "../../../../services/homeService";
-import { queryClient } from "../../../../queryClient";
-import { ErrorMessage } from "../../../../components";
-import { CHECK_TOKEN_LOGIN } from "../../../../services";
-import { TOKEN_KEY } from "../../../../constants";
+import { loginUser } from "../../services/homeService";
+import { queryClient } from "../../queryClient";
+import { ErrorMessage } from "../../components";
+import { CHECK_TOKEN_LOGIN } from "../../services";
+import { TOKEN_KEY } from "../../constants";
 
 type Inputs = {
   email: string;
@@ -15,20 +16,7 @@ type Inputs = {
 };
 
 const LoginUser = () => {
-  const mutationLoginUser = useMutation({
-    mutationFn: loginUser,
-    onSuccess: async (data: { access_token: string; token_type: string }) => {
-      localStorage.setItem(TOKEN_KEY, data.access_token);
-
-      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
-    },
-    onError: async () => {
-      setError("password", {
-        type: "bad password",
-        message: "Please provide a valid password.",
-      });
-    },
-  });
+  const navigate = useNavigate();
 
   const {
     register,
@@ -37,6 +25,29 @@ const LoginUser = () => {
     watch,
     formState: { errors },
   } = useForm<Inputs>();
+
+  const mutationLoginUser = useMutation({
+    mutationFn: loginUser,
+    onSuccess: async (data: {
+      access_token: string;
+      token_type: string;
+      is_admin?: boolean;
+    }) => {
+      localStorage.setItem(TOKEN_KEY, data.access_token);
+
+      if (data.is_admin) {
+        navigate("/admin", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
+    },
+    onError: async () => {
+      setError("password", {
+        type: "bad password",
+        message: "Please provide a valid data.",
+      });
+    },
+  });
 
   const styleBtnSubmit = classNames(style.formBtnDisable, {
     [style.formBtnEnable]: watch("email") && watch("password"),

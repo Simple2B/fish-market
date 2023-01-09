@@ -74,3 +74,8 @@ export const phoneNumberAutoFormat = (phoneNumber: string): string => {
     return number.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, "$1-$2-$3-$4");
   return number.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
 };
+
+export const isValidNumber = (v: string): boolean => {
+  const number = replaceDash(v);
+  return number.length === 10 || number.length == 12;
+};

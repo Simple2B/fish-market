@@ -42,7 +42,7 @@ def check_access_to_product_prep(prep_id: int, product: m.Product, prep: m.Prep)
 
 
 def check_access_to_business(business: m.Business, data_mes: Union[str, m.User]):
-    if not business:
+    if not business or business.user.is_deleted:
         log(log.WARNING, "Business was not found: [%s]", data_mes)
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

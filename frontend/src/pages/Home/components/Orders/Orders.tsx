@@ -1,76 +1,93 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Spinner } from "../../../../components";
+
 import {
-  ACTIVE_BTN_FILTER_INDEX,
-  API_BASE_URL,
-  TOKEN_KEY,
-} from "../../../../constants";
-import {
-  FilteringFunctions,
   GET_ORDERS,
-  sortByData,
-  FilterBtnItem,
+  sortByDate,
+  StatusBtnItem,
+  getOrders,
+  CHECK_TOKEN_LOGIN,
+  sortByActiveOrderId,
 } from "../../../../services";
 import { Order } from "./Order";
 import style from "./Orders.module.css";
 import { FilterButton } from "./FilterButton";
-import { ManagerOutletContext, OrderData } from "../../../../main.type";
-import { useOutletContext } from "react-router-dom";
+import { OrderData } from "../../../../main.type";
+import { queryClient } from "../../../../queryClient";
 
-const Orders = ({ filterOptions }: { filterOptions: FilterBtnItem[] }) => {
+type OrdersProps = {
+  filterOptions: StatusBtnItem[];
+  isArchive: boolean;
+};
+
+const Orders = ({ filterOptions, isArchive }: OrdersProps) => {
   const [ordersData, setOrdersData] = useState<OrderData[]>([]);
-  const { activeBtnFilterName, setActiveBtnFilterName } =
-    useOutletContext<ManagerOutletContext>();
+  const [arrayActiveOrders, setArrayActiveOrders] = useState<number[]>([]);
+  const [activeBtnFilterName, setActiveBtnFilterName] = useState<string>("");
 
   const { data, isLoading } = useQuery({
-    queryKey: [GET_ORDERS],
-    queryFn: async () => {
-      const res = await fetch(`${API_BASE_URL}/order/`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
-        },
-      });
+    queryKey: [GET_ORDERS, isArchive],
+    queryFn: getOrders,
+    onSuccess: (data: OrderData[]) => {
+      const sortResult = sortByIsActiveBtnFilterName(data);
 
-      if (!res.ok) {
-        localStorage.removeItem(TOKEN_KEY);
-        console.error("Bad login");
-        return [];
-      }
-
-      const data = await res.json();
-
-      return data.orders.sort(sortByData);
-    },
-    onSuccess: (data) => {
-      if (!activeBtnFilterName) {
-        setActiveBtnFilterName(filterOptions[ACTIVE_BTN_FILTER_INDEX].name);
-      }
-
-      const filterFn = filterOptions.find(
-        (option) => option.name === activeBtnFilterName
-      )?.filterFn;
-
-      if (filterFn) {
-        setOrdersData(data.filter(filterFn));
+      if (!sortResult) {
+        setActiveBtnFilterName("");
       }
     },
+    onError: () => {
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
+    },
+    refetchInterval: 30000,
   });
 
-  const handlerButtonsFilters = ({
-    filterFn,
-    name,
-  }: {
-    filterFn: FilteringFunctions;
-    name: string;
-  }) => {
+  useEffect(() => {
+    sortByIsActiveBtnFilterName(ordersData);
+  }, [arrayActiveOrders, activeBtnFilterName]);
+
+  const sortByIsActiveBtnFilterName = (data: OrderData[]): boolean => {
+    const dataForSort = [...data].sort(sortByDate);
+
+    const sortFunction = filterOptions.find(
+      (item) => item.name === activeBtnFilterName
+    )?.sortFn;
+
+    if (activeBtnFilterName && sortFunction) {
+      dataForSort.sort(sortFunction);
+      sortByActiveOrderId(dataForSort, arrayActiveOrders);
+      setOrdersData(dataForSort);
+      return true;
+    }
+    sortByActiveOrderId(dataForSort, arrayActiveOrders);
+
+    setOrdersData(dataForSort);
+    return false;
+  };
+
+  const handlerButtonsFilters = ({ name }: StatusBtnItem) => {
     if (!data) {
       return;
     }
-    setOrdersData([...data].filter(filterFn));
+
+    const sortedOrders = [...ordersData];
+
+    if (activeBtnFilterName === name) {
+      setActiveBtnFilterName("");
+      setOrdersData(sortedOrders);
+      return;
+    }
+    setOrdersData(sortedOrders);
     setActiveBtnFilterName(name);
+  };
+
+  const onItemsShowChange = (id: number) => {
+    if (arrayActiveOrders.includes(id)) {
+      setArrayActiveOrders(arrayActiveOrders.filter((el) => el !== id));
+    } else {
+      setArrayActiveOrders([...arrayActiveOrders, id]);
+    }
   };
 
   return isLoading ? (
@@ -88,8 +105,14 @@ const Orders = ({ filterOptions }: { filterOptions: FilterBtnItem[] }) => {
         ))}
       </div>
       <div className={style.ordersContent}>
-        {ordersData &&
-          ordersData.map((el: OrderData) => <Order key={el.id} {...el} />)}
+        {ordersData.map((el: OrderData) => (
+          <Order
+            key={el.id}
+            {...el}
+            onItemsShowChange={onItemsShowChange}
+            showItems={arrayActiveOrders.includes(el.id)}
+          />
+        ))}
       </div>
     </div>
   );

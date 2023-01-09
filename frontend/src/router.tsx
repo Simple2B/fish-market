@@ -1,6 +1,14 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { navMenuBtnNameKeys, NAV_MENU_BUTTONS } from "./constants";
-import { AddProduct, ChangePassword, Home, Market } from "./pages";
+import {
+  AddProduct,
+  Admin,
+  ChangePassword,
+  Home,
+  LoginUser,
+  Market,
+  RegisterNewUser,
+} from "./pages";
 import { Orders, OutOfStock, SettingsView } from "./pages/Home";
 import {
   rebuildUrl,
@@ -15,11 +23,11 @@ const settingUrl = rebuildUrl(
 export const contentManager = [
   {
     nameBtn: NAV_MENU_BUTTONS[navMenuBtnNameKeys.ORDERS].name,
-    outLet: <Orders filterOptions={filterOptionsOrder} />,
+    outLet: <Orders filterOptions={filterOptionsOrder} isArchive={false} />,
   },
   {
     nameBtn: NAV_MENU_BUTTONS[navMenuBtnNameKeys.ARCHIVE].name,
-    outLet: <Orders filterOptions={filterOptionsArchive} />,
+    outLet: <Orders filterOptions={filterOptionsArchive} isArchive={true} />,
   },
   {
     nameBtn: NAV_MENU_BUTTONS[navMenuBtnNameKeys.OUT_OF_STOCK].name,
@@ -44,6 +52,17 @@ export const rootRouter = createBrowserRouter([
         element: obj.outLet,
       };
     }),
+  },
+  { path: "/login", element: <LoginUser /> },
+  {
+    path: "/admin",
+    element: <Admin />,
+    children: [
+      {
+        path: "/admin/register-new-user",
+        element: <RegisterNewUser />,
+      },
+    ],
   },
   {
     path: "market/:marketId",

@@ -1,35 +1,28 @@
 import classNames from "classnames";
-import {
-  settingsViewKey,
-  SETTINGS_VIEW_TEXT_DATA,
-} from "../../../../constants";
-import { CreateProductType, ItemUnit } from "../../../../main.type";
-import {
-  CreateProductAction,
-  CreateProductActionKeys,
-} from "../../AddProduct.type";
+import { settingsViewKey, SETTINGS_VIEW_TEXT_DATA } from "../../constants";
+import { ItemUnit } from "../../main.type";
 import style from "./SetProductSoldBy.module.css";
 
 type SetProductSoldByProps = {
-  productDispatch: (action: CreateProductAction) => void;
-  productState: CreateProductType;
+  handlerSoldBy: (type: ItemUnit) => void;
+  soldByStatus: ItemUnit;
 };
 
-const textDataSoldBy = SETTINGS_VIEW_TEXT_DATA[settingsViewKey.SOLD_BY_TEXT];
+const textDataSoldBy = SETTINGS_VIEW_TEXT_DATA;
 
 const SetProductSoldBy = ({
-  productDispatch,
-  productState,
+  handlerSoldBy,
+  soldByStatus,
 }: SetProductSoldByProps) => {
-  const setStatusSoldBy = (type: ItemUnit) => {
-    let setStatus = productState.sold_by;
+  const setStatusSoldBy = (status: ItemUnit) => {
+    let setStatus = soldByStatus;
 
     // if you know a better way to write this function let me know
 
-    if (type === ItemUnit.by_kilogram) {
+    if (status === ItemUnit.by_kilogram) {
       switch (setStatus) {
         case ItemUnit.unknown:
-          setStatus = type;
+          setStatus = status;
           break;
         case ItemUnit.by_unit:
           setStatus = ItemUnit.by_both;
@@ -42,10 +35,10 @@ const SetProductSoldBy = ({
       }
     }
 
-    if (type === ItemUnit.by_unit) {
+    if (status === ItemUnit.by_unit) {
       switch (setStatus) {
         case ItemUnit.unknown:
-          setStatus = type;
+          setStatus = status;
           break;
         case ItemUnit.by_kilogram:
           setStatus = ItemUnit.by_both;
@@ -58,38 +51,34 @@ const SetProductSoldBy = ({
       }
     }
 
-    productDispatch({
-      type: CreateProductActionKeys.ADD_PRODUCT_VALUE,
-      payload: { sold_by: setStatus },
-    });
+    handlerSoldBy(setStatus);
   };
 
   const contentBtnByKg = classNames(style.contentBnt, {
     [style.contentBntActive]:
-      productState.sold_by === ItemUnit.by_both ||
-      productState.sold_by === ItemUnit.by_kilogram,
+      soldByStatus === ItemUnit.by_both ||
+      soldByStatus === ItemUnit.by_kilogram,
   });
 
   const contentBtnByUnit = classNames(style.contentBnt, {
     [style.contentBntActive]:
-      productState.sold_by === ItemUnit.by_both ||
-      productState.sold_by === ItemUnit.by_unit,
+      soldByStatus === ItemUnit.by_both || soldByStatus === ItemUnit.by_unit,
   });
 
   return (
     <div className={style.setProductSoldByContent}>
-      <div>{textDataSoldBy}</div>
+      <div>{textDataSoldBy[settingsViewKey.SOLD_BY_TEXT]}</div>
       <div
         className={contentBtnByKg}
         onClick={() => setStatusSoldBy(ItemUnit.by_kilogram)}
       >
-        {ItemUnit.by_kilogram}
+        {textDataSoldBy[settingsViewKey.SOLD_BY_KG]}
       </div>
       <div
         className={contentBtnByUnit}
         onClick={() => setStatusSoldBy(ItemUnit.by_unit)}
       >
-        {ItemUnit.by_unit}
+        {textDataSoldBy[settingsViewKey.SOLD_BY_UNIT]}
       </div>
     </div>
   );
