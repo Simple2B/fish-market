@@ -1,0 +1,16 @@
+.productViewContent {
+    height: 12.2rem;
+    width: 72.5rem;
+
+    display: flex;
+
+    box-sizing: border-box;
+    border: 1px solid #000000;
+    border-radius: 5px;
+}
+
+@media (max-width: 1024px) {
+    .productViewContent {
+        width: 63rem;
+    }
+}

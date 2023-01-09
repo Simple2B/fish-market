@@ -1,7 +1,8 @@
 .productCartItems {
+    height: 33.0rem;
+    width: 19.25rem;
     border: 1px solid #000000;
     border-radius: 5px;
-    /* margin-top: 6vh; */
     overflow-y: scroll;
 }
 
@@ -43,4 +44,11 @@
     text-align: center;
 
     color: #000000;
+}
+
+@media (max-width: 1024px) {
+    .productCartItems {
+        height: 25.0rem;
+        width: 17rem;
+    }
 }

@@ -1,5 +1,7 @@
+# flake8: noqa E712
 from fastapi import Depends, APIRouter, HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 
 from app.service import get_business_from_cur_user
 from app import schema as s
@@ -11,17 +13,28 @@ from app.logger import log
 router = APIRouter(prefix="/order", tags=["Orders"])
 
 
-@router.get("/", status_code=status.HTTP_200_OK)
+@router.get("/", status_code=status.HTTP_200_OK, response_model=s.OrdersOut)
 def get_orders(
+    is_archive: bool = False,
     db: Session = Depends(get_db),
     business: m.Business = Depends(get_business_from_cur_user),
 ):
 
     log(log.INFO, "get_orders, business_id: [%d]", business.id)
 
-    return s.OrdersOut(
-        orders=db.query(m.Order).filter_by(business=business, is_deleted=False).all()
-    )
+    query = db.query(m.Order).filter_by(business_id=business.id)
+
+    status_list_is_archive = [m.OrderStatus.picked_up, m.OrderStatus.can_not_complete]
+
+    if is_archive:
+        query = query.filter(
+            or_(m.Order.status.in_(status_list_is_archive), m.Order.is_deleted == True)
+        )
+    else:
+        query = query.filter(m.Order.status.not_in(status_list_is_archive))
+        query = query.filter(m.Order.is_deleted == False)
+
+    return s.OrdersOut(orders=query.all())
 
 
 @router.patch(

@@ -1,4 +1,4 @@
-import { useState, useReducer, useRef } from "react";
+import { useState, useReducer, useRef, useEffect } from "react";
 import { Navigate, useParams } from "react-router-dom";
 
 import { ProductList } from "./components/ProductList";
@@ -34,7 +34,7 @@ const buttonTitle = {
 export function Market() {
   const { marketId } = useParams<"marketId">();
   if (!marketId) {
-    return <Navigate to={"/"} replace={true} />;
+    return <Navigate to={"/market-not-found"} replace={true} />;
   }
 
   const [cartState, dispatchCart] = useReducer(cartReducer, initialStateCart);
@@ -50,6 +50,16 @@ export function Market() {
 
   const { height, width } = useWindowDimensions();
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (orderState.isNumberVerified) {
+        handlerStepNextClient();
+      }
+    }, 20000);
+
+    return () => clearTimeout(timer);
+  }, [orderState.isNumberVerified]);
+
   const handleStepBusiness = () => {
     if (step === BusinessStep.ORDER && cartState.length < 1) return;
 
@@ -63,7 +73,6 @@ export function Market() {
 
       setStep((value) => value + 1);
     }
-    console.log(buttonTitle[step]);
   };
 
   const handlerStepConfirm = () => {

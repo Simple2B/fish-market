@@ -1,31 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { Spinner } from "../../components";
-import { API_BASE_URL } from "../../constants";
-import { CHECK_TOKEN, TOKEN_KEY } from "../../services";
-import { LoginUser } from "./components/LoginUser";
+import { REFETCH_INTERVAL_VALID_TOKEN } from "../../constants";
+import { CHECK_TOKEN_LOGIN, isTokenValid } from "../../services";
 import { Manager } from "./components/Manager";
 
 export function Home() {
-  const { data, isLoading } = useQuery({
-    queryKey: [CHECK_TOKEN],
-    queryFn: async () => {
-      const res = await fetch(`${API_BASE_URL}/me-info`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem(TOKEN_KEY)}`,
-        },
-      });
+  const navigate = useNavigate();
 
-      if (!res.ok) {
-        localStorage.removeItem(TOKEN_KEY);
-        return false;
-      }
-
-      const data = await res.json();
-
-      return data.is_valid;
+  const { isLoading } = useQuery({
+    queryKey: [CHECK_TOKEN_LOGIN],
+    queryFn: isTokenValid,
+    onError: () => {
+      navigate("/login");
     },
+    refetchInterval: REFETCH_INTERVAL_VALID_TOKEN,
   });
 
-  return isLoading ? <Spinner /> : <>{data ? <Manager /> : <LoginUser />}</>;
+  return isLoading ? <Spinner /> : <Manager />;
 }

@@ -31,10 +31,21 @@ def create_product(
 ):
     log(log.INFO, "create_product")
 
-    new_product = m.Product(business_id=business.id, **data.dict())
+    new_product = m.Product(
+        business_id=business.id,
+        name=data.name,
+        price=data.price,
+        sold_by=data.sold_by,
+        image=data.image,
+    )
     db.add(new_product)
     db.commit()
     db.refresh(new_product)
+
+    for prep in data.preps:
+        prep = m.Prep(product_id=new_product.id, **prep.dict())
+        db.add(prep)
+    db.commit()
 
     return new_product
 
@@ -91,6 +102,24 @@ def update_product(
     db.refresh(product)
 
     return product
+
+
+@router.patch("/", status_code=status.HTTP_200_OK)
+def reset_product_out_of_stock(
+    business: m.Business = Depends(get_business_from_cur_user),
+    db: Session = Depends(get_db),
+):
+
+    log(log.INFO, "reset_product_out_of_stock, [%d]", business.id)
+    products = business.active_products
+
+    for product in products:
+        if product.is_out_of_stock:
+            product.is_out_of_stock = False
+
+    db.commit()
+
+    return {"ok": True}
 
 
 @router.post(
@@ -186,3 +215,31 @@ def patch_product_prep_by_id(
     db.commit()
 
     return prep
+
+
+@router.patch(
+    "/{product_id}/prep-highlight",
+    status_code=status.HTTP_200_OK,
+)
+def highlight_product_prep(
+    data: s.HighlightPreps,
+    product_id: int,
+    db: Session = Depends(get_db),
+    current_user: m.User = Depends(get_current_user),
+):
+    log(log.INFO, "highlight_product_prep: product_id [%d]", product_id)
+    product = db.query(m.Product).get(product_id)
+
+    check_access_to_product(product=product, user=current_user, product_id=product_id)
+
+    is_active = not data.is_highlight
+
+    preps = db.query(m.Prep).filter_by(
+        product_id=product_id, is_deleted=False, is_active=is_active
+    )
+
+    for prep in preps:
+        prep.is_active = data.is_highlight
+        db.commit()
+
+    return {"ok", True}

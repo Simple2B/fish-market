@@ -1,0 +1,46 @@
+.productsViewContent {
+    height: 100%;
+    width: 73.75rem;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+
+    font-weight: 400;
+    font-size: 1.1rem;
+    line-height: 1.6rem;
+}
+
+.productsViewContentBtn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin: 1.5rem 0;
+
+}
+
+.productsViewContentBtn>div {
+    font-weight: 800;
+    font-size: 1.6rem;
+    line-height: 2.2rem;
+}
+
+.activeBtn:hover {
+    background: #C1E1FF;
+}
+
+
+.productsViewContentWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem 0;
+}
+
+
+
+@media (max-width: 1024px) {
+    .productsViewContent {
+        width: 62rem;
+    }
+}

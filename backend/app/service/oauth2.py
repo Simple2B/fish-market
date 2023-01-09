@@ -73,7 +73,7 @@ def get_business_from_cur_user(current_user=Depends(get_current_user)) -> m.Busi
     if current_user.businesses and current_user.role == m.UserRole.Marketeer:
         business = current_user.businesses[0]
 
-    if not business:
+    if not business or business.user.is_deleted:
         log(log.WARNING, "User [%s] does not have business", current_user)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

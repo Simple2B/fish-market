@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Spinner } from "../../../../components";
 import { API_BASE_URL } from "../../../../constants";
 import { IBusinessOut } from "../../Market.type";
@@ -14,7 +14,9 @@ interface LogoProps {
 }
 
 const Logo = ({ marketId, onConfirm, textBtn }: LogoProps) => {
-  const { data, isLoading, isError } = useQuery({
+  const navigate = useNavigate();
+
+  const { data, isLoading } = useQuery({
     queryKey: ["marketDetails"],
     queryFn: async () => {
       const res = await fetch(`${API_BASE_URL}/business/${marketId}`);
@@ -25,6 +27,9 @@ const Logo = ({ marketId, onConfirm, textBtn }: LogoProps) => {
 
       const data: IBusinessOut = await res.json();
       return data;
+    },
+    onError: () => {
+      navigate("/market-not-found", { replace: true });
     },
   });
 
@@ -37,10 +42,6 @@ const Logo = ({ marketId, onConfirm, textBtn }: LogoProps) => {
   ) : (
     "logo"
   );
-
-  if (isError) {
-    return <Navigate to={"/"} replace={true} />;
-  }
 
   return isLoading ? (
     <Spinner />

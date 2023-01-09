@@ -25,7 +25,7 @@ class ProductView(ModelView, model=Product):
         Product.price,
         Product.sold_by,
         Product.image,
-        Product.is_out_of_stoke,
+        Product.is_out_of_stock,
         Product.is_deleted,
     ]
     column_sortable_list = [

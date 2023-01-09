@@ -5,6 +5,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: center;
 }
 
 .confirmPageTitle {
@@ -29,26 +30,22 @@
 .confirmPageContent {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
     height: 90%;
-    width: 100%;
+    width: 40rem;
 }
 
 .contentCart {
-    width: 50%;
     display: flex;
     justify-content: flex-end;
 }
 
 .contentForm {
     height: 100%;
-    width: 50%;
     display: flex;
     justify-content: flex-start;
 }
 
 .contentFormWrap {
-    width: 43%;
     margin-left: 50px;
 
 }
@@ -56,7 +53,3 @@
 .contentCartWrap {
     width: 50%;
 }
-
-/* @media screen and (max-width: 1000px) {
-
-} */

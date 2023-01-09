@@ -43,6 +43,7 @@ services:
     restart: always
     volumes:
       - ./backend/backup:/backup
+      - ./backend/:/app
     links:
       - db
     environment:
@@ -53,6 +54,7 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_EXTRA_OPTS: "--schema=public --blobs"
       DAYS_HISTORY: ${BACKUP_DAYS_HISTORY:-7}
+      DATA_FOLDERS_TO_BACKUP: ${DATA_FOLDERS_TO_BACKUP:-/app/static/market}
 
 volumes:
   db_data:

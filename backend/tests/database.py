@@ -30,12 +30,16 @@ def fill_test_data(db: SessionLocal):
             phone_number=fake.phone_number(),
             email=fake.email(),
             role=m.UserRole.Marketeer,
+            user_type="Fish",
         )
         db.add(user)
         db.commit()
         db.refresh(user)
         business = m.Business(
-            name=fake.company(), user_id=user.id, logo=fake.image_url()
+            name=fake.company(),
+            user_id=user.id,
+            logo=fake.image_url(),
+            phone_number=fake.phone_number(),
         )
         db.add(business)
         db.commit()
@@ -126,7 +130,12 @@ def create_test_customer_order(db: SessionLocal) -> tuple[m.Business, m.Order]:
 
     for i, product in enumerate(products):
         for prep in product.preps:
-            order_item = m.OrderItem(order_id=order.id, prep_id=prep.id, qty=i + 1)
+            order_item = m.OrderItem(
+                order_id=order.id,
+                prep_id=prep.id,
+                qty=i + 1,
+                unit_type=m.SoldBy.by_kilogram,
+            )
             db.add(order_item)
             if i == 2:
                 break

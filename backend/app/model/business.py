@@ -15,6 +15,7 @@ class Business(Base):
     name = Column(String(128), default="")
     logo = Column(String(128), default="")
     web_site_id = Column(String(36), default=gen_unique_uid)
+    phone_number = Column(String(64), nullable=False)
 
     user = relationship("User")
     products = relationship("Product", viewonly=True)
@@ -23,6 +24,14 @@ class Business(Base):
     @property
     def active_products(self):
         return [product for product in self.products if not product.is_deleted]
+
+    @property
+    def user_email(self) -> str:
+        return self.user.email
+
+    @user_email.setter
+    def user_email(self, value):
+        self.user.email = value
 
     def __repr__(self) -> str:
         return f"<id:{self.id}, name:{self.name},  user:{self.user}>"

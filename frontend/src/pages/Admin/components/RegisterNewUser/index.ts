@@ -1,0 +1,1 @@
+export { RegisterNewUser } from "./RegisterNewUser";

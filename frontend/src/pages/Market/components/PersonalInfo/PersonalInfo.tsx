@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import classNames from "classnames";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { isValidPhoneNumber } from "react-phone-number-input";
 
 import style from "./PersonalInfo.module.css";
 import { useMutation } from "@tanstack/react-query";
 import { createCheckPhoneNumber } from "../../../../services";
 import { MarketActionTypes, ISetOrderData, IProduct } from "../../Market.type";
-import { createOrder } from "../../../../services/marketService";
+import {
+  createOrder,
+  isValidNumber,
+  phoneNumberAutoFormat,
+  replaceDash,
+} from "../../../../services/marketService";
 import { ErrorMessage } from "../../../../components";
+
+const inputPhoneNumber = "phone_number";
 
 type PersonalInfoProps = {
   onConfirm: () => void;
@@ -36,6 +42,7 @@ const PersonalInfo = ({
     handleSubmit,
     setError,
     getValues,
+    setValue,
     formState: { errors },
   } = useForm<PersonalInfoFormValues>();
 
@@ -45,7 +52,7 @@ const PersonalInfo = ({
       console.log("Order is created");
     },
     onError: async (err) => {
-      console.log(`Create order error ${err}`);
+      console.error(`Create order error ${err}`);
     },
   });
 
@@ -74,7 +81,11 @@ const PersonalInfo = ({
             customer_name: fullName,
             note: noteValue,
             items: cartState.map((product) => {
-              return { prep_id: product.prepId, qty: product.qty };
+              return {
+                prep_id: product.prepId,
+                qty: product.qty,
+                unit_type: product.itemType == "Kg" ? "by_kilogram" : "by_unit",
+              };
             }),
           },
           business_uid: marketId,
@@ -86,7 +97,7 @@ const PersonalInfo = ({
       onConfirm();
     },
     onError: async () => {
-      setError("phone_number", {
+      setError(inputPhoneNumber, {
         type: "postNumber",
         message: "Please provide a valid phone number.",
       });
@@ -98,12 +109,15 @@ const PersonalInfo = ({
   const handleSubmitBtn: SubmitHandler<PersonalInfoFormValues> = (data) => {
     if (data) {
       const phoneNumber = {
-        phone_number: data.phone_number.startsWith("+")
-          ? data.phone_number.slice(1)
-          : data.phone_number,
+        phone_number: replaceDash(data.phone_number),
       };
       mutation.mutate(phoneNumber);
     }
+  };
+
+  const handlerOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const targetValue = phoneNumberAutoFormat(e.target.value);
+    setValue(inputPhoneNumber, targetValue);
   };
 
   return (
@@ -114,18 +128,14 @@ const PersonalInfo = ({
       <div className={style.contentWrap}>
         <div className={style.contentWrapLabel}>Phone number</div>
         <input
-          {...register("phone_number", {
+          type="tel"
+          maxLength={14}
+          {...register(inputPhoneNumber, {
             required: true,
-            minLength: 12,
-            maxLength: 13,
-            validate: {
-              isValidNumber: (v) => {
-                if (!v.startsWith("+")) {
-                  v = `+${v}`;
-                }
-                return isValidPhoneNumber(v);
-              },
-            },
+            maxLength: 14,
+            minLength: 10,
+            validate: isValidNumber,
+            onChange: handlerOnchange,
           })}
           className={style.contentInput}
           placeholder="+972 55 85 55 642"
@@ -135,7 +145,7 @@ const PersonalInfo = ({
           <ErrorMessage
             text={
               errors.phone_number.type !== "postNumber"
-                ? "Phone number should consist from 12 characters. Please provide a valid phone number."
+                ? "Phone number should consist min from 10 characters. Please provide a valid phone number."
                 : errors.phone_number.message!
             }
           />

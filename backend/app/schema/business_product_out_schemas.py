@@ -1,6 +1,7 @@
 from typing import Optional
+from enum import Enum
 
-from pydantic import BaseModel
+from pydantic import BaseModel, AnyUrl
 
 from app import model as m
 
@@ -36,3 +37,13 @@ class BusinessProductOut(BaseModel):
 
 class BusinessProductsOut(BaseModel):
     products: list[BusinessProductOut]
+
+
+class BusinessImageType(Enum):
+    LOGO = "logo"
+    PRODUCT = "product"
+
+
+class BusinessImage(BaseModel):
+    business_id: int
+    img_url: AnyUrl

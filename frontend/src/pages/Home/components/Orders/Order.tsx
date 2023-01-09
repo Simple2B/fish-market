@@ -1,31 +1,33 @@
 import { CiAlarmOn } from "react-icons/ci";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import classNames from "classnames";
-import { Step, Stepper } from "react-form-stepper";
 import { useOutletContext } from "react-router-dom";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import style from "./Order.module.css";
 import { useState } from "react";
 import { OrderItem } from "./OrderItem";
-import { StepStyleDTO } from "react-form-stepper/dist/components/Step/StepTypes";
 import {
   IOpenModalData,
   ManagerOutletContext,
   OrderData,
   OrderStatus,
 } from "../../../../main.type";
-import { ConnectorStyleProps } from "react-form-stepper/dist/components/Connector/ConnectorTypes";
 import { useMutation } from "@tanstack/react-query";
 import {
   changeOrder,
+  CHECK_TOKEN_LOGIN,
   GET_ORDERS,
   notify,
   removeOrder,
 } from "../../../../services";
 import { queryClient } from "../../../../queryClient";
-import { modalData, TEXT_DATA } from "../../../../constants";
+import {
+  IS_REMOVED_BTN_NAME,
+  modalDataKeys,
+  MODAL_TEXT_DATA,
+} from "../../../../constants";
+import { CustomStepper } from "../CustomStepper";
 
 const buttonsNameByStatus = [
   { key: OrderStatus.created, btnName: "Pending order" },
@@ -36,22 +38,9 @@ const buttonsNameByStatus = [
   { key: OrderStatus.can_not_complete, btnName: "Can’t complete" },
 ];
 
-const connectorStyle = {
-  size: "3px",
-  completedColor: "#C1E1FF",
-  activeColor: "#C1E1FF",
-} as ConnectorStyleProps;
-
-const stepperStyle = {
-  activeTextColor: "#5099dd",
-  activeBgColor: "#5099dd",
-  completedBgColor: "#C1E1FF",
-  completedTextColor: "#C1E1FF",
-  inactiveTextColor: "#D1D1D1",
-} as StepStyleDTO;
-
-const textDataCanNotCompleted = TEXT_DATA[modalData.CAN_NOT_COMPLETED];
-const textDataRemoved = TEXT_DATA[modalData.REMOVE_ORDER];
+const textDataCanNotCompleted =
+  MODAL_TEXT_DATA[modalDataKeys.CAN_NOT_COMPLETED];
+const textDataRemoved = MODAL_TEXT_DATA[modalDataKeys.REMOVE_ORDER];
 
 const Order = ({
   id,
@@ -62,9 +51,13 @@ const Order = ({
   pick_up_data,
   items,
   status,
-}: OrderData) => {
-  const [showItems, setShowItems] = useState<boolean>(false);
-
+  is_deleted,
+  onItemsShowChange,
+  showItems,
+}: OrderData & {
+  onItemsShowChange?: (id: number) => void;
+  showItems: boolean;
+}) => {
   const { openModal } = useOutletContext<ManagerOutletContext>();
 
   const changeStatusOrder = useMutation({
@@ -73,7 +66,7 @@ const Order = ({
       queryClient.invalidateQueries([GET_ORDERS]);
     },
     onError: async (err) => {
-      console.log(`changeStatusOrder error ${err}`);
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
     },
   });
 
@@ -84,22 +77,35 @@ const Order = ({
       notify(textDataRemoved.toastMessage);
     },
     onError: async (err) => {
-      console.log(`removeOrderData error ${err}`);
+      queryClient.invalidateQueries([CHECK_TOKEN_LOGIN]);
     },
   });
 
-  const handelBtnStatus = () => {
-    if (showItems) {
-      const currentStatusIndex = buttonsNameByStatus.findIndex(
-        (obj) => obj.key === status
-      );
-      const reqData = {
-        order_id: id,
-        body: { new_status: buttonsNameByStatus[currentStatusIndex + 1].key },
-      };
+  const isOrderInArchive =
+    status == OrderStatus.picked_up ||
+    status == OrderStatus.can_not_complete ||
+    is_deleted;
 
-      changeStatusOrder.mutate(reqData);
+  const orderDataTime = pick_up_data ? pick_up_data : created_at;
+
+  const statusBtnName = buttonsNameByStatus.find(
+    (obj) => obj.key === status
+  )?.btnName;
+
+  const handelBtnStatus = () => {
+    if (isOrderInArchive) {
+      return;
     }
+
+    const currentStatusIndex = buttonsNameByStatus.findIndex(
+      (obj) => obj.key === status
+    );
+    const reqData = {
+      order_id: id,
+      body: { new_status: buttonsNameByStatus[currentStatusIndex + 1].key },
+    };
+
+    changeStatusOrder.mutate(reqData);
   };
 
   const confirmCanNotCompleted = () => {
@@ -119,6 +125,10 @@ const Order = ({
   };
 
   const handlerCantComplete = () => {
+    if (isOrderInArchive) {
+      return;
+    }
+
     const openModalData: IOpenModalData = {
       modalTitle: textDataCanNotCompleted.title,
       modalConfirmLabel: textDataCanNotCompleted.btnName,
@@ -128,6 +138,9 @@ const Order = ({
   };
 
   const handlerRemove = () => {
+    if (is_deleted) {
+      return;
+    }
     const openModalData: IOpenModalData = {
       modalTitle: textDataRemoved.title,
       modalConfirmLabel: textDataRemoved.btnName,
@@ -136,12 +149,30 @@ const Order = ({
     openModal(openModalData);
   };
 
+  const handlerStatusBtn = () => {
+    onItemsShowChange && onItemsShowChange(id);
+  };
+
+  const activeStep = buttonsNameByStatus.findIndex((obj) => obj.key === status);
+
   const orderContent = classNames(style.orderContent, {
     [style.orderContentButton]: !showItems,
   });
 
-  const orderContentStatusBtn = classNames(style.orderContentStatusBtn, {
-    [style.btnActive]: showItems,
+  const orderContentStatusBtn = classNames(
+    style.orderContentStatusBtn,
+    style.btnActive,
+    {
+      [style.btnInActive]: isOrderInArchive,
+    }
+  );
+
+  const styleBtnCantComplete = classNames(style.orderItemBtn, {
+    [style.btnInActive]: isOrderInArchive,
+  });
+
+  const styleBtnRemove = classNames(style.orderItemBtn, {
+    [style.btnInActive]: is_deleted,
   });
 
   return (
@@ -155,9 +186,11 @@ const Order = ({
             </div>
             <div className={style.orderContentDataRow}>
               <span>Due date:</span>
-              {pick_up_data
-                ? pick_up_data
-                : new Date(created_at).toDateString()}
+              {new Date(orderDataTime).toLocaleString([], {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+              })}
             </div>
             <div className={style.orderContentDataRow}>
               <span>Name: </span> {customer_name}
@@ -188,32 +221,21 @@ const Order = ({
           </div>
         </div>
         <div className={style.orderContentStatus}>
-          <Stepper
-            activeStep={buttonsNameByStatus.findIndex(
-              (obj) => obj.key === status
-            )}
-            style={{ padding: "0" }}
-            connectorStateColors={true}
-            connectorStyleConfig={connectorStyle}
-            styleConfig={stepperStyle}
-          >
-            {buttonsNameByStatus.slice(0, -1).map((obj) => (
-              <Step
-                key={obj.key}
-                label={
-                  obj.key[0].toLocaleUpperCase() +
-                  obj.key.replace("_", " ").slice(1)
-                }
-              />
-            ))}
-          </Stepper>
+          {status === OrderStatus.can_not_complete || is_deleted ? (
+            <></>
+          ) : (
+            <CustomStepper
+              activeStep={activeStep}
+              steps={buttonsNameByStatus}
+            />
+          )}
           <div className={style.orderContentStatusWrap}>
             <div className={orderContentStatusBtn} onClick={handelBtnStatus}>
-              {buttonsNameByStatus.find((obj) => obj.key === status)?.btnName}
+              {is_deleted ? IS_REMOVED_BTN_NAME : statusBtnName}
             </div>
             <div
               className={style.orderContentStatusIconBtn}
-              onClick={() => setShowItems((currentIsShow) => !currentIsShow)}
+              onClick={handlerStatusBtn}
             >
               {showItems ? (
                 <BiChevronUp className={style.iconContent} />
@@ -233,12 +255,12 @@ const Order = ({
             ))}
             <div className={style.orderItemButtons}>
               <button
-                className={style.orderItemBtn}
+                className={styleBtnCantComplete}
                 onClick={handlerCantComplete}
               >
                 {textDataCanNotCompleted.btnName}
               </button>
-              <button className={style.orderItemBtn} onClick={handlerRemove}>
+              <button className={styleBtnRemove} onClick={handlerRemove}>
                 {textDataRemoved.btnName}
               </button>
             </div>

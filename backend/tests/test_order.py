@@ -15,6 +15,8 @@ def test_get_orders(
 ):
     _, order = customer_orders
 
+    status_list_is_archive = [m.OrderStatus.picked_up, m.OrderStatus.can_not_complete]
+
     res = marketer_client.get("/order/")
     assert res.status_code == status.HTTP_200_OK
     res_data = s.OrdersOut.parse_obj(res.json())
@@ -22,14 +24,19 @@ def test_get_orders(
     assert order.id == first_order.id
     assert len(order.items) == len(first_order.items)
 
-    # test order is removed
     order.is_deleted = True
     db.commit()
-    db.refresh(order)
-    res = marketer_client.get("/order/")
+    res = marketer_client.get("/order/?is_archive=true")
+    res_data = s.OrdersOut.parse_obj(res.json())
+    assert res_data.orders
 
-    assert res.status_code == status.HTTP_200_OK
-    assert res.json()["orders"] == []
+    order.status = m.OrderStatus.picked_up
+    order.is_deleted = False
+    db.commit()
+    res = marketer_client.get("/order/?is_archive=true")
+    assert res
+    res_data = s.OrdersOut.parse_obj(res.json())
+    assert order.status in status_list_is_archive
 
 
 def test_change_order_by_id(marketer_client: TestClient, customer_orders, db: Session):

@@ -8,7 +8,7 @@ class CreateProductPrep(BaseModel):
 class ProductPrepOut(BaseModel):
     id: str
     name: str
-    is_active: str
+    is_active: bool
 
     class Config:
         orm_mode = True

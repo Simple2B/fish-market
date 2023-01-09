@@ -44,7 +44,7 @@ def test_get_business_product_out(
     assert len(first_product.preps) == len(first_product_res.preps)
     assert len(user_business.products) == len(res_data.products)
 
-    user_business.products[0].is_out_of_stoke = True
+    user_business.products[0].is_out_of_stock = True
     user_business.products[1].price = 100
     for prep in user_business.products[2].preps:
         prep.is_deleted = True
@@ -76,8 +76,12 @@ def test_create_product_order(client: TestClient, db: Session, customer_orders):
     second_qty = 7.2
 
     order_items = [
-        s.CreateOrderItem(prep_id=first_prep.id, qty=first_qty),
-        s.CreateOrderItem(prep_id=second_prep.id, qty=second_qty),
+        s.CreateOrderItem(
+            prep_id=first_prep.id, qty=first_qty, unit_type=m.SoldBy.by_kilogram
+        ),
+        s.CreateOrderItem(
+            prep_id=second_prep.id, qty=second_qty, unit_type=m.SoldBy.by_unit
+        ),
     ]
 
     data_create_order = s.CreateOrder(
@@ -118,9 +122,13 @@ def test_create_product_order(client: TestClient, db: Session, customer_orders):
 
     # test if prep_id is not correct
     data_create_order.items = [
-        s.CreateOrderItem(prep_id=first_prep.id, qty=first_qty),
-        s.CreateOrderItem(prep_id=second_prep.id, qty=second_qty),
-        s.CreateOrderItem(prep_id=140, qty=second_qty),
+        s.CreateOrderItem(
+            prep_id=first_prep.id, qty=first_qty, unit_type=m.SoldBy.by_kilogram
+        ),
+        s.CreateOrderItem(
+            prep_id=second_prep.id, qty=second_qty, unit_type=m.SoldBy.by_kilogram
+        ),
+        s.CreateOrderItem(prep_id=140, qty=second_qty, unit_type=m.SoldBy.by_kilogram),
     ]
     res = client.post(
         f"/business/{user_business.web_site_id}/order", json=data_create_order.dict()

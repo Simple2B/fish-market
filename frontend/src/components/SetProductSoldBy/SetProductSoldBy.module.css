@@ -1,0 +1,38 @@
+.setProductSoldByContent {
+    height: 100%;
+    width: 8.5rem;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+
+    border-right: 1px solid black;
+    font-weight: 400;
+    font-size: 1.1rem;
+    line-height: 1.6rem;
+}
+
+.setProductSoldByContent div:first-child {
+    font-weight: 800;
+}
+
+.contentBnt {
+    height: 1.9rem;
+    width: 5.5rem;
+    padding: 0.2rem;
+    box-sizing: border-box;
+    border: 1px solid #C1E1FF;
+    border-radius: 5px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.contentBntActive {
+    background: #C1E1FF;
+}

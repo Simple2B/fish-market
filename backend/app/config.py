@@ -12,10 +12,10 @@ class Settings(BaseSettings):
     ADMIN_USER: str = "admin"
     ADMIN_PASS: str = "admin"
     ADMIN_EMAIL: EmailStr = "admin@admin.com"
-    AUTH_TOKEN_TWILIO: str = ""
-    ACCOUNT_SID_TWILIO: str = ""
-    MESSAGE_SERVICE_SID: str = ""
     COUNTRY_CODE: str = "IL"
+    API_TOKEN_UP_SENDER: str = ""
+    USERNAME_UP_SENDER: str = ""
+    STATIC_FOLDER: str = "static"
 
     class Config:
         env_file = ".env"

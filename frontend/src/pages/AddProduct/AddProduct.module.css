@@ -1,0 +1,28 @@
+.addProductContent {
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem 0;
+}
+
+.addProductContentTitle {
+    font-weight: 800;
+    font-size: 1.7rem;
+    line-height: 2.2rem;
+}
+
+.addProductContentWpar {
+    box-sizing: border-box;
+}
+
+.addProductContentButtons {
+    display: flex;
+    justify-content: space-between;
+    width: 32.6rem;
+}
+
+.activeBtn:hover {
+    background: #C1E1FF;
+}

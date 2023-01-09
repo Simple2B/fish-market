@@ -9,12 +9,18 @@ PRODUCT_NAME = "fish"
 PRODUCT_PRICE = 2
 PRODUCT_SOLD_BY = m.SoldBy.by_kilogram
 PRODUCT_IMAGE = "/dir/imag/logo_product.png"
+IS_OUT_OF_STOCK = True
+TEST_PREPS = [
+    {"name": "red", "is_active": True},
+    {"name": "fillet", "is_active": False},
+]
 
 data_create_product = s.CreateProduct(
     name=PRODUCT_NAME,
     price=PRODUCT_PRICE,
     sold_by=PRODUCT_SOLD_BY,
     image=PRODUCT_IMAGE,
+    preps=[s.CreatePrep(**prep) for prep in TEST_PREPS],
 )
 
 data_update_product = s.UpdateProduct(
@@ -22,6 +28,7 @@ data_update_product = s.UpdateProduct(
     price=PRODUCT_PRICE,
     sold_by=PRODUCT_SOLD_BY,
     image=PRODUCT_IMAGE,
+    is_out_of_stock=IS_OUT_OF_STOCK,
 )
 
 
@@ -102,6 +109,8 @@ def test_cur_user_create_product(marketer_client: TestClient, db: Session):
     assert product
     assert product.price == PRODUCT_PRICE
     assert product.sold_by == PRODUCT_SOLD_BY
+    assert len(product.preps) == 2
+    assert product.preps[0].name == TEST_PREPS[0]["name"]
 
     # test business has new product
     business = db.query(m.Business).get(product.business_id)
@@ -169,3 +178,36 @@ def test_update_product(marketer_client: TestClient, db: Session):
     marketer_client.delete(f"/product/{product.id}")
     res = marketer_client.patch(f"/product/{product.id}", json=prod_data)
     assert res.status_code == status.HTTP_404_NOT_FOUND
+
+
+def test_reset_product_out_of_stock(marketer_client: TestClient, db: Session):
+    business: m.Business = db.query(m.Business).first()
+
+    for product in business.active_products:
+        product.is_out_of_stock = True
+    db.commit()
+
+    res = marketer_client.patch("/product/")
+    assert res.status_code == status.HTTP_200_OK
+    assert "ok" in res.json()
+
+    assert all([not product.is_out_of_stock for product in business.active_products])
+
+
+def test_highlight_product_prep(marketer_client: TestClient, db: Session):
+    product: m.Product = db.query(m.Product).filter_by(is_deleted=False).first()
+
+    reqData = s.HighlightPreps(is_highlight=False)
+
+    res = marketer_client.patch(
+        f"/product/{product.id}/prep-highlight", json=reqData.dict()
+    )
+    assert res.status_code == status.HTTP_200_OK
+    assert all([not prep.is_active for prep in product.preps if not prep.is_deleted])
+
+    reqData.is_highlight = True
+    res = marketer_client.patch(
+        f"/product/{product.id}/prep-highlight", json=reqData.dict()
+    )
+    assert res.status_code == status.HTTP_200_OK
+    assert all([prep.is_active for prep in product.preps if not prep.is_deleted])

@@ -31,8 +31,11 @@ services:
     restart: always
     volumes:
       - ./backup:/backup
+      - ./:/app
     links:
       - db
+    env_file:
+      - .env
     environment:
       SCHEDULE: "@daily"
       POSTGRES_DATABASE: ${DATABASE_NAME:-db}

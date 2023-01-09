@@ -30,7 +30,7 @@ export function ProductList({
       const res = await fetch(`${API_BASE_URL}/business/${marketId}/product`);
       const data: { products: ProductItemProps[] } = await res.json();
 
-      return data.products;
+      return data.products.sort((a, b) => a.id - b.id);
     },
   });
 

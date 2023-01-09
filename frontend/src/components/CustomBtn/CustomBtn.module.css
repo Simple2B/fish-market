@@ -1,0 +1,17 @@
+.btnStyle {
+    height: 3.5rem;
+    width: 15.5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-sizing: border-box;
+    border: 2px solid #C1E1FF;
+    border-radius: 5px;
+    cursor: pointer;
+
+    font-weight: 400;
+    font-size: 1.1rem;
+    line-height: 1.5rem;
+}
