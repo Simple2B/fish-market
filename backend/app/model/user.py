@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship
 from app.hash_utils import make_hash, hash_verify
 from app.database import Base, SessionLocal
 
-from .enums import UserRole, OrderStatus
+from .enums import UserRole, OrderStatus, SoldBy
 
 
 class User(Base):
@@ -26,19 +26,44 @@ class User(Base):
 
     businesses = relationship("Business", viewonly=True)
 
+    def get_picked_up_orders_items(self):
+        if self.businesses:
+            picked_up_orders = [
+                order
+                for order in self.businesses[0].orders
+                if order.status == OrderStatus.picked_up
+            ]
+
+            orders_items = [
+                order_item for order in picked_up_orders for order_item in order.items
+            ]
+            return orders_items
+        return []
+
     @property
     def orders_taken(self):
         if self.businesses:
             return len(self.businesses[0].orders)
-        return 0  # it is impossible take admin business
+        return 0
 
-    # TODO provide valid data
     @property
     def items_sold(self):
+        if self.businesses:
+            return sum(
+                item.qty
+                for item in self.get_picked_up_orders_items()
+                if item.unit_type == SoldBy.by_unit
+            )
         return 0
 
     @property
     def kg_sold(self):
+        if self.businesses:
+            return sum(
+                item.qty
+                for item in self.get_picked_up_orders_items()
+                if item.unit_type == SoldBy.by_kilogram
+            )
         return 0
 
     @property
