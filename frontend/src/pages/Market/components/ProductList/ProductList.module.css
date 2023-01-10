@@ -53,3 +53,59 @@
         width: 40rem;
     }
 }
+
+@media (max-width: 1000px) {
+    .pageContent {
+        width: 47rem;
+    }
+
+    .contentTitle {
+        display: flex;
+        gap: 0 1rem;
+    }
+
+    .iconCart {
+        display: block;
+        display: flex;
+    }
+
+    .iconCart>div {
+        width: 1.2rem;
+        height: 1.2rem;
+        font-weight: 400;
+        font-size: 0.8rem;
+        line-height: 1.1rem;
+        text-align: center;
+        margin: 0 auto;
+        border-radius: 50%;
+        background: #C1E1FF;
+    }
+
+    .contentCarts {
+        display: none;
+    }
+}
+
+@media (max-width: 750px) {
+    .pageContent {
+        width: 28rem;
+    }
+}
+
+@media (max-width: 500px) {
+    .pageContent {
+        width: 22rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .pageContent {
+        width: 18rem;
+    }
+}
+
+@media (max-width: 280px) {
+    .pageContent {
+        width: 14rem;
+    }
+}

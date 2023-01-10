@@ -1,11 +1,14 @@
 .cardWrap {
+    width: 98%;
+    height: 8rem;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+
+    margin-top: 0.5rem;
     border: 1px solid black;
     border-radius: 5px;
-    height: 124px;
-    margin-bottom: 8px;
+    box-sizing: border-box;
 }
 
 
@@ -13,14 +16,15 @@
     height: 100%;
     width: 35%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 0 1rem;
     align-items: center;
     border-right: 1px solid black;
 }
 
 .cardBlockContent {
-    height: 92px;
-    width: 114px;
+    height: 5.7rem;
+    width: 7.1rem;
     margin-left: 3px;
 }
 
@@ -45,8 +49,8 @@
     font-family: 'Avenir';
     font-style: normal;
     font-weight: 500;
-    font-size: 18px;
-    line-height: 25px;
+    font-size: 1.1rem;
+    line-height: 1.6rem;
     text-align: center;
     color: #000000;
 }
@@ -57,8 +61,8 @@
     font-family: 'Avenir';
     font-style: normal;
     font-weight: 800;
-    font-size: 26px;
-    line-height: 36px;
+    font-size: 1.6rem;
+    line-height: 2.1rem;
     text-align: center;
     color: #000000;
 }
@@ -80,7 +84,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 50px;
+    font-size: 3rem;
     text-align: center;
     color: #D1D1D1;
     background: white;
@@ -108,8 +112,8 @@
     font-family: 'Avenir';
     font-style: normal;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 22px;
+    font-size: 1.1rem;
+    line-height: 1.6rem;
     text-align: center;
 }
 
@@ -118,7 +122,7 @@
     background: #FFFFFF;
     border: 1px solid #000000;
     border-radius: 5px;
-    padding: 8px;
+    padding: 0.5rem;
 }
 
 
@@ -134,22 +138,21 @@
     border: 1px solid black;
 }
 
-@media screen and (max-width: 700px) {
+@media (max-width: 750px) {
     .cardWrap {
-        height: 254px;
-        width: 335px;
-
+        height: 15.8rem;
+        width: 26rem;
         display: grid;
         grid-template-columns: 80% 20%;
         border: 1px solid black;
         border-radius: 5px;
-
-
     }
 
 
+
+
     .cardBlock {
-        height: 84px;
+        height: 5.25rem;
         width: 100%;
         grid-column: 1;
         grid-row: 1;
@@ -157,8 +160,8 @@
     }
 
     .cardBlockContent {
-        height: 71px;
-        width: 88px;
+        height: 4.4rem;
+        width: 5.5rem;
         margin-left: 3px;
     }
 
@@ -173,7 +176,7 @@
     }
 
     .preparationBlock {
-        height: 80px;
+        height: 5rem;
         width: 100%;
         grid-column: 1;
         grid-row: 3;
@@ -196,28 +199,34 @@
         border-right: 1px solid black;
 
     }
+}
+
+@media (max-width: 480px) {
+    .cardWrap {
+        width: 20rem;
+    }
+}
+
+
+
+
+@media (max-width: 390px) {
+    .cardWrap {
+        width: 16rem;
+    }
+}
+
+@media (max-width: 280px) {
+    .cardWrap {
+        width: 13rem;
+    }
 
     .cardProductName {
-        font-weight: 500;
-        font-size: 16px;
-        line-height: 22px;
+        font-size: 1rem;
     }
 
     .cardProductPrice {
-        font-weight: 800;
-        font-size: 20px;
-        line-height: 27px;
+        font-size: 1rem;
     }
-}
 
-@media screen and (max-width: 380px) {
-    .cardWrap {
-        width: 300px;
-    }
-}
-
-@media screen and (max-width: 280px) {
-    .cardWrap {
-        width: 235px;
-    }
 }
