@@ -8,21 +8,20 @@ import { IProduct, MarketActions } from "../../Market.type";
 
 import { API_BASE_URL } from "../../../../constants";
 import { Spinner } from "../../../../components";
-import { useState } from "react";
 import { CartItems } from "../CartItems";
 
 type Props = {
+  isShowCart: boolean;
   marketId: string;
   cartState: IProduct[];
   dispatchCart: (action: MarketActions) => void;
-  isCartPhoneView?: boolean;
 };
 
 export function ProductList({
   marketId,
   cartState,
   dispatchCart,
-  isCartPhoneView,
+  isShowCart,
 }: Props) {
   const { data, isLoading } = useQuery({
     queryKey: [`marketProductList-${marketId}`],
@@ -34,7 +33,14 @@ export function ProductList({
     },
   });
 
-  console.log(cartState);
+  if (isShowCart && cartState.length > 0) {
+    return (
+      <div className={style.contentCartsPhoneView}>
+        <div className={style.contentTitle}>Cart</div>
+        <CartItems cartState={cartState} dispatchCart={dispatchCart} />
+      </div>
+    );
+  }
 
   return isLoading ? (
     <Spinner />
@@ -45,10 +51,10 @@ export function ProductList({
           <div className={style.contentTitle}>
             Choose your items{" "}
             <div className={style.iconCart}>
+              <HiShoppingCart />
               {cartState.length >= 1 && (
                 <div className={style.iconCartCount}>{cartState.length}</div>
               )}
-              <HiShoppingCart />
             </div>{" "}
           </div>
           <div className={style.contentItemsSubTitle}>

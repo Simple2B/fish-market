@@ -8,12 +8,17 @@
 }
 
 .contentWrap {
+    width: 17rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
     margin-bottom: 2rem;
 }
+
+.contentWrap input[type="date"]::-ms-clear {
+    display: none;
+}
+
 
 .contentWrapNote {
     height: 100%;
@@ -76,5 +81,17 @@
 @media (max-width: 1024px) {
     .contentWrap {
         margin-bottom: 0.5rem;
+    }
+}
+
+@media (max-width: 320px) {
+    .contentWrap {
+        width: 14rem;
+    }
+}
+
+@media (max-width: 280px) {
+    .contentWrap {
+        width: 12rem;
     }
 }

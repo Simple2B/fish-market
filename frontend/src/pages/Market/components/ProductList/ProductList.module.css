@@ -44,6 +44,13 @@
     display: none;
 }
 
+.contentCartsPhoneView {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem 0;
+}
+
 @media (max-width: 1024px) {
     .pageContent {
         width: 64rem;
@@ -98,7 +105,7 @@
     }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 390px) {
     .pageContent {
         width: 18rem;
     }
