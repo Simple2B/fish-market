@@ -1,210 +1,55 @@
-.productListPage {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-
-
 .pageContent {
+    height: 83vh;
+    width: 80rem;
     display: flex;
     justify-content: center;
-    align-items: center;
     gap: 0 2.75rem;
+    margin: 0 auto;
 }
 
-
-.productListContent {
-    height: 100vh;
-    width: 68%;
-}
-
-.contentBlockTitle {
-    /* height: 3.75rem; */
+.contentItems {
+    width: 50rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding-top: 2.5rem;
+    gap: 1rem 0;
 }
 
-
-.productCardContent {
-    height: 100vh;
-    width: 30%;
-
-}
-
-
-.blockTitle {
-    font-family: 'Avenir';
-    font-style: normal;
+.contentTitle {
+    margin-top: 1rem;
+    align-self: center;
     font-weight: 800;
-    font-size: 28px;
-    line-height: 38px;
-    text-align: center;
+    font-size: 1.75rem;
+    line-height: 2.3rem;
+}
+
+.contentItemsSubTitle {
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.4rem;
+}
+
+.contentItemsWrap {
+    height: 33rem;
+    overflow-y: scroll;
+    box-sizing: border-box;
+}
+
+.contentCarts {
+    display: flex;
+    flex-direction: column;
+    gap: 3.6rem 0;
 }
 
 .iconCart {
     display: none;
 }
 
-.blockTitleCart {
-    font-family: 'Avenir';
-    font-style: normal;
-    font-weight: 800;
-    font-size: 28px;
-    line-height: 38px;
-    text-align: center;
-    margin-bottom: 2.8rem;
-}
-
-
-.blockSubTitle {
-    font-family: 'Avenir';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 22px;
-    text-align: center;
-    padding-top: 1vh;
-
-}
-
-.blockItems {
-    height: 33.0rem;
-    width: 50.3rem;
-    padding-top: 1rem;
-    overflow-y: scroll;
-}
-
 @media (max-width: 1024px) {
-    .blockItems {
-        height: 25.0rem;
-        width: 40.3rem;
-    }
-
-    .contentBlockTitle {
-        padding-top: 1rem;
-    }
-
-    .blockTitleCart {
-        margin-bottom: 2.7rem;
-    }
-}
-
-@media screen and (max-width: 1000px) {
-    /* .productCardContent {
-        display: none;
-        visibility: hidden;
-    } */
-
     .pageContent {
-        display: flex;
-        width: 90%;
-        justify-content: center
+        width: 64rem;
     }
 
-    .productListContent {
-        width: 100%;
-    }
-
-    .blockTitle {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-    }
-
-    .iconCart {
-        width: 20%;
-        display: flex;
-    }
-
-    .iconCartCount {
-        height: 20px;
-        width: 20px;
-        border-radius: 50%;
-        background: #C1E1FF;
-        text-align: center;
-        font-weight: 400;
-        font-size: 15px;
-        line-height: 18px;
-    }
-
-
-}
-
-@media (max-width: 1024px) {
-    .blockItems {
-        height: 25.0rem;
-        width: 40.3rem;
-    }
-
-    .contentBlockTitle {
-        padding-top: 1rem;
-    }
-
-    .blockTitleCart {
-        margin-bottom: 2.7rem;
-    }
-}
-
-@media screen and (max-width: 700px) {
-    .blockItems {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-}
-
-@media screen and (max-width: 1000px) {
-    /* .productCardContent {
-        display: none;
-        visibility: hidden;
-    } */
-
-    .pageContent {
-        display: flex;
-        width: 90%;
-        justify-content: center
-    }
-
-    .productListContent {
-        width: 100%;
-    }
-
-    .blockTitle {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-    }
-
-    .iconCart {
-        width: 20%;
-        display: flex;
-    }
-
-    .iconCartCount {
-        height: 20px;
-        width: 20px;
-        border-radius: 50%;
-        background: #C1E1FF;
-        text-align: center;
-        font-weight: 400;
-        font-size: 15px;
-        line-height: 18px;
-    }
-
-
-}
-
-@media screen and (max-width: 700px) {
-    .blockItems {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    .contentItems {
+        width: 40rem;
     }
 }

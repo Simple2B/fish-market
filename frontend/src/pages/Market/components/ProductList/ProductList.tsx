@@ -5,17 +5,17 @@ import { ProductItemProps } from "./ProductList.type";
 import style from "./ProductList.module.css";
 import { ProductItem } from "../ProductItem";
 import { IProduct, MarketActions } from "../../Market.type";
-import { CartItems } from "../CartItems";
 
 import { API_BASE_URL } from "../../../../constants";
 import { Spinner } from "../../../../components";
 import { useState } from "react";
+import { CartItems } from "../CartItems";
 
 type Props = {
   marketId: string;
   cartState: IProduct[];
   dispatchCart: (action: MarketActions) => void;
-  isCartPhoneView: boolean;
+  isCartPhoneView?: boolean;
 };
 
 export function ProductList({
@@ -40,46 +40,36 @@ export function ProductList({
     <Spinner />
   ) : (
     <>
-      <div className={style.productListPage}>
-        <div className={style.pageContent}>
-          <div className={style.productListContent}>
-            <div className={style.contentBlockTitle}>
-              <div className={style.blockTitle}>
-                Choose your items
-                <div className={style.iconCart}>
-                  <HiShoppingCart />
-                  {cartState.length >= 1 && (
-                    <div className={style.iconCartCount}>
-                      {cartState.length}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className={style.blockSubTitle}>
-                *The weight is roughly estimated, the order might arrive with up
-                to 35% margin of difference
-              </div>
-            </div>
-            <div className={style.blockItems}>
-              {data?.map(
-                (props: Omit<ProductItemProps, "onClick" | "dispatchCart">) => (
-                  <ProductItem
-                    key={props.id}
-                    dispatchCart={dispatchCart}
-                    {...props}
-                  />
-                )
+      <div className={style.pageContent}>
+        <div className={style.contentItems}>
+          <div className={style.contentTitle}>
+            Choose your items{" "}
+            <div className={style.iconCart}>
+              {cartState.length >= 1 && (
+                <div className={style.iconCartCount}>{cartState.length}</div>
               )}
-            </div>
+              <HiShoppingCart />
+            </div>{" "}
           </div>
-          {isCartPhoneView && (
-            <div className={style.productCardContent}>
-              <div className={style.contentBlockTitle}>
-                <div className={style.blockTitleCart}>Cart</div>
-              </div>
-              <CartItems cartState={cartState} dispatchCart={dispatchCart} />
-            </div>
-          )}
+          <div className={style.contentItemsSubTitle}>
+            *The weight is roughly estimated, the order might arrive with up to
+            35% margin of difference
+          </div>
+          <div className={style.contentItemsWrap}>
+            {data?.map(
+              (props: Omit<ProductItemProps, "onClick" | "dispatchCart">) => (
+                <ProductItem
+                  key={props.id}
+                  dispatchCart={dispatchCart}
+                  {...props}
+                />
+              )
+            )}
+          </div>
+        </div>
+        <div className={style.contentCarts}>
+          <div className={style.contentTitle}>Cart</div>
+          <CartItems cartState={cartState} dispatchCart={dispatchCart} />
         </div>
       </div>
     </>
