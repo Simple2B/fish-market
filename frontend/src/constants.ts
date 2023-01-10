@@ -5,6 +5,7 @@ export const ACTIVE_BTN_FILTER = "activeBtnFilterKey";
 export const ACTIVE_BTN_FILTER_INDEX = 1;
 export const IS_REMOVED_BTN_NAME = "Removed";
 export const REFETCH_INTERVAL_VALID_TOKEN = 180000;
+export const PHONE_WIDTH = 1000;
 
 export const arrOfMonth = [
   "January",
