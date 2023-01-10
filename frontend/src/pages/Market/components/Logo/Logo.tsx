@@ -55,7 +55,11 @@ const Logo = ({ marketId, onConfirm, textBtn }: LogoProps) => {
           <div className={style.businessTitleText}>Welcome to {data!.name}</div>
         </div>
       </div>
-      <BusinessBtn onClick={onConfirm} textBtn={textBtn} />
+      <BusinessBtn
+        onClick={onConfirm}
+        textBtn={textBtn}
+        isNotActivePhoneView={false}
+      />
     </>
   );
 };
