@@ -2,6 +2,7 @@ import os
 import uuid
 from pathlib import Path
 from urllib.parse import urljoin
+from datetime import datetime
 
 from fastapi import Depends, APIRouter, status, HTTPException, UploadFile, File, Request
 from sqlalchemy.orm import Session
@@ -123,8 +124,11 @@ def create_order_for_business(
         )
 
     log(log.INFO, "create order")
+
     order_status = (
-        m.OrderStatus.pending if not data.pick_up_data else m.OrderStatus.created
+        m.OrderStatus.pending
+        if datetime.now().date() == data.pick_up_data.date()
+        else m.OrderStatus.created
     )
     order = m.Order(
         phone_number_id=db_phone_number.id,

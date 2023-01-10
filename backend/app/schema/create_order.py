@@ -1,7 +1,7 @@
 from typing import Optional
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 from app import model as m
 
@@ -36,8 +36,14 @@ class CreateOrder(BaseModel):
     phone_number: str
     customer_name: str
     note: Optional[str]
-    pick_up_data: Optional[datetime]
+    pick_up_data: datetime
     items: list[CreateOrderItem]
+
+    @validator("pick_up_data")
+    def ensure_date_is_valid(cls, date):
+        if datetime.now().date() > date.date():
+            raise ValueError("Pick up date is not valid")
+        return date
 
 
 class CreateOrderOut(BaseModel):
