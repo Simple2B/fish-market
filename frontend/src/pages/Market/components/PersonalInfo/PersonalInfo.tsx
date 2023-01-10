@@ -5,28 +5,39 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import style from "./PersonalInfo.module.css";
 import { useMutation } from "@tanstack/react-query";
 import { createCheckPhoneNumber } from "../../../../services";
-import { MarketActionTypes, ISetOrderData, IProduct } from "../../Market.type";
+import {
+  MarketActionTypes,
+  ISetOrderData,
+  IProduct,
+  IOrder,
+} from "../../Market.type";
 import {
   createOrder,
   isValidNumber,
   phoneNumberAutoFormat,
   replaceDash,
+  rewriteCurrentDate,
 } from "../../../../services/marketService";
 import { ErrorMessage } from "../../../../components";
 
 const inputPhoneNumber = "phone_number";
 
 type PersonalInfoProps = {
+  setIsPersonalInfoFill: (n: boolean) => void;
+
+  isPhoneView: boolean;
   onConfirm: () => void;
   dispatchOrder: (action: ISetOrderData) => void;
   submitRef: React.RefObject<HTMLButtonElement>;
   marketId: string;
   cartState: IProduct[];
+  orderState: IOrder;
 };
 
 type PersonalInfoFormValues = {
   phone_number: string;
   full_name: string;
+  pick_up_data: Date | string;
   note: string;
 };
 
@@ -35,16 +46,40 @@ const PersonalInfo = ({
   submitRef,
   dispatchOrder,
   cartState,
+  orderState,
   marketId,
+  isPhoneView,
+  setIsPersonalInfoFill,
 }: PersonalInfoProps) => {
+  const currentDate = rewriteCurrentDate(orderState.pick_up_data);
+
   const {
     register,
     handleSubmit,
     setError,
     getValues,
     setValue,
+    watch,
     formState: { errors },
-  } = useForm<PersonalInfoFormValues>();
+  } = useForm<PersonalInfoFormValues>({
+    defaultValues: {
+      pick_up_data: currentDate,
+    },
+  });
+
+  useEffect(() => {
+    // I need advice about this code maybe there is better way
+
+    const subscription = watch((value) => {
+      if (!isPhoneView) return;
+      if (value.full_name && value.phone_number && value.pick_up_data) {
+        setIsPersonalInfoFill(true);
+      } else {
+        setIsPersonalInfoFill(false);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   const mutationCreateOrder = useMutation({
     mutationFn: createOrder,
@@ -62,7 +97,13 @@ const PersonalInfo = ({
       number: string;
       is_number_verified: boolean;
     }) => {
-      const [fullName, noteValue] = getValues(["full_name", "note"]);
+      const [fullName, noteValue, pickUpDate] = getValues([
+        "full_name",
+        "note",
+        "pick_up_data",
+      ]);
+
+      const correctPickUpDate = new Date(pickUpDate);
 
       dispatchOrder({
         type: MarketActionTypes.SET_ORDER_DATA,
@@ -71,6 +112,7 @@ const PersonalInfo = ({
           isNumberVerified: data.is_number_verified,
           name: fullName,
           note: noteValue,
+          pick_up_data: correctPickUpDate,
         },
       });
 
@@ -80,6 +122,7 @@ const PersonalInfo = ({
             phone_number: data.number,
             customer_name: fullName,
             note: noteValue,
+            pick_up_data: correctPickUpDate,
             items: cartState.map((product) => {
               return {
                 prep_id: product.prepId,
@@ -119,6 +162,14 @@ const PersonalInfo = ({
     const targetValue = phoneNumberAutoFormat(e.target.value);
     setValue(inputPhoneNumber, targetValue);
   };
+
+  const handlerOnChangePickUpDate = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setValue("pick_up_data", e.target.value);
+  };
+
+  // console.log(watch(["full_name", "note", "pick_up_data"]), "watch");
 
   return (
     <form
@@ -167,6 +218,23 @@ const PersonalInfo = ({
         {errors.full_name && (
           <ErrorMessage text="Your name should consist from minimum 3 characters. Please provide a valid name." />
         )}
+      </div>
+      <div
+        style={isPhoneView ? {} : { display: "none" }}
+        className={style.contentWrap}
+      >
+        <div className={style.contentWrapLabel}>Pickup Date</div>
+        <input
+          type="date"
+          {...register("pick_up_data", {
+            required: true,
+            onChange: handlerOnChangePickUpDate,
+          })}
+          className={style.contentInput}
+          min={currentDate}
+          disabled={mutation.isLoading}
+        />
+        {errors.pick_up_data && <ErrorMessage text="Pickup Date is required" />}
       </div>
       <div className={style.contentWrap}>
         <div className={style.contentWrapLabel}>Add notes (optional)</div>

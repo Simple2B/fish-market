@@ -13,6 +13,7 @@ export interface IOrder {
   isNumberVerified: boolean;
   name: string;
   note: string;
+  pick_up_data: Date;
 }
 
 export interface ISetOrderData {
@@ -75,5 +76,6 @@ export type CreateOrderItems = {
   phone_number: string;
   customer_name: string;
   note: string;
+  pick_up_data: Date;
   items: IOrderItem[];
 };

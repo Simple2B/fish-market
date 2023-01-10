@@ -12,6 +12,7 @@ export const initialStateOrder: IOrder = {
   isNumberVerified: false,
   name: "",
   note: "",
+  pick_up_data: new Date(),
 };
 
 export function cartReducer(state: IProduct[], action: MarketActions) {
