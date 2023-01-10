@@ -15,7 +15,7 @@ import { BusinessBtn } from "./components/BusinessBtn/BusinessBtn";
 import { NextClient } from "./components/NextClient/NextClient";
 import { MarketActionTypes } from "./Market.type";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
-import { PHONE_WIDTH } from "./constants";
+import { PHONE_WIDTH } from "../../constants";
 
 enum BusinessStep {
   START_ORDER,
@@ -36,6 +36,9 @@ export function Market() {
   if (!marketId) {
     return <Navigate to={"/market-not-found"} replace={true} />;
   }
+  const { height, width } = useWindowDimensions();
+
+  const isPhoneView = width <= PHONE_WIDTH;
 
   const [cartState, dispatchCart] = useReducer(cartReducer, initialStateCart);
   const [orderState, dispatchOrder] = useReducer(
@@ -44,11 +47,10 @@ export function Market() {
   );
 
   const [step, setStep] = useState<BusinessStep>(BusinessStep.START_ORDER);
-  const [isCartPhoneView, setIsCartPhoneView] = useState<boolean>(false);
+  const [isShowCart, setIsShowCart] = useState<boolean>(false);
+  const [isPersonalInfoFill, setIsPersonalInfoFill] = useState<boolean>(false);
 
   const customerConfirmRef = useRef<HTMLButtonElement>(null);
-
-  const { height, width } = useWindowDimensions();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -66,12 +68,16 @@ export function Market() {
     if (step === BusinessStep.CONFIRM && cartState.length < 1) {
       setStep((value) => value - 1);
     } else {
-      if (step === BusinessStep.ORDER && width <= PHONE_WIDTH) {
-        setIsCartPhoneView(true);
-        return;
+      if (step === BusinessStep.ORDER && isPhoneView) {
+        if (!isShowCart) {
+          setIsShowCart(true);
+        } else {
+          setIsShowCart(false);
+          setStep((value) => value + 1);
+        }
+      } else {
+        setStep((value) => value + 1);
       }
-
-      setStep((value) => value + 1);
     }
   };
 
@@ -79,6 +85,7 @@ export function Market() {
     cartState.length < 1
       ? handleStepBusiness()
       : customerConfirmRef.current?.click();
+    setIsPersonalInfoFill(false);
   };
 
   const handlerStepNextClient = () => {
@@ -88,7 +95,7 @@ export function Market() {
     setStep(BusinessStep.START_ORDER);
   };
 
-  console.log({ height, width });
+  const isNotActiveBtnPhoneView = width <= PHONE_WIDTH && cartState.length <= 0;
 
   return orderState.isNumberVerified ? (
     <>
@@ -96,7 +103,7 @@ export function Market() {
       <BusinessBtn
         onClick={handlerStepNextClient}
         textBtn="Next client"
-        cartState={cartState}
+        isNotActivePhoneView={isNotActiveBtnPhoneView}
       />
     </>
   ) : (
@@ -113,6 +120,7 @@ export function Market() {
       {step === BusinessStep.ORDER && (
         <>
           <ProductList
+            isShowCart={isShowCart}
             marketId={marketId}
             cartState={cartState}
             dispatchCart={dispatchCart}
@@ -120,13 +128,16 @@ export function Market() {
           <BusinessBtn
             onClick={handleStepBusiness}
             textBtn={buttonTitle[step]}
-            cartState={cartState}
+            isNotActivePhoneView={isNotActiveBtnPhoneView}
           />
         </>
       )}
       {step === BusinessStep.CONFIRM && (
         <>
           <Confirm
+            setIsPersonalInfoFill={setIsPersonalInfoFill}
+            isPhoneView={isPhoneView}
+            orderState={orderState}
             cartState={cartState}
             marketId={marketId}
             dispatchCart={dispatchCart}
@@ -137,12 +148,13 @@ export function Market() {
           <BusinessBtn
             onClick={handlerStepConfirm}
             textBtn={buttonTitle[step]}
-            cartState={cartState}
+            isNotActivePhoneView={isPhoneView && !isPersonalInfoFill}
           />
         </>
       )}
       {step === BusinessStep.CONFIRM_CODE && (
         <ConfirmCode
+          isPhoneView={isPhoneView}
           dispatchOrder={dispatchOrder}
           orderState={orderState}
           cartState={cartState}

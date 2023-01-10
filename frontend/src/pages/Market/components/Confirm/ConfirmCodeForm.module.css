@@ -5,7 +5,7 @@
 
 .formContent {
     display: flex;
-    width: 276px;
+    width: 17rem;
     flex-direction: column;
     align-items: center;
     margin: 0 auto;
@@ -20,17 +20,17 @@
     font-family: 'Avenir';
     font-style: normal;
     font-weight: 500;
-    font-size: 18px;
-    line-height: 25px;
-    margin-bottom: 8px;
+    font-size: 1.1rem;
+    line-height: 1.6rem;
+    margin-bottom: 0.5rem;
 
 
     color: #000000;
 }
 
 .smsCode {
-    height: 60px;
-    width: 100%;
+    height: 3.7rem;
+    width: 17rem;
     background: #FFFFFF;
     border: 1px solid #000000;
     border-radius: 5px;
@@ -39,9 +39,9 @@
     font-family: 'Avenir';
     font-style: normal;
     font-weight: 500;
-    font-size: 18px;
-    line-height: 25px;
-    padding-left: 16px;
+    font-size: 1.6rem;
+    line-height: 2.1rem;
+    padding-left: 1rem;
 
     text-align: start;
 
@@ -53,17 +53,17 @@
 
 
 .submitBtn {
-    height: 60px;
+    height: 3.7rem;
     width: 100%;
-    margin-top: 36px;
+    margin-top: 2.2rem;
     background: #A2D2FF;
     border-radius: 5px;
 
     font-family: 'Avenir';
     font-style: normal;
     font-weight: 500;
-    font-size: 18px;
-    line-height: 25px;
+    font-size: 1.1rem;
+    line-height: 1.6rem;
     /* identical to box height */
 
     text-align: center;
@@ -75,12 +75,12 @@
     display: flex;
     justify-content: center;
 
-    margin-top: 48px;
+    margin-top: 3rem;
     font-family: 'Avenir';
     font-style: normal;
     font-weight: 500;
-    font-size: 18px;
-    line-height: 25px;
+    font-size: 1.1rem;
+    line-height: 1.6rem;
     /* identical to box height */
 
     text-align: center;
@@ -92,4 +92,8 @@
 
 .btnSendAgain {
     text-decoration: underline;
+}
+
+.btnInActive {
+    background: #D1D1D1;
 }

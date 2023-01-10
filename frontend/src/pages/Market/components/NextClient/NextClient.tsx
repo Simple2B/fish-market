@@ -1,9 +1,7 @@
 import React from "react";
 import style from "./NextClient.module.css";
 
-type Props = {};
-
-const NextClient = (props: Props) => {
+const NextClient = () => {
   return (
     <div className={style.nextClientPage}>
       <div className={style.nextClientTitle}>Order confirmed!</div>

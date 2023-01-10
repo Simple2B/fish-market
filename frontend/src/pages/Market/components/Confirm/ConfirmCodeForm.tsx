@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import classNames from "classnames";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ErrorMessage } from "../../../../components";
 
@@ -22,6 +23,7 @@ type ConfirmCodeFormProps = {
   orderState: IOrder;
   cartState: IProduct[];
   marketId: string;
+  isPhoneView: boolean;
 };
 
 type ConfirmCodeFormValue = {
@@ -34,6 +36,7 @@ const ConfirmCodeForm = ({
   cartState,
   marketId,
   onConfirm,
+  isPhoneView,
 }: ConfirmCodeFormProps) => {
   const mutationSendAgain = useMutation({
     mutationFn: createCheckPhoneNumber,
@@ -65,6 +68,7 @@ const ConfirmCodeForm = ({
             phone_number: orderState.phoneNumber,
             customer_name: orderState.name,
             note: orderState.note,
+            pick_up_data: orderState.pick_up_data,
             items: cartState.map((product) => {
               return {
                 prep_id: product.prepId,
@@ -94,6 +98,7 @@ const ConfirmCodeForm = ({
     register,
     handleSubmit,
     setError,
+    watch,
     formState: { errors },
   } = useForm<ConfirmCodeFormValue>();
 
@@ -107,6 +112,10 @@ const ConfirmCodeForm = ({
   const handlerSendAgainBtn = () => {
     mutationSendAgain.mutate({ phone_number: orderState.phoneNumber });
   };
+
+  const styleSubmitBtn = classNames(style.submitBtn, {
+    [style.btnInActive]: !watch("sms_code") && isPhoneView,
+  });
 
   return (
     <div className={style.confirmCodeFormPage}>
@@ -133,7 +142,7 @@ const ConfirmCodeForm = ({
         {errors.sms_code && <ErrorMessage text={errors.sms_code.message!} />}
         <button
           type="submit"
-          className={style.submitBtn}
+          className={styleSubmitBtn}
           disabled={mutationConfirmCode.isLoading}
         >
           Confirm
