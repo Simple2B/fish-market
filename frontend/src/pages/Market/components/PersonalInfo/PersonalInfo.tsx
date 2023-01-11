@@ -239,10 +239,11 @@ const PersonalInfo = ({
       <div className={style.contentWrap}>
         <div className={style.contentWrapLabel}>Add notes (optional)</div>
         <textarea
-          {...register("note")}
+          {...register("note", { maxLength: 150 })}
           className={contentNote}
           placeholder="Type here"
           disabled={mutation.isLoading}
+          maxLength={150}
         />
       </div>
       <button
