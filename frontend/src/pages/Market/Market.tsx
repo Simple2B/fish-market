@@ -16,6 +16,7 @@ import { NextClient } from "./components/NextClient/NextClient";
 import { MarketActionTypes } from "./Market.type";
 import { useWindowDimensions } from "../../hooks/useWindowDimensions";
 import { PHONE_WIDTH } from "../../constants";
+import style from "./Market.module.css";
 
 enum BusinessStep {
   START_ORDER,
@@ -98,28 +99,29 @@ export function Market() {
   const isNotActiveBtnPhoneView = width <= PHONE_WIDTH && cartState.length <= 0;
 
   return orderState.isNumberVerified ? (
-    <>
+    <div className={style.mainContent}>
       <NextClient />
       <BusinessBtn
         onClick={handlerStepNextClient}
         textBtn="Next client"
         isNotActivePhoneView={isNotActiveBtnPhoneView}
       />
-    </>
+    </div>
   ) : (
     <>
       {step === BusinessStep.START_ORDER && (
-        <>
+        <div className={style.mainContent}>
           <Logo
             marketId={marketId}
             onConfirm={handleStepBusiness}
             textBtn={buttonTitle[step]}
           />
-        </>
+        </div>
       )}
       {step === BusinessStep.ORDER && (
-        <>
+        <div className={style.mainContent}>
           <ProductList
+            setIsShowCart={setIsShowCart}
             isShowCart={isShowCart}
             marketId={marketId}
             cartState={cartState}
@@ -130,10 +132,10 @@ export function Market() {
             textBtn={buttonTitle[step]}
             isNotActivePhoneView={isNotActiveBtnPhoneView}
           />
-        </>
+        </div>
       )}
       {step === BusinessStep.CONFIRM && (
-        <>
+        <div className={style.mainContent}>
           <Confirm
             setIsPersonalInfoFill={setIsPersonalInfoFill}
             isPhoneView={isPhoneView}
@@ -150,7 +152,7 @@ export function Market() {
             textBtn={buttonTitle[step]}
             isNotActivePhoneView={isPhoneView && !isPersonalInfoFill}
           />
-        </>
+        </div>
       )}
       {step === BusinessStep.CONFIRM_CODE && (
         <ConfirmCode

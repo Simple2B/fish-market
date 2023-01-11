@@ -63,6 +63,17 @@
     }
 }
 
+@media (max-width: 1000px) {
+    .personalInfoContent {
+        gap: 0.5rem 0;
+    }
+
+    .contentInput {
+        padding: 0.5rem;
+    }
+}
+
+
 @media (max-width: 320px) {
     .contentWrap {
         width: 14rem;
