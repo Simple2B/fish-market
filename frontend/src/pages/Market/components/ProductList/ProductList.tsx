@@ -15,6 +15,7 @@ type Props = {
   marketId: string;
   cartState: IProduct[];
   dispatchCart: (action: MarketActions) => void;
+  handlerDeleteCartItem: (n: number) => void;
 };
 
 export function ProductList({
@@ -22,6 +23,7 @@ export function ProductList({
   cartState,
   dispatchCart,
   isShowCart,
+  handlerDeleteCartItem,
 }: Props) {
   const { data, isLoading } = useQuery({
     queryKey: [`marketProductList-${marketId}`],
@@ -37,7 +39,10 @@ export function ProductList({
     return (
       <div className={style.contentCartsPhoneView}>
         <div className={style.contentTitle}>Cart</div>
-        <CartItems cartState={cartState} dispatchCart={dispatchCart} />
+        <CartItems
+          cartState={cartState}
+          handlerDeleteCartItem={handlerDeleteCartItem}
+        />
       </div>
     );
   }
@@ -75,7 +80,10 @@ export function ProductList({
         </div>
         <div className={style.contentCarts}>
           <div className={style.contentTitle}>Cart</div>
-          <CartItems cartState={cartState} dispatchCart={dispatchCart} />
+          <CartItems
+            cartState={cartState}
+            handlerDeleteCartItem={handlerDeleteCartItem}
+          />
         </div>
       </div>
     </>

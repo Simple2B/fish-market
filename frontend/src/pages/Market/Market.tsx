@@ -96,6 +96,14 @@ export function Market() {
     setStep(BusinessStep.START_ORDER);
   };
 
+  const deleteCartItem = (index: number) => {
+    if (isPhoneView && cartState.length <= 1) {
+      setIsShowCart(false);
+    }
+
+    dispatchCart({ type: MarketActionTypes.DELETE_ITEM, payload: index });
+  };
+
   const isNotActiveBtnPhoneView = width <= PHONE_WIDTH && cartState.length <= 0;
 
   return orderState.isNumberVerified ? (
@@ -121,6 +129,7 @@ export function Market() {
       {step === BusinessStep.ORDER && (
         <div className={style.mainContent}>
           <ProductList
+            handlerDeleteCartItem={deleteCartItem}
             isShowCart={isShowCart}
             marketId={marketId}
             cartState={cartState}
@@ -141,7 +150,7 @@ export function Market() {
             orderState={orderState}
             cartState={cartState}
             marketId={marketId}
-            dispatchCart={dispatchCart}
+            handlerDeleteCartItem={deleteCartItem}
             onConfirm={handleStepBusiness}
             submitRef={customerConfirmRef}
             dispatchOrder={dispatchOrder}

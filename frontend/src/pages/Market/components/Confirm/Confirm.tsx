@@ -14,7 +14,7 @@ type ConfirmProps = {
   isPhoneView: boolean;
   orderState: IOrder;
   cartState: IProduct[];
-  dispatchCart: (action: DeleteItemAction) => void;
+  handlerDeleteCartItem: (n: number) => void;
   dispatchOrder: (action: ISetOrderData) => void;
   onConfirm: () => void;
   submitRef: React.RefObject<HTMLButtonElement>;
@@ -24,13 +24,13 @@ type ConfirmProps = {
 const Confirm = ({
   orderState,
   cartState,
-  dispatchCart,
   dispatchOrder,
   onConfirm,
   submitRef,
   marketId,
   isPhoneView,
   setIsPersonalInfoFill,
+  handlerDeleteCartItem,
 }: ConfirmProps) => {
   return (
     <>
@@ -43,7 +43,10 @@ const Confirm = ({
             style={isPhoneView ? { display: "none" } : {}}
             className={style.contentCart}
           >
-            <CartItems cartState={cartState} dispatchCart={dispatchCart} />
+            <CartItems
+              cartState={cartState}
+              handlerDeleteCartItem={handlerDeleteCartItem}
+            />
           </div>
           <div className={style.contentForm}>
             <div className={style.contentFormWrap}>
