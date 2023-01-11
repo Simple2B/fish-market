@@ -1,5 +1,3 @@
-import { PHONE_WIDTH } from "../../../../constants";
-import { useWindowDimensions } from "../../../../hooks/useWindowDimensions";
 import {
   IProduct,
   DeleteItemAction,
