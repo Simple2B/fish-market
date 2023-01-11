@@ -4,8 +4,8 @@
 
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
+    gap: 1.5rem;
 }
 
 .confirmPageTitle {
@@ -14,7 +14,6 @@
     align-items: end;
     justify-content: center;
     height: 10%;
-    margin-bottom: 1.5rem;
 
 
     font-family: 'Avenir';

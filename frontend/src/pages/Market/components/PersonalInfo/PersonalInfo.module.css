@@ -30,9 +30,9 @@
     font-family: 'Avenir';
     font-style: normal;
     font-weight: 500;
-    font-size: 18px;
-    line-height: 25px;
-    margin-bottom: 8px;
+    font-size: 1.1rem;
+    line-height: 1.6rem;
+    margin-bottom: 0.5rem;
 
 
     color: #000000;
@@ -44,9 +44,9 @@
     font-family: 'Avenir';
     font-style: normal;
     font-weight: 500;
-    font-size: 18px;
-    line-height: 25px;
-    padding: 16px;
+    font-size: 1.1rem;
+    line-height: 1.6rem;
+    padding: 1rem;
 
     color: #000000;
 
