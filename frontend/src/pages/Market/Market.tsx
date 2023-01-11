@@ -121,7 +121,6 @@ export function Market() {
       {step === BusinessStep.ORDER && (
         <div className={style.mainContent}>
           <ProductList
-            setIsShowCart={setIsShowCart}
             isShowCart={isShowCart}
             marketId={marketId}
             cartState={cartState}
