@@ -36,15 +36,16 @@
 
 .cardInfoWrap {
     height: 100%;
-    width: 50%;
+    width: 10rem;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+    word-wrap: break-word;
 }
 
+
 .cardProductName {
-    height: 35%;
     width: 100%;
     font-family: 'Avenir';
     font-style: normal;
@@ -56,7 +57,6 @@
 }
 
 .cardProductPrice {
-    height: 35%;
     width: 100%;
     font-family: 'Avenir';
     font-style: normal;
@@ -138,6 +138,12 @@
     border: 1px solid black;
 }
 
+@media (max-width: 1024px) {
+    .cardInfoWrap {
+        width: 8rem;
+    }
+}
+
 @media (max-width: 750px) {
     .cardWrap {
         height: 15.8rem;
@@ -157,6 +163,11 @@
         grid-column: 1;
         grid-row: 1;
         border-bottom: 1px solid black;
+    }
+
+    .cardInfoWrap {
+        height: 5.25rem;
+        width: 6rem;
     }
 
     .cardBlockContent {
@@ -199,6 +210,15 @@
         border-right: 1px solid black;
 
     }
+
+    .cardProductName {
+        font-size: 1rem;
+        line-height: normal;
+    }
+
+    .cardProductPrice {
+        font-size: 1rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -219,14 +239,6 @@
 @media (max-width: 280px) {
     .cardWrap {
         width: 13rem;
-    }
-
-    .cardProductName {
-        font-size: 1rem;
-    }
-
-    .cardProductPrice {
-        font-size: 1rem;
     }
 
 }
