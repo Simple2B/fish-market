@@ -68,8 +68,6 @@ const PersonalInfo = ({
   });
 
   useEffect(() => {
-    // I need advice about this code maybe there is better way
-
     const subscription = watch((value) => {
       if (!isPhoneView) return;
       if (value.full_name && value.phone_number && value.pick_up_data) {

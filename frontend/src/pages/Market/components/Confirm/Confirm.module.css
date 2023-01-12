@@ -53,6 +53,10 @@
     width: 50%;
 }
 
+.disableComponent {
+    display: none;
+}
+
 @media (max-width: 1000px) {
     .confirmPageContent {
         width: auto;

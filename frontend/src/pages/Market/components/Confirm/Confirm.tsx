@@ -1,9 +1,5 @@
-import {
-  IProduct,
-  DeleteItemAction,
-  ISetOrderData,
-  IOrder,
-} from "../../Market.type";
+import classNames from "classnames";
+import { IProduct, ISetOrderData, IOrder } from "../../Market.type";
 import { CartItems } from "../CartItems";
 import { PersonalInfo } from "../PersonalInfo";
 
@@ -32,6 +28,10 @@ const Confirm = ({
   setIsPersonalInfoFill,
   handlerDeleteCartItem,
 }: ConfirmProps) => {
+  const cartItemsStyle = classNames(style.contentCart, {
+    [style.disableComponent]: isPhoneView,
+  });
+
   return (
     <>
       <div className={style.confirmPage}>
@@ -39,10 +39,7 @@ const Confirm = ({
           {isPhoneView ? "Personal Information" : "Order details"}
         </div>
         <div className={style.confirmPageContent}>
-          <div
-            style={isPhoneView ? { display: "none" } : {}}
-            className={style.contentCart}
-          >
+          <div className={cartItemsStyle}>
             <CartItems
               cartState={cartState}
               handlerDeleteCartItem={handlerDeleteCartItem}
