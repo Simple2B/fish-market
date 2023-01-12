@@ -112,6 +112,10 @@ const UserDetail = ({ id, is_active, openModal }: UserDetailProps) => {
         <tr className={style.userDetailContent}>
           <td colSpan={3}>
             <div className={style.userDetailRow}>
+              <span>Username: </span>
+              {data.username}
+            </div>
+            <div className={style.userDetailRow}>
               <span>Email: </span>
               {data.email}
             </div>

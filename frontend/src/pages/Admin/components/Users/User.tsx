@@ -15,7 +15,7 @@ const User = (
   return (
     <>
       <tr className={style.userContent} onClick={handlerOnUser}>
-        <td>{props.username}</td>
+        <td>{props.business_name}</td>
         <td>{props.id}</td>
         <td>{props.orders_taken}</td>
         <td>{props.items_sold}</td>

@@ -57,7 +57,7 @@ const Users = ({ openModal, handlerRegisterNewUser }: Props) => {
       <table className={style.informationPanel}>
         <thead className={style.informationPanelWrap}>
           <tr>
-            <th>User name</th>
+            <th>Business name</th>
             <th>User number</th>
             <th>Orders taken</th>
             <th>Items sold</th>

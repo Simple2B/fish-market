@@ -101,7 +101,7 @@ export type ObjId = {
 
 export type MarketUser = {
   id: number;
-  username: string;
+  business_name: string;
   orders_taken: number;
   items_sold: number;
   kg_sold: number;
@@ -113,6 +113,7 @@ export type MarketUser = {
 };
 
 export type MarketUserDetail = {
+  username: string;
   email: string;
   phone_number: string;
   address: string;

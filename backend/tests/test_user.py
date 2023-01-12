@@ -86,7 +86,8 @@ def test_create_user_marketeer(admin_client: TestClient, db: Session):
 
     new_user = s.UserOut.parse_obj(response.json())
     user = db.query(m.User).get(new_user.id)
-    assert user.username == new_user.username
+    assert len(user.businesses) == 1
+    assert user.businesses[0].name == new_user.business_name
     assert user.businesses and user.role == m.UserRole.Marketeer
 
     response = admin_client.get("/user/all")
@@ -95,7 +96,7 @@ def test_create_user_marketeer(admin_client: TestClient, db: Session):
     assert count_of_user == len(response.json()["users"])
 
     user = s.UserOut.parse_obj(response.json()["users"][0])
-    assert user.username == USER_NAME
+    assert user.business_name == BUSINESS_NAME
     # new user can login
     del admin_client.headers["Authorization"]
     client = admin_client

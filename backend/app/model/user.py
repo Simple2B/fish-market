@@ -41,6 +41,12 @@ class User(Base):
         return []
 
     @property
+    def business_name(self):
+        if self.businesses:
+            return self.businesses[0].name
+        return ""
+
+    @property
     def orders_taken(self):
         if self.businesses:
             return len(self.businesses[0].orders)

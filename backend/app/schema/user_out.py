@@ -3,6 +3,7 @@ from datetime import datetime
 
 
 class UserDetailOut(BaseModel):
+    username: str
     email: EmailStr
     phone_number: str
     address: str
@@ -13,7 +14,7 @@ class UserDetailOut(BaseModel):
 
 class UserOut(BaseModel):
     id: int
-    username: str
+    business_name: str = Field(alias="business_name")
     orders_taken: int = Field(alias="orders_taken")
     items_sold: int = Field(alias="items_sold")
     kg_sold: int = Field(alias="kg_sold")
