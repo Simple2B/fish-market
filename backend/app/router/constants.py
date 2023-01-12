@@ -1,3 +1,4 @@
+# flake8: noqa E501
 from app import model as m
 
 CONFIRM_MES_KEY = "confirm"
