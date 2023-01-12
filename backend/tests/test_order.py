@@ -39,8 +39,11 @@ def test_get_orders(
     assert order.status in status_list_is_archive
 
 
-def test_change_order_by_id(marketer_client: TestClient, customer_orders, db: Session):
+def test_change_order_by_id(
+    marketer_client: TestClient, customer_orders, db: Session, mocker
+):
     business, order = customer_orders
+    mocker.patch("app.router.order.send_sms", return_value=True)
 
     order_data = s.ChangeOrderStatus(new_status=m.OrderStatus.in_progress)
 
@@ -50,6 +53,13 @@ def test_change_order_by_id(marketer_client: TestClient, customer_orders, db: Se
     assert res_data.id == order.id
     assert res_data.status == m.OrderStatus.in_progress.value
     assert res_data.status == order.status.value
+    assert business.sms_used == 0
+
+    # test sms was send
+    order_data = s.ChangeOrderStatus(new_status=m.OrderStatus.ready)
+    res = marketer_client.patch(f"/order/{order.id}", json=order_data.dict())
+    assert res.status_code == status.HTTP_200_OK
+    assert business.sms_used == 1
 
     # test order was not found
     res = marketer_client.patch("/order/100", json=order_data.dict())

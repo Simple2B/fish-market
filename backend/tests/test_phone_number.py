@@ -11,14 +11,18 @@ NOTE = "Do it quickly"
 
 
 def test_create_check_phone_number(client: TestClient, db: Session, mocker):
+    business: m.Business = db.query(m.Business).get(1)
     mocker.patch("app.router.phone_number.send_sms", return_value=True)
-    req_data = s.CreatePhoneNumber(phone_number=PHONE_NUMBER)
+    req_data = s.CreatePhoneNumber(
+        phone_number=PHONE_NUMBER, business_uid=business.web_site_id
+    )
     # test create phone number
     res = client.post("/phone-number/", json=req_data.dict())
     assert res.status_code == status.HTTP_201_CREATED
     res_data = s.CreatePhoneNumberOut.parse_obj(res.json())
     assert res_data.number == PHONE_NUMBER
     assert not res_data.is_number_verified
+    assert business.sms_used == 1
 
     phone_numbers = db.query(m.PhoneNumber).all()
 
@@ -33,6 +37,7 @@ def test_create_check_phone_number(client: TestClient, db: Session, mocker):
     assert res.status_code == status.HTTP_201_CREATED
     phone_numbers = db.query(m.PhoneNumber).all()
     assert len(phone_numbers) == 1
+    assert business.sms_used == 2
 
     # test phone verification is valid
     phone_number.is_number_verified = True
@@ -42,6 +47,7 @@ def test_create_check_phone_number(client: TestClient, db: Session, mocker):
     assert res.status_code == status.HTTP_201_CREATED
     res_data = s.CreatePhoneNumberOut.parse_obj(res.json())
     assert res_data.is_number_verified
+    assert business.sms_used == 2
 
     # test is number has 10 digit
     req_data.phone_number = "0" + PHONE_NUMBER[3:]

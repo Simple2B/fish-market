@@ -110,7 +110,10 @@ const ConfirmCodeForm = ({
   };
 
   const handlerSendAgainBtn = () => {
-    mutationSendAgain.mutate({ phone_number: orderState.phoneNumber });
+    mutationSendAgain.mutate({
+      phone_number: orderState.phoneNumber,
+      business_uid: marketId,
+    });
   };
 
   const styleSubmitBtn = classNames(style.submitBtn, {
@@ -128,12 +131,12 @@ const ConfirmCodeForm = ({
           {...register("sms_code", {
             required: "The field is required",
             minLength: {
-              value: 6,
-              message: "The field must have 6 digits", // JS only: <p>error message</p> TS only support string
+              value: 4,
+              message: "The field must have 4 digits", // JS only: <p>error message</p> TS only support string
             },
             maxLength: {
-              value: 6,
-              message: "The field must have 6 digits", // JS only: <p>error message</p> TS only support string
+              value: 4,
+              message: "The field must have 4 digits", // JS only: <p>error message</p> TS only support string
             },
           })}
           className={style.smsCode}

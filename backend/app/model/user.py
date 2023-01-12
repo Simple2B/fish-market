@@ -49,11 +49,7 @@ class User(Base):
     @property
     def items_sold(self):
         if self.businesses:
-            return sum(
-                item.qty
-                for item in self.get_picked_up_orders_items()
-                if item.unit_type == SoldBy.by_unit
-            )
+            return len(self.get_picked_up_orders_items())
         return 0
 
     @property
@@ -72,6 +68,8 @@ class User(Base):
 
     @property
     def sms_used(self):
+        if self.businesses:
+            return self.businesses[0].sms_used
         return 0
 
     @property
