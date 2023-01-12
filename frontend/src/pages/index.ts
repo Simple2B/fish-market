@@ -6,4 +6,4 @@ export { ErrorMessage } from "../components/ErrorMessage";
 export { Admin } from "./Admin";
 export { LoginUser } from "./LoginUser";
 export { RegisterNewUser } from "./Admin";
-export { MarketNotFound } from "./MarketNotFound";
+export { Error } from "./Error";

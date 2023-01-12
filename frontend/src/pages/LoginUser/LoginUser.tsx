@@ -34,6 +34,10 @@ const LoginUser = () => {
       is_admin?: boolean;
     }) => {
       localStorage.setItem(TOKEN_KEY, data.access_token);
+      if (data.access_token === "frozen") {
+        navigate("/account-is-frozen", { replace: true });
+        return;
+      }
 
       if (data.is_admin) {
         navigate("/admin", { replace: true });

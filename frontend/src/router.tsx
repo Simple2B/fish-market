@@ -7,7 +7,7 @@ import {
   Home,
   LoginUser,
   Market,
-  MarketNotFound,
+  Error,
   RegisterNewUser,
 } from "./pages";
 import { Orders, OutOfStock, SettingsView } from "./pages/Home";
@@ -79,6 +79,10 @@ export const rootRouter = createBrowserRouter([
   },
   {
     path: "/market-not-found",
-    element: <MarketNotFound />,
+    element: <Error textError="Market not found" />,
+  },
+  {
+    path: "/account-is-frozen",
+    element: <Error textError="Sorry, but your account has been frozen" />,
   },
 ]);

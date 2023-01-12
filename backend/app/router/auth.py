@@ -26,10 +26,13 @@ def login(
         user_credentials.password,
     )
 
-    if not user or user.is_deleted or not user.is_active:
+    if not user or user.is_deleted:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Invalid credentials"
         )
+
+    if not user.is_active:
+        return {"access_token": "frozen", "token_type": "bearer"}
 
     access_token = create_access_token(data={"user_id": user.id})
 
