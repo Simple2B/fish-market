@@ -15,7 +15,7 @@ const LeftPanel = (props: LeftPanelType) => {
   return (
     <div className={style.leftPanelContent}>
       <div className={style.leftPanelTitle}>
-        <div className={style.titleText}>Your Information</div>
+        <div className={style.titleText}>Your user ID - {props.id}</div>
       </div>
       <div className={style.contentWrap}>
         {isEdit ? (

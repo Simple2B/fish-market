@@ -12,6 +12,8 @@ import { ImageType, LeftPanelType } from "../../../../../../main.type";
 import { queryClient } from "../../../../../../queryClient";
 import {
   GET_USER_BUSINESS,
+  phoneNumberAutoFormat,
+  replaceDash,
   updateBusinessInfo,
   uploadImage,
   validateImageFile,
@@ -25,14 +27,14 @@ const placeholder = CHANGE_PASSWORD_INPUT_DATA[changePasswordKeys.PLACEHOLDER];
 type Inputs = {
   businessLogo: string | FileList;
   businessName: string;
-  userEmail: string;
+  businessPhoneNumber: string;
 };
 
 const BusinessInfoUpdate = ({
   id,
   logo,
   name,
-  user_email,
+  phone_number,
   handlerEditBtn,
 }: LeftPanelType & { handlerEditBtn: () => void }) => {
   const mutationUpdateBusinessInfo = useMutation({
@@ -47,20 +49,27 @@ const BusinessInfoUpdate = ({
     mutationFn: uploadImage,
   });
 
-  const { register, handleSubmit } = useForm<Inputs>({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<Inputs>({
     defaultValues: {
       businessLogo: logo,
       businessName: name,
-      userEmail: user_email,
+      businessPhoneNumber: phoneNumberAutoFormat(phone_number),
     },
   });
+
+  console.log(errors, "errors");
 
   const [imageUrl, setImageUrl] = useState<string>("");
 
   const handlerOnSubmit: SubmitHandler<Inputs> = async (data) => {
     if (!data) return;
 
-    const reqData: { logo?: string; name?: string; user_email?: string } = {};
+    const reqData: { logo?: string; name?: string; phone_number?: string } = {};
 
     if (typeof data.businessLogo !== "string" && data.businessLogo.length > 0) {
       const uploadImageData = {
@@ -78,8 +87,8 @@ const BusinessInfoUpdate = ({
     if (data.businessName !== name) {
       reqData.name = data.businessName;
     }
-    if (data.userEmail !== user_email) {
-      reqData.user_email = data.userEmail;
+    if (data.businessPhoneNumber !== phone_number) {
+      reqData.phone_number = replaceDash(data.businessPhoneNumber);
     }
 
     if (Object.keys(reqData).length === 0) {
@@ -105,6 +114,13 @@ const BusinessInfoUpdate = ({
       return true;
     }
     return validateImageFile(input[0]);
+  };
+
+  const onChangeBusinessPhoneNumber = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const targetValue = phoneNumberAutoFormat(e.target.value);
+    setValue("businessPhoneNumber", targetValue);
   };
 
   return (
@@ -134,12 +150,18 @@ const BusinessInfoUpdate = ({
           />
         </div>
         <div className={style.textInputContentWrap}>
-          <span>{textData[settingsViewKey.EMAIL_NAME]}</span>
+          <span>{textData[settingsViewKey.PHONE_NUMBER_NAME]}</span>
           <input
             className={style.textInput}
-            type="email"
+            type="tel"
+            maxLength={14}
             placeholder={placeholder}
-            {...register("userEmail", { required: true })}
+            {...register("businessPhoneNumber", {
+              required: true,
+              maxLength: 14,
+              minLength: 10,
+              onChange: onChangeBusinessPhoneNumber,
+            })}
           />
         </div>
       </div>

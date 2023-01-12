@@ -38,11 +38,6 @@ def update_business_cur_user(
 
     data: dict = data.dict()
     for key, value in data.items():
-        if key == "user_email" and value is not None:
-            email = db.query(m.User).filter_by(email=value).first()
-            if email:
-                continue
-
         if value is not None:
             setattr(business, key, value)
 
@@ -50,7 +45,7 @@ def update_business_cur_user(
     db.refresh(business)
 
     return s.BusinessUpdateOut(
-        name=business.name, logo=business.logo, email=business.user_email
+        name=business.name, logo=business.logo, phone_number=business.phone_number
     )
 
 

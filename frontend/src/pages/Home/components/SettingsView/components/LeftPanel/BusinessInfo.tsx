@@ -5,13 +5,14 @@ import {
   settingsViewKey,
   SETTINGS_VIEW_TEXT_DATA,
 } from "../../../../../../constants";
+import { phoneNumberAutoFormat } from "../../../../../../services";
 
 const textData = SETTINGS_VIEW_TEXT_DATA;
 
 const BusinessInfo = ({
   logo,
   name,
-  user_email,
+  phone_number,
   handlerEditBtn,
 }: LeftPanelType & { handlerEditBtn: () => void }) => {
   return (
@@ -25,8 +26,8 @@ const BusinessInfo = ({
           {name}
         </div>
         <div className={style.contentWrapText}>
-          <span> {textData[settingsViewKey.EMAIL_NAME]}: </span>
-          {user_email}
+          <span> {textData[settingsViewKey.PHONE_NUMBER_NAME]}: </span>
+          {phoneNumberAutoFormat(phone_number)}
         </div>
       </div>
       <div className={style.btnEdit} onClick={handlerEditBtn}>

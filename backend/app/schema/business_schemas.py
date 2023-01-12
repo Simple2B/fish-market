@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, root_validator, Field
+from pydantic import BaseModel, root_validator
 
 
 class UserBusinessOut(BaseModel):
@@ -8,7 +8,7 @@ class UserBusinessOut(BaseModel):
     name: Optional[str]
     logo: Optional[str]
     web_site_id: str
-    email: str = Field(alias="user_email")
+    phone_number: str
 
     class Config:
         orm_mode = True
@@ -17,7 +17,7 @@ class UserBusinessOut(BaseModel):
 class BusinessUpdate(BaseModel):
     name: Optional[str]
     logo: Optional[str]
-    user_email: Optional[str]
+    phone_number: Optional[str]
 
     @root_validator
     def any_of(cls, v):
@@ -29,4 +29,4 @@ class BusinessUpdate(BaseModel):
 class BusinessUpdateOut(BaseModel):
     name: str
     logo: str
-    email: str
+    phone_number: str

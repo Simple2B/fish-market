@@ -71,7 +71,7 @@ export interface IUserBusinessInfo {
   name: string;
   logo: string;
   web_site_id: string;
-  user_email: string;
+  phone_number: string;
 }
 
 export type LeftPanelType = Omit<IUserBusinessInfo, "web_site_id">;
