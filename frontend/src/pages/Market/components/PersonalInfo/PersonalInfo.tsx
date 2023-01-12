@@ -167,8 +167,6 @@ const PersonalInfo = ({
     setValue("pick_up_data", e.target.value);
   };
 
-  // console.log(watch(["full_name", "note", "pick_up_data"]), "watch");
-
   return (
     <form
       onSubmit={handleSubmit(handleSubmitBtn)}
