@@ -3,6 +3,7 @@ import { CreateOrderItems } from "../pages/Market/Market.type";
 
 export const createCheckPhoneNumber = async (dataForm: {
   phone_number: string;
+  business_uid: string;
 }) => {
   const res = await fetch(`${API_BASE_URL}/phone-number/`, {
     method: "POST",

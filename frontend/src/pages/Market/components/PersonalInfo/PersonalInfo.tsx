@@ -153,6 +153,7 @@ const PersonalInfo = ({
     if (data) {
       const phoneNumber = {
         phone_number: replaceDash(data.phone_number),
+        business_uid: marketId,
       };
       mutation.mutate(phoneNumber);
     }
