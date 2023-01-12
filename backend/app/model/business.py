@@ -16,6 +16,7 @@ class Business(Base):
     logo = Column(String(128), default="")
     web_site_id = Column(String(36), default=gen_unique_uid)
     phone_number = Column(String(64), nullable=False)
+    sms_used = Column(Integer, default=0)
 
     user = relationship("User")
     products = relationship("Product", viewonly=True)
