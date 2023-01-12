@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     API_TOKEN_UP_SENDER: str = ""
     USERNAME_UP_SENDER: str = ""
     STATIC_FOLDER: str = "static"
+    SMS_LANGUAGE: str = "EN"
+    FRONTEND_URL: str = ""
 
     class Config:
         env_file = ".env"
