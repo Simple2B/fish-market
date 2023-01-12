@@ -6,7 +6,9 @@ from app import schema as s
 from app import model as m
 from app.database import get_db
 from app.logger import log
-from .utils import is_number_valid
+from app.config import settings
+from .utils import is_number_valid, check_access_to_business
+from .constants import MESSAGE_TEXT, CONFIRM_MES_KEY
 
 router = APIRouter(prefix="/phone-number", tags=["Phone-number"])
 
@@ -40,8 +42,22 @@ def create_check_phone_number(data: s.CreatePhoneNumber, db: Session = Depends(g
         db.commit()
     if not phone_number.is_number_verified:
         phone_number.confirm_code = m.gen_confirm_code()
+        business: m.Business = (
+            db.query(m.Business).filter_by(web_site_id=data.business_uid).first()
+        )
+        check_access_to_business(
+            business=business, data_mes="Can't verified number business not exist"
+        )
+        business.sms_used += 1
         db.commit()
-        is_sent = send_sms(phone_number.confirm_code, phone_number.number)
+
+        message = MESSAGE_TEXT[settings.SMS_LANGUAGE][CONFIRM_MES_KEY].format(
+            "-".join(list(phone_number.confirm_code)),
+            business.name,
+            business.phone_number,
+        )
+
+        is_sent = send_sms(message, phone_number.number)
         if not is_sent:
             log(
                 log.ERROR,

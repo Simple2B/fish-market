@@ -1,13 +1,17 @@
 # flake8: noqa E712
-from fastapi import Depends, APIRouter, HTTPException, status
+from fastapi import Depends, APIRouter, HTTPException, Request, status
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 
+from app.service import send_sms
 from app.service import get_business_from_cur_user
 from app import schema as s
 from app import model as m
 from app.database import get_db
 from app.logger import log
+from app.config import settings
+
+from .constants import MESSAGE_TEXT
 
 
 router = APIRouter(prefix="/order", tags=["Orders"])
@@ -63,6 +67,23 @@ def change_status_order(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Order does not belong to the business",
         )
+
+    message = None
+    if data.new_status == m.OrderStatus.ready.value:
+        market_link = f"{settings.FRONTEND_URL}/market/{business.web_site_id}"
+        message = MESSAGE_TEXT[settings.SMS_LANGUAGE][m.OrderStatus.ready].format(
+            business.name, business.phone_number, order_id, market_link
+        )
+    elif data.new_status == m.OrderStatus.can_not_complete.value:
+        message = MESSAGE_TEXT[settings.SMS_LANGUAGE][
+            m.OrderStatus.can_not_complete
+        ].format(business.name, business.phone_number, order_id)
+
+    if message is not None:
+        business.sms_used += 1
+        db.commit()
+        is_send = send_sms(message, order.phone_number.number)
+        # TODO what to do if message is not sent
 
     order.status = data.new_status
     db.commit()

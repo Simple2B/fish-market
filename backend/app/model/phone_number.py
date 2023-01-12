@@ -10,7 +10,7 @@ class PhoneNumber(Base):
 
     id = Column(Integer, primary_key=True)
     number = Column(String(64), nullable=False, unique=True)
-    confirm_code = Column(String(6), default=gen_confirm_code)
+    confirm_code = Column(String(4), default=gen_confirm_code)
     is_number_verified = Column(Boolean, default=False)
 
     orders: list = relationship("Order", viewonly=True)

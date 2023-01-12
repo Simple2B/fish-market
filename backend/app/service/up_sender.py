@@ -21,7 +21,7 @@ def send_sms(text_sms: str, phone_number: str) -> bool:
         "Data": {
             "Message": f"{text_sms}",
             "Recipients": [{"Phone": f"{phone_number}"}],
-            "Settings": {"Sender": "fish market"},
+            "Settings": {"Sender": "fish market"},  # TODO business name
         }
     }
 

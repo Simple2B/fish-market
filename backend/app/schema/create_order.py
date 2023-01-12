@@ -8,6 +8,7 @@ from app import model as m
 
 class CreatePhoneNumber(BaseModel):
     phone_number: str
+    business_uid: str
 
 
 class CreatePhoneNumberOut(BaseModel):
