@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { BiCheck } from "react-icons/bi";
 import {
@@ -13,6 +14,7 @@ import {
   GET_USER_BUSINESS,
   updateBusinessInfo,
   uploadImage,
+  validateImageFile,
 } from "../../../../../../services";
 import { UploadImage } from "../UploadImage";
 import style from "./BusinessInfoUpdate.module.css";
@@ -53,6 +55,8 @@ const BusinessInfoUpdate = ({
     },
   });
 
+  const [imageUrl, setImageUrl] = useState<string>("");
+
   const handlerOnSubmit: SubmitHandler<Inputs> = async (data) => {
     if (!data) return;
 
@@ -86,17 +90,37 @@ const BusinessInfoUpdate = ({
     mutationUpdateBusinessInfo.mutate(reqData);
   };
 
+  const onChangeFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      const isImage = validateImageFile(file);
+      if (!isImage) return;
+      const imaUrl = URL.createObjectURL(file);
+      setImageUrl(imaUrl);
+    }
+  };
+
+  const validateFileInput = (input: string | FileList) => {
+    if (typeof input === "string") {
+      return true;
+    }
+    return validateImageFile(input[0]);
+  };
+
   return (
     <form
       onSubmit={handleSubmit(handlerOnSubmit)}
       className={style.formContent}
     >
-      <UploadImage>
+      <UploadImage imageUrl={imageUrl}>
         <input
           className={style.fileInput}
           type="file"
-          accept="image/*"
-          {...register("businessLogo")}
+          accept=".png, .jpg, .jpeg"
+          {...register("businessLogo", {
+            onChange: onChangeFileInput,
+            validate: validateFileInput,
+          })}
         />
       </UploadImage>
       <div className={style.textInputContent}>

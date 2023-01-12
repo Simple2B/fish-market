@@ -35,6 +35,7 @@ export {
   isTokenValid,
   getOrders,
   sortByActiveOrderId,
+  validateImageFile,
 } from "./homeService";
 export type { FilteringFunctions, StatusBtnItem } from "./homeService";
 

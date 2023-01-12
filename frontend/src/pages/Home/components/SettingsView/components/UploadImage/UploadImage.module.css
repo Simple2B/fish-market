@@ -18,5 +18,11 @@
     line-height: 1.5rem;
 
     text-align: center;
+}
 
+.previewImage {
+    position: absolute;
+    height: 6.1rem;
+    width: 6.1rem;
+    object-fit: cover;
 }

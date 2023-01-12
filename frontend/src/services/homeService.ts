@@ -210,3 +210,9 @@ export const sortByActiveOrderId = (
     );
   }
 };
+
+export const validateImageFile = (file: File): boolean => {
+  const listOfExpansions = ["png", "jpg", "jpeg"];
+  const fileExpansion = file.name.split(".").slice(-1).toString();
+  return listOfExpansions.includes(fileExpansion);
+};

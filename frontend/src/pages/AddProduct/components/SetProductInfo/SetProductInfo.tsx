@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { validateImageFile } from "../../../../services";
 import { UploadImage } from "../../../Home";
 import {
   CreateProductActionKeys,
@@ -18,6 +20,7 @@ type SetProductInfoInputs = {
 
 const SetProductInfo = ({ productDispatch }: SetProductInfoProps) => {
   const { register } = useForm<SetProductInfoInputs>();
+  const [imageUrl, setImageUrl] = useState<string>("");
 
   const handlerOnChangeInputs = (e: React.ChangeEvent<HTMLInputElement>) => {
     let payloadKey = e.target.name;
@@ -30,7 +33,15 @@ const SetProductInfo = ({ productDispatch }: SetProductInfoProps) => {
 
     if (payloadKey === "image") {
       if (!e.target.files) return;
-      payloadValue = e.target.files[0];
+
+      const file = e.target.files[0];
+      const isImage = validateImageFile(file);
+
+      if (!isImage) return;
+
+      const imaUrl = URL.createObjectURL(file);
+      setImageUrl(imaUrl);
+      payloadValue = file;
     }
 
     productDispatch({
@@ -39,12 +50,19 @@ const SetProductInfo = ({ productDispatch }: SetProductInfoProps) => {
     });
   };
 
+  const validateFileInput = (input: string | FileList) => {
+    if (typeof input === "string") {
+      return true;
+    }
+    return validateImageFile(input[0]);
+  };
+
   return (
     <div className={style.setProductInfoContent}>
-      <UploadImage>
+      <UploadImage imageUrl={imageUrl}>
         <input
           type="file"
-          accept="image/*"
+          accept=".png, .jpg, .jpeg"
           {...register("image", {
             required: true,
             onChange: handlerOnChangeInputs,
@@ -60,6 +78,7 @@ const SetProductInfo = ({ productDispatch }: SetProductInfoProps) => {
             {...register("name", {
               required: true,
               onChange: handlerOnChangeInputs,
+              validate: validateFileInput,
             })}
             className={style.inputData}
           />
