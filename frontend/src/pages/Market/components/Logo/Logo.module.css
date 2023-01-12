@@ -1,37 +1,34 @@
 .marketLogoStart {
-    width: 100%;
-    height: 100vh;
+    width: 100vw;
+    height: 60vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    margin: 0 auto;
-    padding-top: 20px;
+    justify-content: space-evenly;
+
 }
 
 .businessTitle {
-    height: 60vh;
-    align-self: center;
-}
-
-.businessTitleText {
-    font-family: 'Avenir';
-    font-style: normal;
     font-weight: 800;
-    font-size: 36px;
-    line-height: 49px;
+    font-size: 2.1rem;
+    line-height: 3rem;
     text-align: center;
 }
 
-.businessLogoWrap {
-    height: 320px;
-}
 
 .businessLogo {
-    height: 35vh;
+    width: 7.6rem;
+    height: 5.1rem;
+}
+
+.businessLogoText {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-weight: 500;
+    font-size: 3.75rem;
+    line-height: 5.125rem;
+    color: #D1D1D1;
 }
 
 .businessLogoImg {

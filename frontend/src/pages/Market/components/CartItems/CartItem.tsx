@@ -16,14 +16,14 @@ export const CartItem = ({
   itemName,
   itemType,
   itemPrice,
-  dispatchCart,
   index,
+  handlerDeleteCartItem,
 }: IProduct & {
-  dispatchCart: (action: DeleteItemAction) => void;
   index: number;
+  handlerDeleteCartItem: (n: number) => void;
 }) => {
   const handelDeleteCartItem = () => {
-    dispatchCart({ type: MarketActionTypes.DELETE_ITEM, payload: index });
+    handlerDeleteCartItem(index);
   };
 
   return (

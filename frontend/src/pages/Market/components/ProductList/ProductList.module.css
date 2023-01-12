@@ -1,89 +1,121 @@
-.productListPage {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
 .pageContent {
+    height: 85vh;
+    width: 80rem;
     display: flex;
     justify-content: center;
-    align-items: center;
     gap: 0 2.75rem;
+    margin: 0 auto;
 }
 
-
-.productListContent {
-    height: 100vh;
-    width: 68%;
+.contentItems {
+    width: 50rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem 0;
 }
 
-.contentBlockTitle {
-    /* height: 3.75rem; */
+.contentTitle {
+    margin-top: 1rem;
+    align-self: center;
+    font-weight: 800;
+    font-size: 1.75rem;
+    line-height: 2.3rem;
+}
+
+.contentItemsSubTitle {
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.4rem;
+}
+
+.contentItemsWrap {
+    height: 33rem;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    padding-bottom: 3rem;
+    box-sizing: border-box;
+}
+
+.contentCarts {
+    display: flex;
+    flex-direction: column;
+    gap: 3.6rem 0;
+}
+
+.iconCart {
+    display: none;
+}
+
+.contentCartsPhoneView {
+    height: 80vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 2.5rem;
-}
-
-
-.productCardContent {
-    height: 100vh;
-    width: 30%;
-
-}
-
-
-.blockTitle {
-    font-family: 'Avenir';
-    font-style: normal;
-    font-weight: 800;
-    font-size: 28px;
-    line-height: 38px;
-    text-align: center;
-}
-
-.blockTitleCart {
-    font-family: 'Avenir';
-    font-style: normal;
-    font-weight: 800;
-    font-size: 28px;
-    line-height: 38px;
-    text-align: center;
-    margin-bottom: 2.8rem;
-}
-
-
-.blockSubTitle {
-    font-family: 'Avenir';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 22px;
-    text-align: center;
-    padding-top: 1vh;
-
-}
-
-.blockItems {
-    height: 33.0rem;
-    width: 50.3rem;
-    padding-top: 1rem;
-    overflow-y: scroll;
+    gap: 1rem 0;
 }
 
 @media (max-width: 1024px) {
-    .blockItems {
-        height: 25.0rem;
-        width: 40.3rem;
+    .pageContent {
+        width: 64rem;
     }
 
-    .contentBlockTitle {
-        padding-top: 1rem;
+    .contentItems {
+        width: 40rem;
+    }
+}
+
+@media (max-width: 1000px) {
+    .pageContent {
+        width: 47rem;
     }
 
-    .blockTitleCart {
-        margin-bottom: 2.7rem;
+    .contentTitle {
+        display: flex;
+        gap: 0 1rem;
+    }
+
+    .iconCart {
+        display: block;
+        display: flex;
+    }
+
+    .iconCart>div {
+        width: 1.2rem;
+        height: 1.2rem;
+        font-weight: 400;
+        font-size: 0.8rem;
+        line-height: 1.1rem;
+        text-align: center;
+        margin: 0 auto;
+        border-radius: 50%;
+        background: #C1E1FF;
+    }
+
+    .contentCarts {
+        display: none;
+    }
+}
+
+@media (max-width: 750px) {
+    .pageContent {
+        width: 28rem;
+    }
+}
+
+@media (max-width: 500px) {
+    .pageContent {
+        width: 22rem;
+    }
+}
+
+@media (max-width: 390px) {
+    .pageContent {
+        width: 18rem;
+    }
+}
+
+@media (max-width: 280px) {
+    .pageContent {
+        width: 14rem;
     }
 }

@@ -22,10 +22,12 @@
 }
 
 .productInfoContentWrap {
+    width: 7.3rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 0.5rem 0;
+    word-wrap: break-word;
 }
 
 .productInfoContentWrap>div {

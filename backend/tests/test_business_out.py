@@ -1,3 +1,4 @@
+from datetime import datetime
 import uuid
 
 from fastapi import status
@@ -84,12 +85,15 @@ def test_create_product_order(client: TestClient, db: Session, customer_orders):
         ),
     ]
 
+    pick_up_data = datetime.now()
+
     data_create_order = s.CreateOrder(
         phone_number=phone_number.number,
         business_id=business.id,
         note=NOTE,
         customer_name=FULL_NAME,
         items=order_items,
+        pick_up_data=pick_up_data,
     )
 
     order_data = data_create_order.dict()
@@ -100,6 +104,9 @@ def test_create_product_order(client: TestClient, db: Session, customer_orders):
     # test create order
     phone_number.is_number_verified = True
     db.commit()
+
+    order_data["pick_up_data"] = str(order_data["pick_up_data"])
+
     res = client.post(f"/business/{user_business.web_site_id}/order", json=order_data)
     assert res.status_code == status.HTTP_201_CREATED
     res_data = s.CreateOrderOut.parse_obj(res.json())
@@ -130,16 +137,18 @@ def test_create_product_order(client: TestClient, db: Session, customer_orders):
         ),
         s.CreateOrderItem(prep_id=140, qty=second_qty, unit_type=m.SoldBy.by_kilogram),
     ]
+
+    incorrect_order_data = data_create_order.dict()
+    incorrect_order_data["pick_up_data"] = str(order_data["pick_up_data"])
+
     res = client.post(
-        f"/business/{user_business.web_site_id}/order", json=data_create_order.dict()
+        f"/business/{user_business.web_site_id}/order", json=incorrect_order_data
     )
     assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     # test if the number not exists
-    data_create_order.phone_number = "380672215670"
-    res = client.post(
-        f"/business/{user_business.web_site_id}/order", json=data_create_order.dict()
-    )
+    order_data["phone_number"] = "380672215670"
+    res = client.post(f"/business/{user_business.web_site_id}/order", json=order_data)
     assert res.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
     phone_numbers = db.query(m.PhoneNumber).all()
     assert len(phone_numbers) == 1

@@ -12,10 +12,14 @@
     font-family: 'Avenir';
     font-style: normal;
     font-weight: 800;
-    font-size: 36px;
-    line-height: 49px;
+    font-size: 2.25rem;
+    line-height: 3rem;
     text-align: center;
 
     position: fixed;
     bottom: 0;
+}
+
+.businessBtnInActive {
+    background: #D1D1D1;
 }

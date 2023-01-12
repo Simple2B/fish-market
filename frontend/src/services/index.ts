@@ -19,6 +19,7 @@ export {
   replaceDash,
   phoneNumberAutoFormat,
   isValidNumber,
+  rewriteCurrentDate,
 } from "./marketService";
 
 export {

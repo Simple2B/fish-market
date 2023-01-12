@@ -40,7 +40,7 @@ const Logo = ({ marketId, onConfirm, textBtn }: LogoProps) => {
       alt="Business logo"
     />
   ) : (
-    "logo"
+    <div className={style.businessLogoText}>{"logo"}</div>
   );
 
   return isLoading ? (
@@ -48,14 +48,14 @@ const Logo = ({ marketId, onConfirm, textBtn }: LogoProps) => {
   ) : (
     <>
       <div className={style.marketLogoStart}>
-        <div className={style.businessLogo}>
-          <div className={style.businessLogoWrap}>{logoElement}</div>
-        </div>
-        <div className={style.businessTitle}>
-          <div className={style.businessTitleText}>Welcome to {data!.name}</div>
-        </div>
+        <div className={style.businessLogo}>{logoElement}</div>
+        <div className={style.businessTitle}>Welcome to {data!.name}</div>
       </div>
-      <BusinessBtn onClick={onConfirm} textBtn={textBtn} />
+      <BusinessBtn
+        onClick={onConfirm}
+        textBtn={textBtn}
+        isNotActivePhoneView={false}
+      />
     </>
   );
 };

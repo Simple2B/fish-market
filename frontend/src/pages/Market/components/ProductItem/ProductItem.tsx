@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import classNames from "classnames";
 
 import { IoIosAdd } from "react-icons/io";
 
@@ -48,6 +49,10 @@ export function ProductItem({
       setSelectedPrepId(value);
     }
   };
+
+  const styleBtnAdd = classNames(style.disabledAddBtn, {
+    [style.availableAddBtn]: isBtnEnable,
+  });
 
   return (
     <>
@@ -99,10 +104,7 @@ export function ProductItem({
             })}
           </select>
         </div>
-        <div
-          className={isBtnEnable ? style.addBtn : style.disabledAddBtn}
-          onClick={handleAddItem}
-        >
+        <div className={styleBtnAdd} onClick={handleAddItem}>
           <IoIosAdd />
         </div>
       </div>

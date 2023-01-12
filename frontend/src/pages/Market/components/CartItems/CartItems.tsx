@@ -5,10 +5,13 @@ import style from "./CartItems.module.css";
 
 type CartItemsProps = {
   cartState: IProduct[];
-  dispatchCart: (action: DeleteItemAction) => void;
+  handlerDeleteCartItem: (n: number) => void;
 };
 
-export const CartItems = ({ cartState, dispatchCart }: CartItemsProps) => {
+export const CartItems = ({
+  cartState,
+  handlerDeleteCartItem,
+}: CartItemsProps) => {
   return (
     <div className={style.productCartItems}>
       {cartState.length > 0 ? (
@@ -19,7 +22,7 @@ export const CartItems = ({ cartState, dispatchCart }: CartItemsProps) => {
                 key={index}
                 index={index}
                 {...prod}
-                dispatchCart={dispatchCart}
+                handlerDeleteCartItem={handlerDeleteCartItem}
               />
             );
           })}

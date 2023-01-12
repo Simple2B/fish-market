@@ -79,3 +79,17 @@ export const isValidNumber = (v: string): boolean => {
   const number = replaceDash(v);
   return number.length === 10 || number.length == 12;
 };
+
+export const rewriteCurrentDate = (date: Date): string => {
+  const rewriteDate = date
+    .toLocaleString([], {
+      year: "numeric",
+      day: "numeric",
+      month: "numeric",
+    })
+    .split(".")
+    .reverse()
+    .join("-");
+
+  return rewriteDate;
+};

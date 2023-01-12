@@ -8,6 +8,7 @@ type ConfirmCodeProps = {
   orderState: IOrder;
   cartState: IProduct[];
   marketId: string;
+  isPhoneView: boolean;
 };
 
 const ConfirmCode = ({
@@ -16,14 +17,18 @@ const ConfirmCode = ({
   cartState,
   onConfirm,
   marketId,
+  isPhoneView,
 }: ConfirmCodeProps) => {
   return (
     <div className={style.confirmCodePage}>
-      <div className={style.titlePage}>Phone number confirmation</div>
+      <div className={style.titlePage}>
+        {isPhoneView ? "Number confirmation" : "Phone number confirmation"}
+      </div>
       <div className={style.textPage}>
         We sent an SMS to your number. Please enter a confirmation code below.
       </div>
       <ConfirmCodeForm
+        isPhoneView={isPhoneView}
         dispatchOrder={dispatchOrder}
         orderState={orderState}
         onConfirm={onConfirm}

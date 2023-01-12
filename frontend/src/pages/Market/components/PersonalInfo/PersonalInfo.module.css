@@ -5,15 +5,21 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    gap: 2rem 0;
+    overflow-y: scroll;
 }
 
 .contentWrap {
+    width: 17rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    margin-bottom: 2rem;
 }
+
+.contentWrap input[type="date"]::-ms-clear {
+    display: none;
+}
+
 
 .contentWrapNote {
     height: 100%;
@@ -25,9 +31,8 @@
     font-family: 'Avenir';
     font-style: normal;
     font-weight: 500;
-    font-size: 18px;
-    line-height: 25px;
-    margin-bottom: 8px;
+    font-size: 1.1rem;
+    line-height: 1.6rem;
 
 
     color: #000000;
@@ -39,9 +44,9 @@
     font-family: 'Avenir';
     font-style: normal;
     font-weight: 500;
-    font-size: 18px;
-    line-height: 25px;
-    padding: 16px;
+    font-size: 1.1rem;
+    line-height: 1.6rem;
+    padding: 1rem;
 
     color: #000000;
 
@@ -51,30 +56,32 @@
     border-radius: 5px;
 }
 
-.businessBtn {
-    width: 100vh;
-    height: 15vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-    background-color: #C1E1FF;
-    cursor: pointer;
-
-
-    font-family: 'Avenir';
-    font-style: normal;
-    font-weight: 800;
-    font-size: 36px;
-    line-height: 49px;
-    text-align: center;
-
-    position: fixed;
-    bottom: 0;
-}
 
 @media (max-width: 1024px) {
     .contentWrap {
         margin-bottom: 0.5rem;
+    }
+}
+
+@media (max-width: 1000px) {
+    .personalInfoContent {
+        gap: 0.5rem 0;
+    }
+
+    .contentInput {
+        padding: 0.5rem;
+    }
+}
+
+
+@media (max-width: 320px) {
+    .contentWrap {
+        width: 14rem;
+    }
+}
+
+@media (max-width: 280px) {
+    .contentWrap {
+        width: 12rem;
     }
 }
