@@ -155,7 +155,7 @@ export type StatusBtnItem = {
 export const notify = (message: string) =>
   toast(message, {
     position: "top-center",
-    autoClose: 10000,
+    autoClose: 3000,
     hideProgressBar: true,
     closeOnClick: true,
     pauseOnHover: false,
