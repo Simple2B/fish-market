@@ -73,6 +73,10 @@ const ChangePassword = () => {
     mutationChangePassword.mutate(reqData);
   };
 
+  const handlerCancelBtn = () => {
+    navigate("/settings");
+  };
+
   const btnStyle = classNames(style.disableBtn, {
     [style.activeBtn]:
       watch("password") && watch("new_password") && watch("repeat_password"),
@@ -139,10 +143,17 @@ const ChangePassword = () => {
           )}
         </div>
 
-        <CustomBtn
-          btnName={textDataButtons[settingsViewKey.CONFIRM]}
-          additionalStyles={btnStyle}
-        />
+        <div className={style.changePasswordButtons}>
+          <CustomBtn
+            btnName={textDataButtons[settingsViewKey.CONFIRM]}
+            additionalStyles={btnStyle}
+          />
+          <CustomBtn
+            btnName={textDataInputs[changePasswordKeys.CANCELLED_BTN]}
+            handlerOnClick={handlerCancelBtn}
+            additionalStyles={style.cancelBtn}
+          />
+        </div>
       </form>
     </div>
   );

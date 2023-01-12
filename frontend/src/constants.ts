@@ -103,6 +103,7 @@ export const changePasswordKeys = {
   REPEAT_NEW_PASSWORD: "repeatPasswordKey",
   PLACEHOLDER: "placeholderKey",
   NOT_REPEAT_ERR: "notRepeatErrKey",
+  CANCELLED_BTN: "cancelledBtnKey",
 };
 
 export const CHANGE_PASSWORD_INPUT_DATA = {
@@ -112,6 +113,7 @@ export const CHANGE_PASSWORD_INPUT_DATA = {
   [changePasswordKeys.PLACEHOLDER]: "Type here",
   [changePasswordKeys.NOT_REPEAT_ERR]:
     "Your new password does not match your repeat password",
+  [changePasswordKeys.CANCELLED_BTN]: "Cancel",
 };
 
 export const MODAL_TEXT_DATA = {
